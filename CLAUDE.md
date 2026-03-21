@@ -2,6 +2,14 @@
 
 Always answer in Chinese (Simplified).
 
+<available-skills>
+
+| Skill             | Trigger                                                                   | Description                                                              |
+| ----------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `/ppt-agent:ppt`  | "PPT", "slides", "幻灯片", "做个PPT", "slide deck", "演示文稿", "做演示" | PPT slide generation workflow: init → research → outline → design → delivery |
+
+</available-skills>
+
 ## Available Commands
 
 - `/ppt-agent:ppt`: End-to-end PPT slide generation workflow.
