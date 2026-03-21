@@ -1,12 +1,16 @@
 # PPT Agent
 
-基于 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的多智能体 PPT 幻灯片生成工作流。
+多智能体 PPT 幻灯片生成工作流，支持跨平台运行。
 
-由 Claude 生成 + Gemini 审查，输出 SVG 1280×720 Bento Grid 布局的演示幻灯片。
+LLM 生成 + Gemini 审查，输出 SVG 1280×720 Bento Grid 布局的演示幻灯片。
 
 ## 效果展示
 
+同一提示词、同一工作流，不同模型 × 不同宿主的对比效果：
+
 > `/ppt-agent:ppt 帮我收集一下新一代小米su7的发布会资料然后做一套PPT`
+
+### Claude Opus · Claude Code
 
 | | | |
 |:---:|:---:|:---:|
@@ -14,6 +18,16 @@
 | ![性能参数](docs/images/slide-04.png) | ![标配亮点](docs/images/slide-05.png) | ![智能座舱](docs/images/slide-06.png) |
 | ![智能驾驶](docs/images/slide-07.png) | ![安全体系](docs/images/slide-08.png) | ![续航充电](docs/images/slide-09.png) |
 | ![产品矩阵](docs/images/slide-10.png) | ![生态布局](docs/images/slide-11.png) | ![结尾](docs/images/slide-12.png) |
+
+### MiMo V2 Pro · OpenCode
+
+| | | |
+|:---:|:---:|:---:|
+| ![封面](docs/images/mimo/slide-01.png) | ![市场势能](docs/images/mimo/slide-02.png) | ![更好看](docs/images/mimo/slide-03.png) |
+| ![设计详情](docs/images/mimo/slide-04.png) | ![更好开](docs/images/mimo/slide-05.png) | ![配置对比](docs/images/mimo/slide-06.png) |
+| ![蛟龙底盘](docs/images/mimo/slide-07.png) | ![更智能](docs/images/mimo/slide-08.png) | ![智能科技](docs/images/mimo/slide-09.png) |
+| ![更安全](docs/images/mimo/slide-10.png) | ![安全守护](docs/images/mimo/slide-11.png) | ![竞品对决](docs/images/mimo/slide-12.png) |
+| ![结尾](docs/images/mimo/slide-13.png) | | |
 
 ## 安装
 
@@ -74,7 +88,7 @@ PPT Agent 当前运行在 Claude Code 上，计划适配以下平台：
 | [Droid (Factory)](https://factory.ai) | ⭐ | 🔜 待验证 | 官方兼容 Claude Code 插件格式，预计开箱即用 |
 | [Codex (OpenAI)](https://developers.openai.com/codex) | ⭐⭐ | 📋 计划中 | SKILL.md 同构，agents 需 MD→TOML 转换 |
 | [OpenClaw](https://openclaw.ai) | ⭐⭐⭐ | 📋 计划中 | SKILL.md 同构，需适配 plugin manifest 和 ClawHub |
-| [OpenCode](https://opencode.ai) | ⭐⭐⭐⭐ | 📋 计划中 | 插件为 TypeScript hooks 模式，范式差异较大 |
+| [OpenCode](https://opencode.ai) | ⭐⭐⭐⭐ | ✅ 已验证 | MiMo V2 Pro 已跑通完整工作流（见上方效果对比） |
 
 ### 长期方向
 
