@@ -74,6 +74,7 @@ Keyboard: `P` present / `G` gallery / `S` scroll / `F` fullscreen / `←→` nav
 - `drafts/slide-{nn}.svg`
 - `draft-manifest.json`
 - `slides/slide-{nn}.svg`
+- `slide-status.json` — per-slide incremental progress (enables `--run-id` resume)
 - `reviews/review-{nn}.md`
 - `review-manifest.json` — Phase 6→7 quality gate checkpoint
 - `output/` — final deliverables:

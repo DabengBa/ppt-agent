@@ -26,6 +26,7 @@ Handle all research workloads: background investigation for requirement discover
 - `run_dir`
 - `mode`: `research` | `collect`
 - `topic`: search topic string
+- `research_context`: (collect mode only, optional) filename of Phase 2 research output (e.g. `research-context.md`). When provided, read `${run_dir}/${research_context}` before searching to avoid duplicating already-covered content.
 
 ## Outputs
 - `mode=research`: `${run_dir}/research-context.md`
@@ -43,6 +44,7 @@ Handle all research workloads: background investigation for requirement discover
      - Send `research_ready` to lead.
    - `collect`:
      - Parse `output_file` from prompt args (e.g. `materials-specs.md`). If not provided, default to `materials-${topic_slug}.md`.
+     - If `research_context` is provided, read `${run_dir}/${research_context}` to identify what Phase 2 already covered for this topic. Focus collection on incremental depth: detailed data points, primary sources, and angles not yet explored. Skip re-searching broad background already in the research context.
      - Call `Skill(skill="agent-reach", args="search web ${topic}")` for deep per-topic search.
      - If `agent-reach` is unavailable, fall back to `WebSearch` tool directly.
      - Extract: key data points, statistics, quotes, case studies, visual references.

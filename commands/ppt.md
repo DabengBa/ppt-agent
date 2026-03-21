@@ -35,6 +35,7 @@ Generate professional PPT slides as SVG files (1280x720) through a structured mu
 - `${RUN_DIR}/drafts/slide-{nn}.svg`
 - `${RUN_DIR}/draft-manifest.json`
 - `${RUN_DIR}/slides/slide-{nn}.svg`
+- `${RUN_DIR}/slide-status.json`
 - `${RUN_DIR}/reviews/review-{nn}.md`
 - `${RUN_DIR}/reviews/review-holistic.md`
 - `${RUN_DIR}/review-manifest.json`
@@ -72,6 +73,15 @@ Generate professional PPT slides as SVG files (1280x720) through a structured mu
    mkdir -p "${RUN_DIR}"
    ```
 
+   **Resume detection** (when `--run-id` is provided): Check existing artifacts to determine the resume point:
+   - `slide-status.json` exists → resume Phase 6 from first incomplete slide
+   - `draft-manifest.json` exists but no `slide-status.json` → resume at Phase 6 start
+   - `outline.json` exists but no `draft-manifest.json` → resume at Phase 5
+   - `materials.md` exists but no `outline.json` → resume at Phase 4
+   - `requirements.md` exists but no `materials.md` → resume at Phase 3
+   - `research-context.md` exists but no `requirements.md` → resume at Phase 2 (user confirmation)
+   - Nothing exists → start from Phase 1
+
 5. **Write OpenSpec scaffold** to `${RUN_DIR}/`:
    - `proposal.md`: `# Change:` title, `## Why` (presentation purpose), `## What Changes` (slide deliverables), `## Impact`
    - `tasks.md`: one numbered section per phase (Init, Research, Collection, Outline, Draft, Design, Delivery) with `- [ ]` items
@@ -102,11 +112,12 @@ Generate professional PPT slides as SVG files (1280x720) through a structured mu
 
 1. Extract section topics from `${RUN_DIR}/requirements.md`.
 2. Launch parallel collection tasks in a single message (one per major section topic).
-   Each agent writes to its **own isolated file** to avoid race conditions:
+   Each agent writes to its **own isolated file** to avoid race conditions.
+   Pass `research_context=research-context.md` so agents skip already-covered content and focus on incremental deep-dive:
    ```text
-   Task(subagent_type="ppt-agent:research-core", name="collect-1", prompt="run_dir=${RUN_DIR} mode=collect topic=${SECTION_1} output_file=materials-${SLUG_1}.md")
-   Task(subagent_type="ppt-agent:research-core", name="collect-2", prompt="run_dir=${RUN_DIR} mode=collect topic=${SECTION_2} output_file=materials-${SLUG_2}.md")
-   Task(subagent_type="ppt-agent:research-core", name="collect-3", prompt="run_dir=${RUN_DIR} mode=collect topic=${SECTION_3} output_file=materials-${SLUG_3}.md")
+   Task(subagent_type="ppt-agent:research-core", name="collect-1", prompt="run_dir=${RUN_DIR} mode=collect topic=${SECTION_1} output_file=materials-${SLUG_1}.md research_context=research-context.md")
+   Task(subagent_type="ppt-agent:research-core", name="collect-2", prompt="run_dir=${RUN_DIR} mode=collect topic=${SECTION_2} output_file=materials-${SLUG_2}.md research_context=research-context.md")
+   Task(subagent_type="ppt-agent:research-core", name="collect-3", prompt="run_dir=${RUN_DIR} mode=collect topic=${SECTION_3} output_file=materials-${SLUG_3}.md research_context=research-context.md")
    ```
 3. **Lead serially merges** all per-topic files into `${RUN_DIR}/materials.md` after all agents complete.
    This avoids parallel append conflicts on a shared file.
@@ -140,6 +151,17 @@ Generate professional PPT slides as SVG files (1280x720) through a structured mu
 
 **Pipeline optimization**: Do not wait for all drafts to complete. As soon as `draft_slide_ready(index=N)` is received, launch slide-core for that slide. Use a sliding window of `min(3, remaining_slides)` parallel slide-core agents to balance throughput and resource usage.
 
+**Incremental progress tracking**: Maintain `${RUN_DIR}/slide-status.json` throughout Phase 6. After each slide completes its design→review cycle (pass or accepted_with_warning), append its entry immediately. This enables `--run-id` resume to skip already-completed slides. Format:
+```json
+{
+  "slides": {
+    "01": { "status": "passed", "score": 8.2, "fix_rounds": 0, "timestamp": "2026-03-21T10:30:00Z" },
+    "05": { "status": "accepted_with_warning", "score": 6.8, "fix_rounds": 2, "timestamp": "2026-03-21T10:35:00Z" }
+  }
+}
+```
+On `--run-id` resume: read `slide-status.json`, skip slides already marked `passed` or `accepted_with_warning`, and continue from the first incomplete slide.
+
 For each slide (or in batches):
 
 1. **Claude generates** final design SVG:
@@ -160,11 +182,15 @@ For each slide (or in batches):
    - Score >= 7.0 + gates pass: no fixes needed.
    - Score 5.0–6.9: fix loop, max 2 rounds.
    - Score 3.0–4.9: fix loop, max 1 round (unlikely to reach 7 in 2).
-   - Score < 3.0: regenerate from scratch (`mode=regenerate`) — do not patch.
+   - Score < 3.0: regenerate from scratch — re-run `mode=design` **without** `fixes_json` so slide-core produces a fresh layout from the draft reference instead of patching a broken SVG.
 
    For fix rounds, re-run slide-core with fixes:
    ```text
    Task(subagent_type="ppt-agent:slide-core", prompt="run_dir=${RUN_DIR} mode=design slide_index=${N} style=${STYLE} fixes_json=${FIXES}")
+   ```
+   For regeneration (score < 3.0), re-run without fixes:
+   ```text
+   Task(subagent_type="ppt-agent:slide-core", prompt="run_dir=${RUN_DIR} mode=design slide_index=${N} style=${STYLE}")
    ```
    Then re-run review-core. If still failing after max rounds, accept current version with quality note.
 
@@ -227,7 +253,7 @@ For each slide (or in batches):
    ```
 
 3. **Generate HTML preview page** (`${RUN_DIR}/output/index.html`):
-   1. Read the template from `plugins/ppt-agent/skills/_shared/assets/preview-template.html`.
+   1. Read the template from `skills/_shared/assets/preview-template.html` (relative to plugin root).
    2. Read `${RUN_DIR}/outline.json` to extract slide titles for labels.
    3. Replace template placeholders:
       - `{{TITLE}}` → presentation title from outline.json (e.g. "新一代小米SU7发布会")

@@ -57,6 +57,7 @@ openspec/changes/<run_id>/
 ├── outline.json             # 结构化大纲
 ├── drafts/slide-{nn}.svg    # 规划草稿
 ├── slides/slide-{nn}.svg    # 设计稿
+├── slide-status.json        # 逐页进度（支持中断恢复）
 ├── reviews/review-{nn}.md   # 审查报告
 ├── review-manifest.json     # 审查汇总（Phase 6→7 质量门控）
 └── output/
