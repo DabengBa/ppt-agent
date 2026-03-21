@@ -63,6 +63,23 @@ openspec/changes/<run_id>/
     └── index.html           # 交互式预览页
 ```
 
+## 跨平台适配路线图
+
+PPT Agent 当前运行在 Claude Code 上，计划适配以下平台：
+
+| 平台 | 难度 | 状态 | 说明 |
+|------|------|------|------|
+| [Droid (Factory)](https://factory.ai) | ⭐ | 🔜 待验证 | 官方兼容 Claude Code 插件格式，预计开箱即用 |
+| [Codex (OpenAI)](https://developers.openai.com/codex) | ⭐⭐ | 📋 计划中 | SKILL.md 同构，agents 需 MD→TOML 转换 |
+| [OpenClaw](https://openclaw.ai) | ⭐⭐⭐ | 📋 计划中 | SKILL.md 同构，需适配 plugin manifest 和 ClawHub |
+| [OpenCode](https://opencode.ai) | ⭐⭐⭐⭐ | 📋 计划中 | 插件为 TypeScript hooks 模式，范式差异较大 |
+
+### 长期方向
+
+- **MCP Server 化**：将核心工作流封装为 MCP Server，暴露 `ppt/generate`、`ppt/outline`、`ppt/review` 等标准 tools。所有支持 MCP 的宿主（Claude Code / Codex / OpenCode / Droid / Cursor / Zed 等）均可直接接入，一次开发全平台通用。
+- **核心解耦**：将 7 阶段工作流逻辑与宿主特有协议（Task / SendMessage / AskUserQuestion）分离为平台无关的 `core/` 层，新增平台只需编写轻量 adapter。
+- **Headless 模式**：支持无交互批量生成，适用于 CI/CD pipeline 和 API 调用场景。
+
 ## 许可证
 
 MIT
