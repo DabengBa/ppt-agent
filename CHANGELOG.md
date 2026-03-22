@@ -12,3 +12,6 @@
 - **Gemini intermediate artifacts preserved**: Raw Gemini outputs (`gemini-raw-*.md`) are kept in `${RUN_DIR}/reviews/` for traceability and debugging.
 - **research-core agent**: Replaced `agent-reach` CLI dependency with probe-first flow — detects available tools at runtime and selects the best search method per platform.
 - **README showcase**: Add GPT-5.4 OpenCode comparison entry and slide gallery references.
+
+### Removed
+- **Legacy Xiaomi SU7 example bundles**: Remove archived `ppt-xiaomi-su7-2026`, `ppt-xiaomi-su7-launch`, and `ppt-xiaomi-su7-new-launch` assets.
