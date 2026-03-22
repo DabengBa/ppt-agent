@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+- **llmdoc maintainer documentation**: Add an internal `llmdoc/` documentation hub covering project overview, workflow architecture, maintenance guides, and repository conventions for `ppt-agent` maintainers.
 - **agent-reach skill**: Self-contained multi-platform search & read skill (14+ platforms). Zero external dependencies — uses upstream CLI tools (curl+Jina, gh, yt-dlp, xreach, mcporter) directly with tier-based graceful degradation. Includes `probe.sh` for runtime tool detection.
 - **MIT LICENSE** for agent-reach skill (derived from [Agent Reach](https://github.com/Panniantong/Agent-Reach) by Agent Eyes).
 - **GPT-5.4 OpenCode showcase**: Add the new Xiaomi SU7 deck assets, review artifacts, and preview output for the latest 12-slide example.
