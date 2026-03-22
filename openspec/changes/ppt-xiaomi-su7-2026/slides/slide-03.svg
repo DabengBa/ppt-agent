@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <text x="60" y="50" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="36" font-weight="bold" fill="#1a202c">三版本全面升级</text>
+  <g transform="translate(60, 100)">
+    <rect width="360" height="400" rx="12" fill="#f0f4f8" stroke="#e2e8f0" stroke-width="1"/>
+    <rect x="0" y="0" width="360" height="60" rx="12" fill="#1a365d"/>
+    <text x="180" y="40" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="20" font-weight="bold" fill="#ffffff">标准版</text>
+    <text x="180" y="140" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="36" font-weight="bold" fill="#1a365d">¥22.99万</text>
+    <text x="180" y="180" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="16" fill="#1a202c" opacity="0.8">720km 续航</text>
+  </g>
+  <g transform="translate(460, 100)">
+    <rect width="360" height="400" rx="12" fill="#f0f4f8" stroke="#e2e8f0" stroke-width="1"/>
+    <rect x="0" y="0" width="360" height="60" rx="12" fill="#e67e22"/>
+    <text x="180" y="40" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="20" font-weight="bold" fill="#ffffff">Pro版</text>
+    <text x="180" y="140" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="36" font-weight="bold" fill="#e67e22">¥25.99万</text>
+    <text x="180" y="180" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="16" fill="#1a202c" opacity="0.8">902km 续航</text>
+  </g>
+  <g transform="translate(860, 100)">
+    <rect width="360" height="400" rx="12" fill="#f0f4f8" stroke="#e2e8f0" stroke-width="1"/>
+    <rect x="0" y="0" width="360" height="60" rx="12" fill="#1a365d"/>
+    <text x="180" y="40" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="20" font-weight="bold" fill="#ffffff">Max版</text>
+    <text x="180" y="140" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="36" font-weight="bold" fill="#1a365d">¥30.99万</text>
+    <text x="180" y="180" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="16" fill="#1a202c" opacity="0.8">835km 续航</text>
+  </g>
+  <text x="1220" y="700" font-family="Inter" font-size="12" fill="#1a202c" opacity="0.3">03</text>
+</svg>

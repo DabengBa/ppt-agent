@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <text x="60" y="50" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="36" font-weight="bold" fill="#1a202c">从现象级网红到市场销冠</text>
+  <g transform="translate(60, 100)">
+    <rect width="280" height="180" rx="12" fill="#f0f4f8" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="140" y="70" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="48" font-weight="bold" fill="#e67e22">38.1万</text>
+    <text x="140" y="100" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.7">累计交付</text>
+  </g>
+  <g transform="translate(360, 100)">
+    <rect width="280" height="180" rx="12" fill="#f0f4f8" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="140" y="70" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="42" font-weight="bold" fill="#1a365d">258,164</text>
+    <text x="140" y="100" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.7">2025年销量</text>
+  </g>
+  <g transform="translate(660, 100)">
+    <rect width="280" height="180" rx="12" fill="#f0f4f8" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="140" y="70" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="36" font-weight="bold" fill="#1a365d">#1</text>
+    <text x="140" y="100" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.7">20万+轿车销冠</text>
+  </g>
+  <g transform="translate(940, 100)">
+    <rect width="280" height="180" rx="12" fill="#f0f4f8" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="140" y="70" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="36" font-weight="bold" fill="#e67e22">TOP 1</text>
+    <text x="140" y="100" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.7">用户满意度</text>
+  </g>
+  <text x="1220" y="700" font-family="Inter" font-size="12" fill="#1a202c" opacity="0.3">02</text>
+</svg>

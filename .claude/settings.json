@@ -1,0 +1,8 @@
+{
+  "enabledPlugins": {
+    "topic-research@ai-content-plugins": true,
+    "content-analysis@ai-content-plugins": true,
+    "visual-content@ai-content-plugins": true,
+    "ppt-agent@ppt-agent": true
+  }
+}

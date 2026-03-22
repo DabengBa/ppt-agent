@@ -1,0 +1,462 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <defs>
+    <!-- Dark background gradient -->
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#0D0D0D" />
+      <stop offset="100%" stop-color="#1A1A2E" />
+    </linearGradient>
+
+    <!-- Orange accent gradient -->
+    <linearGradient id="orangeGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF6900" />
+      <stop offset="100%" stop-color="#FF8C33" />
+    </linearGradient>
+
+    <!-- Cyan-tinted gradient for AD column -->
+    <linearGradient id="adCardGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.02" />
+    </linearGradient>
+
+    <!-- Cockpit column gradient -->
+    <linearGradient id="cockpitCardGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF6900" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#FF6900" stop-opacity="0.03" />
+    </linearGradient>
+
+    <!-- Stat card glow -->
+    <filter id="statGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#FF6900" flood-opacity="0.2" />
+    </filter>
+
+    <!-- Card shadow -->
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+
+    <!-- Bottom bar glow -->
+    <filter id="barGlow" x="-1%" y="-10%" width="102%" height="130%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#FF6900" flood-opacity="0.15" />
+    </filter>
+
+    <!-- Circuit board pattern (tech motif) -->
+    <pattern id="circuitPattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+      <!-- Horizontal trace -->
+      <line x1="0" y1="20" x2="30" y2="20" stroke="#FFFFFF" stroke-opacity="0.025" stroke-width="1" />
+      <line x1="50" y1="20" x2="80" y2="20" stroke="#FFFFFF" stroke-opacity="0.025" stroke-width="1" />
+      <!-- Vertical trace -->
+      <line x1="40" y1="0" x2="40" y2="15" stroke="#FFFFFF" stroke-opacity="0.025" stroke-width="1" />
+      <line x1="40" y1="25" x2="40" y2="50" stroke="#FFFFFF" stroke-opacity="0.025" stroke-width="1" />
+      <!-- Node dots -->
+      <circle cx="30" cy="20" r="1.5" fill="#FFFFFF" fill-opacity="0.03" />
+      <circle cx="50" cy="20" r="1.5" fill="#FFFFFF" fill-opacity="0.03" />
+      <circle cx="40" cy="15" r="1" fill="#FF6900" fill-opacity="0.04" />
+      <circle cx="40" cy="25" r="1" fill="#FF6900" fill-opacity="0.04" />
+      <!-- Corner trace -->
+      <path d="M60 60 L60 70 L80 70" fill="none" stroke="#FFFFFF" stroke-opacity="0.02" stroke-width="1" />
+      <circle cx="60" cy="60" r="1.5" fill="#FFFFFF" fill-opacity="0.03" />
+    </pattern>
+
+    <!-- Radial glow behind stat numbers -->
+    <radialGradient id="numberGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#FF6900" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#FF6900" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- ========================================== -->
+  <!-- BACKGROUND                                  -->
+  <!-- ========================================== -->
+  <rect width="1280" height="720" fill="url(#bgGradient)" />
+
+  <!-- Circuit board texture overlay -->
+  <rect width="1280" height="720" fill="url(#circuitPattern)" />
+
+  <!-- Subtle grid lines for tech feel -->
+  <line x1="640" y1="0" x2="640" y2="720" stroke="#FFFFFF" stroke-opacity="0.02" stroke-width="1" />
+  <line x1="0" y1="360" x2="1280" y2="360" stroke="#FFFFFF" stroke-opacity="0.015" stroke-width="1" />
+
+  <!-- Top accent bar -->
+  <rect x="0" y="0" width="1280" height="4" fill="url(#orangeGrad)" />
+
+  <!-- ========================================== -->
+  <!-- HEADER AREA                                 -->
+  <!-- ========================================== -->
+  <!-- Section label -->
+  <text x="60" y="42"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="12" fill="#FF6900" font-weight="700" letter-spacing="2">PART 4 / 生态闭环</text>
+
+  <!-- Title -->
+  <text x="60" y="84"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="36" font-weight="800" fill="#FFFFFF" letter-spacing="2">智能座舱 + 智能驾驶</text>
+
+  <!-- Subtitle -->
+  <text x="60" y="114"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="16" fill="#888888" letter-spacing="1">HyperOS</text>
+  <text x="152" y="114"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="16" fill="#555555" letter-spacing="1"> &#xD7; </text>
+  <text x="172" y="114"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="16" fill="#888888" letter-spacing="1">NVIDIA Thor</text>
+  <text x="300" y="114"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="16" fill="#555555" letter-spacing="1"> &#xD7; </text>
+  <text x="320" y="114"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="16" fill="#888888" letter-spacing="1">XiaoAi</text>
+
+  <!-- Title accent line -->
+  <rect x="60" y="126" width="80" height="3" rx="1.5" fill="#FF6900" />
+
+  <!-- ========================================== -->
+  <!-- HERO STAT CARDS ROW (y: 150 – 278)         -->
+  <!-- Two big number cards side by side           -->
+  <!-- ========================================== -->
+
+  <!-- Card 1: 700 TOPS -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="150" width="560" height="128" rx="16" fill="#FF6900" />
+    <!-- Decorative background number -->
+    <text x="560" y="262"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="160" font-weight="900" fill="#FFFFFF" fill-opacity="0.06"
+          text-anchor="end">700</text>
+    <!-- Label -->
+    <text x="88" y="190"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.7" letter-spacing="2">智驾算力</text>
+    <!-- Separator -->
+    <circle cx="88" cy="210" r="2.5" fill="#FFFFFF" fill-opacity="0.4" />
+    <line x1="97" y1="210" x2="170" y2="210" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="1" />
+    <!-- Big number -->
+    <text x="88" y="264"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="64" font-weight="900" fill="#FFFFFF" letter-spacing="-2">700</text>
+    <!-- Unit -->
+    <text x="270" y="264"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="28" font-weight="600" fill="#FFFFFF" fill-opacity="0.85">TOPS</text>
+    <!-- Chip icon -->
+    <g transform="translate(470, 168)">
+      <rect x="0" y="0" width="40" height="40" rx="6" fill="#FFFFFF" fill-opacity="0.15" />
+      <!-- Chip body -->
+      <rect x="10" y="10" width="20" height="20" rx="3" fill="none" stroke="#FFFFFF" stroke-opacity="0.6" stroke-width="1.5" />
+      <!-- Pins -->
+      <line x1="14" y1="10" x2="14" y2="5" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="1.5" />
+      <line x1="20" y1="10" x2="20" y2="5" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="1.5" />
+      <line x1="26" y1="10" x2="26" y2="5" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="1.5" />
+      <line x1="14" y1="30" x2="14" y2="35" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="1.5" />
+      <line x1="20" y1="30" x2="20" y2="35" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="1.5" />
+      <line x1="26" y1="30" x2="26" y2="35" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="1.5" />
+      <line x1="10" y1="16" x2="5" y2="16" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="1.5" />
+      <line x1="10" y1="24" x2="5" y2="24" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="1.5" />
+      <line x1="30" y1="16" x2="35" y2="16" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="1.5" />
+      <line x1="30" y1="24" x2="35" y2="24" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="1.5" />
+      <!-- Core dot -->
+      <circle cx="20" cy="20" r="3" fill="#FFFFFF" fill-opacity="0.5" />
+    </g>
+    <!-- Sub-label -->
+    <text x="88" y="272"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="0" fill="transparent">.</text>
+    <text x="420" y="260"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="12" fill="#FFFFFF" fill-opacity="0.5" letter-spacing="1">NVIDIA Thor</text>
+  </g>
+
+  <!-- Card 2: 95% -->
+  <g filter="url(#cardShadow)">
+    <rect x="640" y="150" width="580" height="128" rx="16" fill="#FFFFFF" fill-opacity="0.05" />
+    <rect x="640" y="150" width="580" height="128" rx="16" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1" />
+    <!-- Decorative background number -->
+    <text x="1160" y="262"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="160" font-weight="900" fill="#FFFFFF" fill-opacity="0.03"
+          text-anchor="end">95</text>
+    <!-- Label -->
+    <text x="672" y="190"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="14" font-weight="500" fill="#AAAAAA" letter-spacing="2">语音控制覆盖</text>
+    <!-- Separator -->
+    <circle cx="672" cy="210" r="2.5" fill="#FF6900" fill-opacity="0.5" />
+    <line x1="681" y1="210" x2="750" y2="210" stroke="#FF6900" stroke-opacity="0.2" stroke-width="1" />
+    <!-- Big number -->
+    <text x="672" y="264"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="64" font-weight="900" fill="#FF6900" letter-spacing="-2" filter="url(#statGlow)">95%</text>
+    <!-- Unit -->
+    <text x="862" y="264"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="22" font-weight="500" fill="#FFFFFF" fill-opacity="0.5">功能</text>
+    <!-- Voice wave icon -->
+    <g transform="translate(1136, 168)">
+      <rect x="0" y="0" width="40" height="40" rx="6" fill="#FF6900" fill-opacity="0.12" />
+      <!-- Sound waves -->
+      <path d="M14 14 L14 26" stroke="#FF6900" stroke-width="2" stroke-linecap="round" />
+      <path d="M18 10 L18 30" stroke="#FF6900" stroke-width="2" stroke-linecap="round" />
+      <path d="M22 14 L22 26" stroke="#FF6900" stroke-width="2" stroke-linecap="round" />
+      <path d="M26 18 L26 22" stroke="#FF6900" stroke-width="2" stroke-linecap="round" />
+    </g>
+    <!-- Sub-label -->
+    <text x="930" y="260"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="12" fill="#FFFFFF" fill-opacity="0.35" letter-spacing="1">车外语音 + 声纹识别</text>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- TWO-COLUMN FEATURE CARDS (y: 298 – 590)    -->
+  <!-- Left: Cockpit  |  Right: Autonomous Driving -->
+  <!-- ========================================== -->
+
+  <!-- LEFT COLUMN: 智能座舱 -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="298" width="560" height="292" rx="16" fill="url(#cockpitCardGrad)" />
+    <rect x="60" y="298" width="560" height="292" rx="16" fill="none" stroke="#FF6900" stroke-opacity="0.12" stroke-width="1" />
+
+    <!-- Corner accent (top-left) -->
+    <path d="M 60 318 L 60 298 Q 60 298 76 298 L 120 298" fill="none" stroke="#FF6900" stroke-width="2" stroke-linecap="round" />
+
+    <!-- Column header -->
+    <g transform="translate(88, 316)">
+      <!-- Screen icon -->
+      <rect x="0" y="0" width="32" height="32" rx="6" fill="#FF6900" fill-opacity="0.15" />
+      <rect x="6" y="7" width="20" height="14" rx="2" fill="none" stroke="#FF6900" stroke-width="1.5" />
+      <line x1="13" y1="21" x2="19" y2="21" stroke="#FF6900" stroke-width="1" />
+      <line x1="16" y1="21" x2="16" y2="25" stroke="#FF6900" stroke-width="1.5" />
+      <line x1="11" y1="25" x2="21" y2="25" stroke="#FF6900" stroke-width="1.5" stroke-linecap="round" />
+    </g>
+    <text x="130" y="340"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="20" font-weight="700" fill="#FFFFFF">智能座舱</text>
+    <text x="240" y="340"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="13" fill="#666666" font-weight="500">SMART COCKPIT</text>
+
+    <!-- Chip badge -->
+    <rect x="88" y="362" width="160" height="30" rx="8" fill="#FF6900" fill-opacity="0.1" />
+    <text x="98" y="382"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="13" font-weight="700" fill="#FF6900">骁龙 8 Gen 3</text>
+
+    <!-- Divider -->
+    <line x1="88" y1="406" x2="580" y2="406" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="1" />
+
+    <!-- Feature 1 -->
+    <g transform="translate(88, 422)">
+      <circle cx="6" cy="8" r="4" fill="#FF6900" fill-opacity="0.2" />
+      <circle cx="6" cy="8" r="1.5" fill="#FF6900" />
+      <text x="20" y="13"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="15" font-weight="600" fill="#FFFFFF" fill-opacity="0.9">6屏 + HyperOS 统一调度</text>
+    </g>
+
+    <!-- Feature 2 -->
+    <g transform="translate(88, 460)">
+      <circle cx="6" cy="8" r="4" fill="#FF6900" fill-opacity="0.2" />
+      <circle cx="6" cy="8" r="1.5" fill="#FF6900" />
+      <text x="20" y="13"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="15" font-weight="600" fill="#FFFFFF" fill-opacity="0.9">95% 语音控制</text>
+      <text x="180" y="13"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="12" fill="#888888">XiaoAi 长期记忆</text>
+    </g>
+
+    <!-- Feature 3 -->
+    <g transform="translate(88, 498)">
+      <circle cx="6" cy="8" r="4" fill="#FF6900" fill-opacity="0.2" />
+      <circle cx="6" cy="8" r="1.5" fill="#FF6900" />
+      <text x="20" y="13"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="15" font-weight="600" fill="#FFFFFF" fill-opacity="0.9">模糊语义导航</text>
+    </g>
+    <!-- Sub-example in quotes -->
+    <text x="108" y="528"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="12" fill="#999999" font-style="italic">"上次约会那家咖啡厅" &#x2192; 精确定位</text>
+
+    <!-- Decorative circuit traces at bottom -->
+    <g opacity="0.08">
+      <line x1="400" y1="570" x2="580" y2="570" stroke="#FF6900" stroke-width="1" />
+      <circle cx="400" cy="570" r="2" fill="#FF6900" />
+      <line x1="430" y1="570" x2="430" y2="555" stroke="#FF6900" stroke-width="1" />
+      <circle cx="430" cy="555" r="2" fill="#FF6900" />
+      <line x1="500" y1="570" x2="500" y2="580" stroke="#FF6900" stroke-width="1" />
+      <circle cx="500" cy="580" r="2" fill="#FF6900" />
+    </g>
+  </g>
+
+  <!-- RIGHT COLUMN: 智能驾驶 -->
+  <g filter="url(#cardShadow)">
+    <rect x="640" y="298" width="580" height="292" rx="16" fill="url(#adCardGrad)" />
+    <rect x="640" y="298" width="580" height="292" rx="16" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1" />
+
+    <!-- Corner accent (top-left) -->
+    <path d="M 640 318 L 640 298 Q 640 298 656 298 L 700 298" fill="none" stroke="#FF6900" stroke-width="2" stroke-linecap="round" />
+
+    <!-- Column header -->
+    <g transform="translate(668, 316)">
+      <!-- Steering/radar icon -->
+      <rect x="0" y="0" width="32" height="32" rx="6" fill="#FF6900" fill-opacity="0.15" />
+      <circle cx="16" cy="16" r="8" fill="none" stroke="#FF6900" stroke-width="1.5" />
+      <circle cx="16" cy="16" r="3" fill="#FF6900" fill-opacity="0.6" />
+      <!-- Radar arcs -->
+      <path d="M16 8 A8 8 0 0 1 24 16" fill="none" stroke="#FF6900" stroke-width="1" stroke-opacity="0.5" />
+      <path d="M16 5 A11 11 0 0 1 27 16" fill="none" stroke="#FF6900" stroke-width="0.8" stroke-opacity="0.3" />
+    </g>
+    <text x="710" y="340"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="20" font-weight="700" fill="#FFFFFF">智能驾驶</text>
+    <text x="820" y="340"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="13" fill="#666666" font-weight="500">AUTONOMOUS DRIVING</text>
+
+    <!-- Chip badge -->
+    <rect x="668" y="362" width="200" height="30" rx="8" fill="#FFFFFF" fill-opacity="0.06" />
+    <text x="678" y="382"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="13" font-weight="700" fill="#FF6900">700 TOPS Thor</text>
+
+    <!-- Divider -->
+    <line x1="668" y1="406" x2="1180" y2="406" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="1" />
+
+    <!-- Feature 1 -->
+    <g transform="translate(668, 422)">
+      <circle cx="6" cy="8" r="4" fill="#FFFFFF" fill-opacity="0.08" />
+      <circle cx="6" cy="8" r="1.5" fill="#FF6900" />
+      <text x="20" y="13"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="15" font-weight="600" fill="#FFFFFF" fill-opacity="0.9">高速 NOA 交付即用</text>
+      <!-- Status badge -->
+      <rect x="210" y="-1" width="60" height="22" rx="11" fill="#00C853" fill-opacity="0.12" />
+      <text x="224" y="14"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="10" font-weight="600" fill="#00C853">READY</text>
+    </g>
+
+    <!-- Feature 2 -->
+    <g transform="translate(668, 460)">
+      <circle cx="6" cy="8" r="4" fill="#FFFFFF" fill-opacity="0.08" />
+      <circle cx="6" cy="8" r="1.5" fill="#FF6900" />
+      <text x="20" y="13"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="15" font-weight="600" fill="#FFFFFF" fill-opacity="0.9">端到端代客泊车</text>
+    </g>
+
+    <!-- Feature 3 -->
+    <g transform="translate(668, 498)">
+      <circle cx="6" cy="8" r="4" fill="#FFFFFF" fill-opacity="0.08" />
+      <circle cx="6" cy="8" r="1.5" fill="#FF6900" />
+      <text x="20" y="13"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="15" font-weight="600" fill="#FFFFFF" fill-opacity="0.9">3,000+ 商场车库</text>
+      <text x="220" y="13"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="12" fill="#888888">23km/h 泊入速度</text>
+    </g>
+
+    <!-- Sensors badge row -->
+    <rect x="668" y="530" width="500" height="36" rx="8" fill="#FFFFFF" fill-opacity="0.03" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="1" />
+    <g transform="translate(684, 542)">
+      <circle cx="4" cy="4" r="3" fill="#FF6900" fill-opacity="0.2" />
+      <circle cx="4" cy="4" r="1.5" fill="#FF6900" />
+      <text x="14" y="9"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="11" fill="#AAAAAA" font-weight="500">激光雷达</text>
+    </g>
+    <g transform="translate(792, 542)">
+      <circle cx="4" cy="4" r="3" fill="#FF6900" fill-opacity="0.2" />
+      <circle cx="4" cy="4" r="1.5" fill="#FF6900" />
+      <text x="14" y="9"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="11" fill="#AAAAAA" font-weight="500">4D毫米波雷达</text>
+    </g>
+    <g transform="translate(930, 542)">
+      <circle cx="4" cy="4" r="3" fill="#FF6900" fill-opacity="0.2" />
+      <circle cx="4" cy="4" r="1.5" fill="#FF6900" />
+      <text x="14" y="9"
+            font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+            font-size="11" fill="#AAAAAA" font-weight="500">HAD 全栈智驾</text>
+    </g>
+
+    <!-- Decorative circuit traces at bottom -->
+    <g opacity="0.06">
+      <line x1="1000" y1="575" x2="1180" y2="575" stroke="#FFFFFF" stroke-width="1" />
+      <circle cx="1000" cy="575" r="2" fill="#FFFFFF" />
+      <line x1="1050" y1="575" x2="1050" y2="560" stroke="#FFFFFF" stroke-width="1" />
+      <circle cx="1050" cy="560" r="2" fill="#FFFFFF" />
+      <line x1="1120" y1="575" x2="1120" y2="585" stroke="#FFFFFF" stroke-width="1" />
+      <circle cx="1120" cy="585" r="2" fill="#FFFFFF" />
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- BOTTOM HIGHLIGHT BAR                        -->
+  <!-- XLA Cognitive Model                         -->
+  <!-- ========================================== -->
+  <g filter="url(#barGlow)">
+    <rect x="60" y="610" width="1160" height="56" rx="14" fill="#FF6900" fill-opacity="0.08" />
+    <rect x="60" y="610" width="1160" height="56" rx="14" fill="none" stroke="#FF6900" stroke-opacity="0.2" stroke-width="1" />
+
+    <!-- AI brain icon -->
+    <g transform="translate(88, 624)">
+      <circle cx="14" cy="14" r="12" fill="#FF6900" fill-opacity="0.15" />
+      <!-- Brain shape simplified -->
+      <path d="M10 18 Q8 14 10 10 Q12 6 16 8 Q18 6 20 8 Q24 6 24 10 Q26 14 24 18 Q22 22 18 20 Q14 22 10 18 Z" fill="none" stroke="#FF6900" stroke-width="1.2" />
+      <line x1="14" y1="10" x2="14" y2="18" stroke="#FF6900" stroke-width="0.8" stroke-opacity="0.5" />
+      <line x1="18" y1="8" x2="18" y2="20" stroke="#FF6900" stroke-width="0.8" stroke-opacity="0.5" />
+    </g>
+
+    <!-- Main text -->
+    <text x="126" y="644"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="18" font-weight="700" fill="#FF6900">XLA 认知大模型</text>
+
+    <!-- Separator -->
+    <line x1="310" y1="626" x2="310" y2="654" stroke="#FF6900" stroke-opacity="0.2" stroke-width="1" />
+
+    <!-- Description -->
+    <text x="336" y="642"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="15" font-weight="500" fill="#FFFFFF" fill-opacity="0.6">从模仿到推理 — 驱动智驾与座舱的统一认知引擎</text>
+
+    <!-- Arrow decoration -->
+    <g transform="translate(1140, 630)">
+      <path d="M0 8 L16 8 M10 2 L16 8 L10 14" stroke="#FF6900" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.4" />
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- FOOTER                                      -->
+  <!-- ========================================== -->
+  <!-- Page number -->
+  <text x="1220" y="700"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="12" fill="#555555" text-anchor="end" font-weight="500">08 / 12</text>
+
+  <!-- Brand footer -->
+  <text x="60" y="700"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="11" fill="#444444" letter-spacing="1">XIAOMI SU7 | 新一代小米SU7发布会</text>
+
+  <!-- Decorative dot pattern (top-right) -->
+  <g fill="#FF6900" fill-opacity="0.06">
+    <circle cx="1180" cy="40" r="1.5" />
+    <circle cx="1194" cy="40" r="1.5" />
+    <circle cx="1208" cy="40" r="1.5" />
+    <circle cx="1222" cy="40" r="1.5" />
+    <circle cx="1180" cy="54" r="1.5" />
+    <circle cx="1194" cy="54" r="1.5" />
+    <circle cx="1208" cy="54" r="1.5" />
+    <circle cx="1222" cy="54" r="1.5" />
+    <circle cx="1180" cy="68" r="1.5" />
+    <circle cx="1194" cy="68" r="1.5" />
+    <circle cx="1208" cy="68" r="1.5" />
+    <circle cx="1222" cy="68" r="1.5" />
+  </g>
+
+</svg>

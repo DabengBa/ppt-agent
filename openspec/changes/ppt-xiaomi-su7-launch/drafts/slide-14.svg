@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6900;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8533;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1280" height="720" fill="url(#bg-grad)"/>
+  
+  <!-- Thank you text -->
+  <text x="640" y="280" text-anchor="middle" font-family="sans-serif" font-size="72" font-weight="bold" fill="white">
+    谢谢观看
+  </text>
+  
+  <!-- Product name -->
+  <text x="640" y="380" text-anchor="middle" font-family="sans-serif" font-size="36" fill="white">
+    新一代小米SU7
+  </text>
+  
+  <!-- Tagline -->
+  <text x="640" y="440" text-anchor="middle" font-family="sans-serif" font-size="24" fill="rgba(255,255,255,0.8)">
+    更好看 · 更好开 · 更智能 · 更安全
+  </text>
+  
+  <!-- Xiaomi logo -->
+  <rect x="600" y="500" width="80" height="80" rx="8" fill="white" opacity="0.2"/>
+  <text x="640" y="545" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="bold" fill="white">
+    Mi
+  </text>
+</svg>

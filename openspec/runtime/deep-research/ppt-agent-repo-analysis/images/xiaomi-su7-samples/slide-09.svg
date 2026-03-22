@@ -1,0 +1,291 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <defs>
+    <!-- Glow filter for connection lines -->
+    <filter id="glowLine" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Strong glow for center hub -->
+    <filter id="glowHub" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle glow for satellite nodes -->
+    <filter id="glowNode" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Card shadow -->
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+
+    <!-- Gradient for connection lines -->
+    <linearGradient id="connGradTop" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#FF6900" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FF6900" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="connGradRight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF6900" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FF6900" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="connGradBottom" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF6900" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FF6900" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="connGradLeft" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0%" stop-color="#FF6900" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FF6900" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="connGradTopRight" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF6900" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FF6900" stop-opacity="0.25"/>
+    </linearGradient>
+
+    <!-- Radial gradient for center hub -->
+    <radialGradient id="hubGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8C33"/>
+      <stop offset="70%" stop-color="#FF6900"/>
+      <stop offset="100%" stop-color="#CC5400"/>
+    </radialGradient>
+
+    <!-- Orbit ring gradient -->
+    <radialGradient id="orbitGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#FF6900" stop-opacity="0"/>
+      <stop offset="95%" stop-color="#FF6900" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#FF6900" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Background gradient -->
+    <radialGradient id="bgGradient" cx="58%" cy="52%" r="60%">
+      <stop offset="0%" stop-color="#222222"/>
+      <stop offset="100%" stop-color="#111111"/>
+    </radialGradient>
+
+    <!-- Number card gradient -->
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2A2A2A"/>
+      <stop offset="100%" stop-color="#1F1F1F"/>
+    </linearGradient>
+
+    <!-- Feature tag gradient -->
+    <linearGradient id="tagGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF6900" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#FF6900" stop-opacity="0.05"/>
+    </linearGradient>
+
+    <!-- Animated pulse ring (static representation) -->
+    <radialGradient id="pulseRing" cx="50%" cy="50%" r="50%">
+      <stop offset="70%" stop-color="#FF6900" stop-opacity="0"/>
+      <stop offset="85%" stop-color="#FF6900" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#FF6900" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ==================== BACKGROUND ==================== -->
+  <rect width="1280" height="720" fill="url(#bgGradient)"/>
+
+  <!-- Subtle grid pattern for tech feel -->
+  <g opacity="0.03" stroke="#FFFFFF" stroke-width="0.5">
+    <line x1="0" y1="180" x2="1280" y2="180"/>
+    <line x1="0" y1="360" x2="1280" y2="360"/>
+    <line x1="0" y1="540" x2="1280" y2="540"/>
+    <line x1="320" y1="0" x2="320" y2="720"/>
+    <line x1="640" y1="0" x2="640" y2="720"/>
+    <line x1="960" y1="0" x2="960" y2="720"/>
+  </g>
+
+  <!-- Top accent bar -->
+  <rect x="0" y="0" width="1280" height="3" fill="#FF6900"/>
+
+  <!-- ==================== HEADER AREA (Left Top) ==================== -->
+
+  <!-- Section label -->
+  <text x="60" y="48" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#FF6900" font-weight="600" letter-spacing="2">PART 4 / ECOSYSTEM</text>
+
+  <!-- Title -->
+  <text x="60" y="95" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="38" font-weight="bold" fill="#FFFFFF" letter-spacing="3">
+    <tspan fill="#FFFFFF">人</tspan>
+    <tspan fill="#FF6900" dx="4"> x </tspan>
+    <tspan fill="#FFFFFF" dx="4">车</tspan>
+    <tspan fill="#FF6900" dx="4"> x </tspan>
+    <tspan fill="#FFFFFF" dx="4">家</tspan>
+    <tspan fill="#FFFFFF" dx="12">生态</tspan>
+  </text>
+
+  <!-- Subtitle -->
+  <text x="60" y="128" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" fill="#999999" letter-spacing="1">10亿+设备，一个HyperOS全连接</text>
+
+  <!-- Accent line under title -->
+  <rect x="60" y="142" width="80" height="3" rx="1.5" fill="#FF6900"/>
+
+  <!-- ==================== BIG NUMBERS (Left Cards) ==================== -->
+
+  <!-- Card: Connected Devices -->
+  <rect x="60" y="175" width="200" height="120" rx="12" fill="url(#cardGrad)" filter="url(#cardShadow)"/>
+  <rect x="60" y="175" width="200" height="120" rx="12" fill="none" stroke="#FF6900" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="80" y="205" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#888888" letter-spacing="1">连接设备</text>
+  <text x="80" y="265" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="48" font-weight="bold" fill="#FF6900">10亿+</text>
+
+  <!-- Card: Product Categories -->
+  <rect x="280" y="175" width="200" height="120" rx="12" fill="url(#cardGrad)" filter="url(#cardShadow)"/>
+  <rect x="280" y="175" width="200" height="120" rx="12" fill="none" stroke="#FF6900" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="300" y="205" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#888888" letter-spacing="1">产品品类</text>
+  <text x="300" y="265" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="48" font-weight="bold" fill="#FF6900">200+</text>
+
+  <!-- ==================== HUB-AND-SPOKE DIAGRAM (Center-Right) ==================== -->
+
+  <!-- Diagram area: centered at cx=780 cy=380 -->
+
+  <!-- Outer orbit rings -->
+  <circle cx="780" cy="380" r="185" fill="none" stroke="#FF6900" stroke-opacity="0.06" stroke-width="1" stroke-dasharray="4 6"/>
+  <circle cx="780" cy="380" r="140" fill="none" stroke="#FF6900" stroke-opacity="0.1" stroke-width="1"/>
+
+  <!-- Pulse ring effect -->
+  <circle cx="780" cy="380" r="165" fill="url(#pulseRing)"/>
+
+  <!-- Connection lines with glow -->
+  <!-- To Phone (top-left) -->
+  <line x1="780" y1="325" x2="780" y2="225" stroke="url(#connGradTop)" stroke-width="2.5" filter="url(#glowLine)"/>
+  <!-- Data flow dots on line -->
+  <circle cx="780" cy="265" r="2.5" fill="#FF6900" opacity="0.7"/>
+  <circle cx="780" cy="245" r="1.8" fill="#FF6900" opacity="0.4"/>
+
+  <!-- To Tablet (top-right) -->
+  <line x1="830" y1="340" x2="920" y2="270" stroke="url(#connGradTopRight)" stroke-width="2.5" filter="url(#glowLine)"/>
+  <circle cx="885" cy="298" r="2.5" fill="#FF6900" opacity="0.7"/>
+  <circle cx="900" cy="286" r="1.8" fill="#FF6900" opacity="0.4"/>
+
+  <!-- To Wearable (bottom-right) -->
+  <line x1="830" y1="420" x2="920" y2="490" stroke="#FF6900" stroke-opacity="0.6" stroke-width="2.5" filter="url(#glowLine)"/>
+  <circle cx="885" cy="462" r="2.5" fill="#FF6900" opacity="0.7"/>
+  <circle cx="900" cy="474" r="1.8" fill="#FF6900" opacity="0.4"/>
+
+  <!-- To Smart Home (bottom-left) -->
+  <line x1="730" y1="420" x2="640" y2="490" stroke="#FF6900" stroke-opacity="0.6" stroke-width="2.5" filter="url(#glowLine)"/>
+  <circle cx="675" cy="462" r="2.5" fill="#FF6900" opacity="0.7"/>
+  <circle cx="660" cy="474" r="1.8" fill="#FF6900" opacity="0.4"/>
+
+  <!-- Cross connections (lighter, showing mesh) -->
+  <path d="M 780 225 Q 870 248 920 270" fill="none" stroke="#FF6900" stroke-opacity="0.08" stroke-width="1" stroke-dasharray="3 4"/>
+  <path d="M 920 490 Q 870 510 640 490" fill="none" stroke="#FF6900" stroke-opacity="0.08" stroke-width="1" stroke-dasharray="3 4"/>
+
+  <!-- Center Hub: SU7 -->
+  <circle cx="780" cy="380" r="58" fill="#FF6900" opacity="0.15" filter="url(#glowHub)"/>
+  <circle cx="780" cy="380" r="48" fill="url(#hubGradient)"/>
+  <circle cx="780" cy="380" r="48" fill="none" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="780" y="373" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="bold" fill="#FFFFFF" text-anchor="middle">SU7</text>
+  <text x="780" y="396" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#FFFFFF" fill-opacity="0.8" text-anchor="middle">HyperOS</text>
+
+  <!-- Satellite Node: Phone (top) -->
+  <circle cx="780" cy="210" r="34" fill="#1A1A1A" stroke="#FF6900" stroke-width="1.5" filter="url(#glowNode)"/>
+  <circle cx="780" cy="210" r="34" fill="#FF6900" fill-opacity="0.08"/>
+  <!-- Phone icon -->
+  <rect x="770" y="192" width="20" height="30" rx="3" fill="none" stroke="#FF6900" stroke-width="1.5"/>
+  <line x1="776" y1="216" x2="784" y2="216" stroke="#FF6900" stroke-width="1.2"/>
+  <text x="780" y="240" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#CCCCCC" text-anchor="middle">手机</text>
+
+  <!-- Satellite Node: Tablet (top-right) -->
+  <circle cx="940" cy="255" r="34" fill="#1A1A1A" stroke="#FF6900" stroke-width="1.5" filter="url(#glowNode)"/>
+  <circle cx="940" cy="255" r="34" fill="#FF6900" fill-opacity="0.08"/>
+  <!-- Tablet icon -->
+  <rect x="927" y="240" width="26" height="20" rx="2" fill="none" stroke="#FF6900" stroke-width="1.5"/>
+  <circle cx="955" cy="250" r="1.5" fill="#FF6900"/>
+  <text x="940" y="285" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#CCCCCC" text-anchor="middle">平板</text>
+
+  <!-- Satellite Node: Wearable (bottom-right) -->
+  <circle cx="940" cy="505" r="34" fill="#1A1A1A" stroke="#FF6900" stroke-width="1.5" filter="url(#glowNode)"/>
+  <circle cx="940" cy="505" r="34" fill="#FF6900" fill-opacity="0.08"/>
+  <!-- Watch/band icon -->
+  <circle cx="940" cy="500" r="10" fill="none" stroke="#FF6900" stroke-width="1.5"/>
+  <rect x="935" y="485" width="10" height="5" rx="1" fill="none" stroke="#FF6900" stroke-width="1"/>
+  <rect x="935" y="511" width="10" height="5" rx="1" fill="none" stroke="#FF6900" stroke-width="1"/>
+  <text x="940" y="535" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#CCCCCC" text-anchor="middle">穿戴</text>
+
+  <!-- Satellite Node: Smart Home (bottom-left) -->
+  <circle cx="620" cy="505" r="34" fill="#1A1A1A" stroke="#FF6900" stroke-width="1.5" filter="url(#glowNode)"/>
+  <circle cx="620" cy="505" r="34" fill="#FF6900" fill-opacity="0.08"/>
+  <!-- House icon -->
+  <polygon points="620,490 605,502 635,502" fill="none" stroke="#FF6900" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="610" y="502" width="20" height="14" fill="none" stroke="#FF6900" stroke-width="1.5"/>
+  <rect x="617" y="508" width="6" height="8" fill="none" stroke="#FF6900" stroke-width="1"/>
+  <text x="620" y="535" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#CCCCCC" text-anchor="middle">智能家居</text>
+
+  <!-- ==================== FEATURE TAGS (Left, below numbers) ==================== -->
+
+  <!-- Feature strip label -->
+  <text x="60" y="335" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#888888" letter-spacing="1">AI 能力</text>
+
+  <!-- Tag: Miloco AI -->
+  <rect x="60" y="350" width="140" height="36" rx="8" fill="url(#tagGrad)" stroke="#FF6900" stroke-opacity="0.3" stroke-width="1"/>
+  <circle cx="80" cy="368" r="4" fill="#FF6900"/>
+  <text x="92" y="373" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#FFFFFF" font-weight="500">Miloco AI</text>
+
+  <!-- Tag: Google Gemini -->
+  <rect x="215" y="350" width="165" height="36" rx="8" fill="url(#tagGrad)" stroke="#FF6900" stroke-opacity="0.3" stroke-width="1"/>
+  <circle cx="235" cy="368" r="4" fill="#FF6900"/>
+  <text x="247" y="373" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#FFFFFF" font-weight="500">Google Gemini</text>
+
+  <!-- Tag: 200+ Categories -->
+  <rect x="395" y="350" width="130" height="36" rx="8" fill="url(#tagGrad)" stroke="#FF6900" stroke-opacity="0.3" stroke-width="1"/>
+  <circle cx="415" cy="368" r="4" fill="#FF6900"/>
+  <text x="427" y="373" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#FFFFFF" font-weight="500">200+ 品类</text>
+
+  <!-- ==================== CROSS-DEVICE SCENARIOS (Bottom Left) ==================== -->
+
+  <text x="60" y="425" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#888888" letter-spacing="1">跨设备场景</text>
+
+  <!-- Scenario cards -->
+  <!-- Card 1: Seamless Flow -->
+  <rect x="60" y="445" width="230" height="70" rx="10" fill="url(#cardGrad)" filter="url(#cardShadow)"/>
+  <rect x="60" y="445" width="230" height="70" rx="10" fill="none" stroke="#333333" stroke-width="1"/>
+  <!-- Arrow icon -->
+  <g transform="translate(78, 468)">
+    <line x1="0" y1="6" x2="18" y2="6" stroke="#FF6900" stroke-width="1.5"/>
+    <polyline points="14,2 18,6 14,10" fill="none" stroke="#FF6900" stroke-width="1.5"/>
+  </g>
+  <text x="105" y="475" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#FFFFFF" font-weight="500">无缝流转</text>
+  <text x="80" y="500" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#777777">手机导航 -> 车机接续 -> 手表到达提醒</text>
+
+  <!-- Card 2: Health Monitoring -->
+  <rect x="305" y="445" width="230" height="70" rx="10" fill="url(#cardGrad)" filter="url(#cardShadow)"/>
+  <rect x="305" y="445" width="230" height="70" rx="10" fill="none" stroke="#333333" stroke-width="1"/>
+  <!-- Heart icon -->
+  <g transform="translate(323, 465)">
+    <path d="M8,4 C8,2 6,0 4,0 C2,0 0,2 0,4 C0,8 8,14 8,14 C8,14 16,8 16,4 C16,2 14,0 12,0 C10,0 8,2 8,4Z" fill="none" stroke="#FF6900" stroke-width="1.3"/>
+  </g>
+  <text x="350" y="475" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#FFFFFF" font-weight="500">健康监测</text>
+  <text x="325" y="500" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#777777">手环检测疲劳 -> 座椅通风 + 提醒休息</text>
+
+  <!-- ==================== BOTTOM CALLOUT BAR ==================== -->
+
+  <rect x="60" y="555" width="480" height="56" rx="10" fill="#FF6900" fill-opacity="0.1" stroke="#FF6900" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="80" y="582" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#FF6900" font-weight="600" letter-spacing="1">MILOCO AI 本地副驾</text>
+  <text x="80" y="600" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#888888">家庭场景智能中枢 | 隐私本地处理 | 跨设备联动决策</text>
+
+  <!-- ==================== BOTTOM BAR ==================== -->
+
+  <!-- Divider line -->
+  <line x1="60" y1="660" x2="1220" y2="660" stroke="#333333" stroke-width="1"/>
+
+  <!-- Core message -->
+  <text x="60" y="690" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666">SU7 不只是一台车 -- 它是小米人车家生态的核心节点</text>
+
+  <!-- Page number -->
+  <text x="1220" y="690" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#555555" text-anchor="end">09 / 12</text>
+
+  <!-- Xiaomi logo mark (minimal) -->
+  <rect x="1190" y="36" width="30" height="5" rx="2.5" fill="#FF6900"/>
+</svg>

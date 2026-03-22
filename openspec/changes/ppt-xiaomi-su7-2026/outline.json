@@ -1,0 +1,159 @@
+{
+  "title": "新一代小米SU7发布会",
+  "total_slides": 12,
+  "style": "活力动感",
+  "target_audience": "媒体记者",
+  "core_purpose": "产品发布",
+  "slides": [
+    {
+      "index": 1,
+      "type": "cover",
+      "title": "新一代小米SU7",
+      "subtitle": "2026年正式发布",
+      "visual_elements": ["小米SU7渲染图", "卡布里蓝配色", "小米Logo", "发布会日期"],
+      "notes": "开场介绍小米汽车品牌和新一代SU7的发布意义"
+    },
+    {
+      "index": 2,
+      "type": "content",
+      "title": "从现象级网红到市场销冠",
+      "key_points": [
+        "累计交付38.1万辆",
+        "2025年销量258,164辆，20万以上轿车销冠",
+        "首次超越特斯拉Model 3",
+        "纯电车型一年保值率第一",
+        "中国质量协会用户满意度第一"
+      ],
+      "data_visualization": "柱状图+数据卡片",
+      "notes": "展示小米SU7的市场表现和用户认可度"
+    },
+    {
+      "index": 3,
+      "type": "content",
+      "title": "三版本全面升级",
+      "key_points": [
+        "标准版：22.99万元，720km续航",
+        "Pro版：25.99万元，902km续航",
+        "Max版：30.99万元，835km续航",
+        "全系标配不加价的理念"
+      ],
+      "data_visualization": "对比表格",
+      "notes": "介绍三版本的价格、续航和核心配置差异"
+    },
+    {
+      "index": 4,
+      "type": "content",
+      "title": "902km续航，同价位之王",
+      "key_points": [
+        "Pro版902km CLTC续航",
+        "752V/897V高压平台",
+        "15分钟补能670km（Max版）",
+        "CTB一体化电池技术"
+      ],
+      "data_visualization": "技术示意图+数据对比",
+      "notes": "详细讲解续航突破的技术原理和优势"
+    },
+    {
+      "index": 5,
+      "type": "content",
+      "title": "全系标配高阶智驾",
+      "key_points": [
+        "700TOPS算力Thor-U芯片",
+        "激光雷达全系标配",
+        "Xiaomi HAD端到端智驾",
+        "XLA认知大模型"
+      ],
+      "data_visualization": "技术架构图+功能演示",
+      "notes": "介绍智能驾驶系统的硬件配置和软件能力"
+    },
+    {
+      "index": 6,
+      "type": "content",
+      "title": "9安全气囊，全方位保护",
+      "key_points": [
+        "全系9安全气囊（老款7个）",
+        "新增后排侧气囊和中央气囊",
+        "2200MPa超强钢车身",
+        "电池14层物理防护"
+      ],
+      "data_visualization": "安全结构示意图",
+      "notes": "展示安全配置的升级和保护能力"
+    },
+    {
+      "index": 7,
+      "type": "content",
+      "title": "性能与价格的完美平衡",
+      "key_points": [
+        "Max版690马力，零百2.78秒",
+        "V6s Plus超级电机，22000rpm",
+        "897V高压平台，5.2C超快充"
+      ],
+      "data_visualization": "性能曲线图+加速数据",
+      "notes": "展示动力性能和驾驶体验"
+    },
+    {
+      "index": 8,
+      "type": "content",
+      "title": "外观内饰全面升级",
+      "key_points": [
+        "新增卡布里蓝配色",
+        "贯穿式光环尾灯",
+        "可升降电动后扰流板",
+        "Alcantara材质覆盖5㎡"
+      ],
+      "data_visualization": "设计细节图+配色展示",
+      "notes": "展示设计语言的进化和材质升级"
+    },
+    {
+      "index": 9,
+      "type": "content",
+      "title": "小米人车家全生态",
+      "key_points": [
+        "小米智能家居互联",
+        "手机车机无缝连接",
+        "小米生态链整合"
+      ],
+      "data_visualization": "生态系统图+互联场景",
+      "notes": "介绍小米生态的优势和用户体验"
+    },
+    {
+      "index": 10,
+      "type": "content",
+      "title": "全系标配不加价",
+      "key_points": [
+        "标准版：22.99万元",
+        "Pro版：25.99万元",
+        "Max版：30.99万元",
+        "同价位最高配置"
+      ],
+      "data_visualization": "价格体系图+价值主张",
+      "notes": "强调性价比和定价策略"
+    },
+    {
+      "index": 11,
+      "type": "content",
+      "title": "全面超越同级竞品",
+      "key_points": [
+        "续航对比：902km vs 竞品",
+        "智驾对比：全系标配 vs 选配",
+        "安全对比：9气囊 vs 行业平均",
+        "性能对比：2.78秒零百 vs 竞品"
+      ],
+      "data_visualization": "对比表格+雷达图",
+      "notes": "与主要竞品的全面对比分析"
+    },
+    {
+      "index": 12,
+      "type": "conclusion",
+      "title": "新一代小米SU7",
+      "key_points": [
+        "902km续航突破",
+        "全系标配高阶智驾",
+        "9安全气囊全面保护",
+        "22.99万起超高性价比"
+      ],
+      "call_to_action": "小米汽车，让每个人享受科技的乐趣",
+      "notes": "总结核心卖点，结束演讲"
+    }
+  ]
+}

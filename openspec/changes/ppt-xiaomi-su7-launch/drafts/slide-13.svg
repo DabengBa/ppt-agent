@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <rect width="1280" height="720" fill="#0f172a"/>
+  
+  <!-- Title -->
+  <text x="64" y="100" font-family="sans-serif" font-size="42" font-weight="bold" fill="white">
+    新一代SU7核心优势
+  </text>
+  
+  <!-- Key advantages -->
+  <g transform="translate(64, 180)">
+    <rect x="0" y="0" width="560" height="160" rx="16" fill="#FF6900" opacity="0.3"/>
+    <text x="40" y="50" font-family="sans-serif" font-size="18" fill="#FFB366">智能驾驶</text>
+    <text x="40" y="90" font-family="sans-serif" font-size="28" font-weight="bold" fill="white">全系标配</text>
+    <text x="40" y="130" font-family="sans-serif" font-size="24" fill="rgba(255,255,255,0.6)">激光雷达 + 700TOPS + XLA大模型</text>
+  </g>
+  
+  <g transform="translate(656, 180)">
+    <rect x="0" y="0" width="560" height="160" rx="16" fill="#FF6900" opacity="0.3"/>
+    <text x="40" y="50" font-family="sans-serif" font-size="18" fill="#FFB366">超长续航</text>
+    <text x="40" y="90" font-family="sans-serif" font-size="28" font-weight="bold" fill="white">Pro 902km</text>
+    <text x="40" y="130" font-family="sans-serif" font-size="24" fill="rgba(255,255,255,0.6)">同级最长续航</text>
+  </g>
+  
+  <g transform="translate(64, 380)">
+    <rect x="0" y="0" width="560" height="160" rx="16" fill="#FF6900" opacity="0.3"/>
+    <text x="40" y="50" font-family="sans-serif" font-size="18" fill="#FFB366">极速充电</text>
+    <text x="40" y="90" font-family="sans-serif" font-size="28" font-weight="bold" fill="white">12分钟快充</text>
+    <text x="40" y="130" font-family="sans-serif" font-size="24" fill="rgba(255,255,255,0.6)">10%-80%仅需12分钟</text>
+  </g>
+  
+  <g transform="translate(656, 380)">
+    <rect x="0" y="0" width="560" height="160" rx="16" fill="#FF6900" opacity="0.3"/>
+    <text x="40" y="50" font-family="sans-serif" font-size="18" fill="#FFB366">安全防护</text>
+    <text x="40" y="90" font-family="sans-serif" font-size="28" font-weight="bold" fill="white">9气囊 + 2200MPa钢</text>
+    <text x="40" y="130" font-family="sans-serif" font-size="24" fill="rgba(255,255,255,0.6)">全方位安全守护</text>
+  </g>
+  
+  <!-- Price highlight -->
+  <g transform="translate(64, 580)">
+    <rect x="0" y="0" width="1152" height="80" rx="16" fill="#FFB366" opacity="0.2"/>
+    <text x="576" y="50" text-anchor="middle" font-family="sans-serif" font-size="32" font-weight="bold" fill="white">
+      21.99万元起 | 性价比之王
+    </text>
+  </g>
+</svg>

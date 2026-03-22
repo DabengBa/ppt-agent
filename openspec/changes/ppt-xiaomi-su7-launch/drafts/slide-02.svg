@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <rect width="1280" height="720" fill="#0f172a"/>
+  
+  <!-- Title -->
+  <text x="64" y="100" font-family="sans-serif" font-size="42" font-weight="bold" fill="white">
+    小米汽车的市场势能
+  </text>
+  
+  <!-- Stats cards -->
+  <g transform="translate(64, 160)">
+    <!-- Card 1 -->
+    <rect x="0" y="0" width="350" height="200" rx="16" fill="#1e293b"/>
+    <text x="40" y="60" font-family="sans-serif" font-size="18" fill="#FFB366">交付量</text>
+    <text x="40" y="120" font-family="sans-serif" font-size="64" font-weight="bold" fill="white">36万+</text>
+    <text x="40" y="160" font-family="sans-serif" font-size="16" fill="rgba(255,255,255,0.6)">21个月累计交付</text>
+  </g>
+  
+  <g transform="translate(446, 160)">
+    <!-- Card 2 -->
+    <rect x="0" y="0" width="350" height="200" rx="16" fill="#1e293b"/>
+    <text x="40" y="60" font-family="sans-serif" font-size="18" fill="#FFB366">市场排名</text>
+    <text x="40" y="120" font-family="sans-serif" font-size="64" font-weight="bold" fill="white">TOP 1</text>
+    <text x="40" y="160" font-family="sans-serif" font-size="16" fill="rgba(255,255,255,0.6)">超越特斯拉Model 3</text>
+  </g>
+  
+  <g transform="translate(828, 160)">
+    <!-- Card 3 -->
+    <rect x="0" y="0" width="350" height="200" rx="16" fill="#1e293b"/>
+    <text x="40" y="60" font-family="sans-serif" font-size="18" fill="#FFB366">2026目标</text>
+    <text x="40" y="120" font-family="sans-serif" font-size="64" font-weight="bold" fill="white">55万</text>
+    <text x="40" y="160" font-family="sans-serif" font-size="16" fill="rgba(255,255,255,0.6)">年交付目标</text>
+  </g>
+  
+  <!-- Highlight bar -->
+  <rect x="64" y="440" width="1152" height="80" rx="12" fill="#FF6900" opacity="0.2"/>
+  <text x="640" y="490" text-anchor="middle" font-family="sans-serif" font-size="24" fill="white">
+    "小米汽车正在重新定义中国新能源汽车市场"
+  </text>
+</svg>

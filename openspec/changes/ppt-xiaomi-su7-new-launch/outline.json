@@ -1,0 +1,139 @@
+{
+  "title": "新一代小米SU7发布会",
+  "subtitle": "新一代驾驶者之车",
+  "theme": {
+    "primary": "#1a365d",
+    "accent": "#e67e22",
+    "mood": "激情活力"
+  },
+  "pages": [
+    {
+      "index": 1,
+      "type": "cover",
+      "title": "新一代小米SU7",
+      "subtitle": "新一代驾驶者之车",
+      "cover": {
+        "title": "新一代小米SU7",
+        "subtitle": "新一代驾驶者之车",
+        "tagline": "更好看 · 更好开 · 更智能 · 更安全"
+      }
+    },
+    {
+      "index": 2,
+      "type": "section_divider",
+      "title": "车型概览",
+      "subtitle": "21.99万元起，重新定义性价比"
+    },
+    {
+      "index": 3,
+      "type": "content",
+      "title": "三款配置，任你选择",
+      "content_blocks": [
+        { "version": "标准版", "price": "21.99万", "range": "720km" },
+        { "version": "Pro版", "price": "24.99万", "range": "902km" },
+        { "version": "Max版", "price": "30.39万", "range": "835km", "highlight": true }
+      ]
+    },
+    {
+      "index": 4,
+      "type": "content",
+      "title": "设计美学：经得起时间考验",
+      "content_blocks": [
+        { "title": "外观延续经典", "items": ["5米车长、2米车宽、3米轴距", "C级豪华轿车比例", "标志性水滴大灯", "家族式光环尾灯"] },
+        { "title": "细节焕新升级", "items": ["全新进气格栅设计", "内置4D毫米波雷达", "远光照射提升至400米", "前后摄像头高压清洗"] }
+      ]
+    },
+    {
+      "index": 5,
+      "type": "content",
+      "title": "九色系列：个性之选",
+      "content_blocks": [
+        { "row": "跑车色系", "colors": ["卡布里蓝", "赤霞红", "璀璨洋红"] },
+        { "row": "时尚色系", "colors": ["雅灰", "流金粉", "霞光紫"] },
+        { "row": "经典色系", "colors": ["靛石绿", "珍珠白", "曜石黑"] }
+      ]
+    },
+    {
+      "index": 6,
+      "type": "section_divider",
+      "title": "内饰豪华",
+      "subtitle": "精致与豪华的全面提升"
+    },
+    {
+      "index": 7,
+      "type": "content",
+      "title": "内饰设计：重新定义豪华",
+      "content_blocks": [
+        { "title": "三层环绕氛围灯", "desc": "联动音乐节奏、驾驶模式变化" },
+        { "title": "Nappa真皮方向盘", "desc": "运动握圈真皮包覆，镀铬装饰" },
+        { "title": "100%软包覆", "desc": "高频接触内饰面全面软包" },
+        { "title": "电动前备箱", "desc": "105L大容量，8种开合方式" }
+      ]
+    },
+    {
+      "index": 8,
+      "type": "section_divider",
+      "title": "安全升级",
+      "subtitle": "不计成本的安全投入"
+    },
+    {
+      "index": 9,
+      "type": "content",
+      "title": "安全：全系标配12项",
+      "content_blocks": [
+        { "title": "2200MPa超强钢防滚架", "desc": "A柱至C柱全覆盖" },
+        { "title": "9个安全气囊", "desc": "新增后排侧气囊" },
+        { "title": "三重冗余门把手", "desc": "100%符合2027年新国标" },
+        { "title": "1500MPa电池防护横梁", "desc": "耐穿刺性能提升13倍" },
+        { "title": "四门防撞梁", "desc": "全方位被动保护" },
+        { "title": "高强防护涂层", "desc": "耐刮擦提升10倍" }
+      ]
+    },
+    {
+      "index": 10,
+      "type": "section_divider",
+      "title": "智能科技",
+      "subtitle": "全系标配，入门即高配"
+    },
+    {
+      "index": 11,
+      "type": "content",
+      "title": "智能驾驶：全系标配激光雷达",
+      "content_blocks": [
+        { "big_stat": "700", "unit": "TOPS", "label": "英伟达Drive Thor芯片" },
+        { "features": ["全系激光雷达", "全系4D毫米波雷达", "全系11颗高清摄像头", "Xiaomi HAD端到端智驾"] }
+      ]
+    },
+    {
+      "index": 12,
+      "type": "content",
+      "title": "三电升级：效率与性能",
+      "content_blocks": [
+        { "title": "V6s Plus电机", "stats": ["最高转速22000rpm", "标准版235kW", "Max版508kW"] },
+        { "title": "超快充平台", "stats": ["标准版/Pro: 752V", "Max版: 897V", "15分钟补能670km"] },
+        { "title": "超长续航", "stats": ["标准版: 720km", "Pro版: 902km", "Max版: 835km"] },
+        { "title": "澎湃动力", "stats": ["Max版零百: 3.08秒", "最高车速: 265km/h"] }
+      ]
+    },
+    {
+      "index": 13,
+      "type": "content",
+      "title": "底盘升级：蛟龙出击",
+      "content_blocks": [
+        { "title": "前双叉臂+后五连杆", "desc": "运动与舒适的完美平衡" },
+        { "title": "闭式双腔空悬(Pro/Max)", "desc": "软硬调节区间更大" },
+        { "title": "CDC自适应减振(Pro/Max)", "desc": "实时调节阻尼" },
+        { "title": "前四活塞固定卡钳", "desc": "全系标配" },
+        { "title": "前245/后265宽胎", "desc": "全系标配，提升操控" }
+      ]
+    },
+    {
+      "index": 14,
+      "type": "end_page",
+      "title": "新一代小米SU7",
+      "subtitle": "21.99万元起",
+      "cta": "即刻下定，享首销权益",
+      "tagline": "小米SU7 · 新一代驾驶者之车"
+    }
+  ]
+}

@@ -1,0 +1,269 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <defs>
+    <!-- Card shadow filter -->
+    <filter id="cardShadow" x="-4%" y="-4%" width="108%" height="112%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+    <!-- Highlight glow for Pro range -->
+    <filter id="proGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#FF6900" flood-opacity="0.4"/>
+    </filter>
+    <!-- Highlight glow for Max acceleration -->
+    <filter id="maxGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#FF6900" flood-opacity="0.4"/>
+    </filter>
+    <!-- Subtle gradient for background -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111111"/>
+      <stop offset="100%" stop-color="#1A1A1A"/>
+    </linearGradient>
+    <!-- Card gradient Standard -->
+    <linearGradient id="cardStd" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#252525"/>
+      <stop offset="100%" stop-color="#1E1E1E"/>
+    </linearGradient>
+    <!-- Card gradient Pro -->
+    <linearGradient id="cardPro" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2A2015"/>
+      <stop offset="100%" stop-color="#1E1A14"/>
+    </linearGradient>
+    <!-- Card gradient Max -->
+    <linearGradient id="cardMax" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2A1A15"/>
+      <stop offset="100%" stop-color="#1E1410"/>
+    </linearGradient>
+    <!-- Orange accent gradient for highlight bars -->
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF6900"/>
+      <stop offset="100%" stop-color="#FF8C33"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ========== BACKGROUND ========== -->
+  <rect width="1280" height="720" fill="url(#bgGrad)"/>
+
+  <!-- Top accent line -->
+  <rect x="0" y="0" width="1280" height="3" fill="#FF6900"/>
+
+  <!-- ========== HEADER AREA ========== -->
+  <!-- Section tag -->
+  <rect x="60" y="28" width="120" height="24" rx="4" fill="#FF6900" opacity="0.15"/>
+  <text x="120" y="45" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#FF6900" font-weight="600" text-anchor="middle" letter-spacing="1">Part 1 / 极致参数</text>
+
+  <!-- Title -->
+  <text x="60" y="95" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="34" font-weight="700" fill="#FFFFFF" letter-spacing="1">三款车型，覆盖20-30万全段位</text>
+
+  <!-- Subtitle -->
+  <text x="60" y="124" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" fill="#888888" letter-spacing="2">Standard · Pro · Max — 每一款都是旗舰</text>
+
+  <!-- Accent underline -->
+  <rect x="60" y="136" width="80" height="3" rx="1.5" fill="#FF6900"/>
+
+  <!-- ========== THREE-COLUMN BENTO GRID ========== -->
+  <!-- Grid: 3 cards, 20px gap, 60px side margins -->
+  <!-- Card width: (1280 - 60 - 60 - 40) / 3 = 373.33 -->
+  <!-- Card 1: x=60   Card 2: x=453.33   Card 3: x=846.67 -->
+
+  <!-- ===== CARD 1: STANDARD ===== -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="160" width="373" height="430" rx="12" fill="url(#cardStd)"/>
+    <!-- Top accent bar -->
+    <rect x="60" y="160" width="373" height="4" rx="2" fill="#666666"/>
+  </g>
+
+  <!-- Trim name -->
+  <text x="246" y="205" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#999999" text-anchor="middle" font-weight="500" letter-spacing="3">STANDARD</text>
+
+  <!-- Price -->
+  <text x="246" y="252" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="42" font-weight="700" fill="#FFFFFF" text-anchor="middle">21.99</text>
+  <text x="246" y="275" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#888888" text-anchor="middle">万元起</text>
+
+  <!-- Divider -->
+  <line x1="100" y1="295" x2="393" y2="295" stroke="#333333" stroke-width="1"/>
+
+  <!-- Spec: Range -->
+  <text x="100" y="332" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#777777" font-weight="500">CLTC 续航</text>
+  <text x="393" y="332" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="700" fill="#FFFFFF" text-anchor="end">720<tspan font-size="14" fill="#888888"> km</tspan></text>
+  <!-- Range bar background -->
+  <rect x="100" y="344" width="293" height="4" rx="2" fill="#333333"/>
+  <!-- Range bar fill (720/902 = ~80%) -->
+  <rect x="100" y="344" width="234" height="4" rx="2" fill="#666666"/>
+
+  <!-- Spec: Acceleration -->
+  <text x="100" y="384" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#777777" font-weight="500">0-100 km/h</text>
+  <text x="393" y="384" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="700" fill="#FFFFFF" text-anchor="end">5.3<tspan font-size="14" fill="#888888"> s</tspan></text>
+  <!-- Accel bar background -->
+  <rect x="100" y="396" width="293" height="4" rx="2" fill="#333333"/>
+  <!-- Accel bar fill (inverted: lower is better, 3.08/5.3 = 58% → show 58%) -->
+  <rect x="100" y="396" width="170" height="4" rx="2" fill="#666666"/>
+
+  <!-- Spec: Platform -->
+  <text x="100" y="436" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#777777" font-weight="500">平台电压</text>
+  <text x="393" y="436" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="700" fill="#FFFFFF" text-anchor="end">752<tspan font-size="14" fill="#888888"> V</tspan></text>
+  <!-- Voltage bar background -->
+  <rect x="100" y="448" width="293" height="4" rx="2" fill="#333333"/>
+  <!-- Voltage bar fill (752/897 = ~84%) -->
+  <rect x="100" y="448" width="246" height="4" rx="2" fill="#666666"/>
+
+  <!-- Value badge -->
+  <rect x="160" y="475" width="173" height="30" rx="15" fill="none" stroke="#555555" stroke-width="1"/>
+  <text x="246" y="495" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#AAAAAA" text-anchor="middle">同价位性价比之王</text>
+
+  <!-- Highlight tag for Standard: value positioning -->
+  <rect x="160" y="520" width="173" height="26" rx="13" fill="#333333"/>
+  <text x="246" y="538" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#CCCCCC" text-anchor="middle" font-weight="500">700 TOPS 智驾算力</text>
+
+
+  <!-- ===== CARD 2: PRO ===== -->
+  <g filter="url(#cardShadow)">
+    <rect x="453" y="160" width="374" height="430" rx="12" fill="url(#cardPro)"/>
+    <!-- Top accent bar - orange for recommended -->
+    <rect x="453" y="160" width="374" height="4" rx="2" fill="url(#accentGrad)"/>
+  </g>
+
+  <!-- Recommended badge -->
+  <rect x="575" y="148" width="80" height="22" rx="11" fill="#FF6900"/>
+  <text x="615" y="163" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" letter-spacing="1">推荐</text>
+
+  <!-- Trim name -->
+  <text x="640" y="205" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#FF6900" text-anchor="middle" font-weight="600" letter-spacing="3">PRO</text>
+
+  <!-- Price -->
+  <text x="640" y="252" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="42" font-weight="700" fill="#FFFFFF" text-anchor="middle">24.99</text>
+  <text x="640" y="275" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#888888" text-anchor="middle">万元起</text>
+
+  <!-- Divider -->
+  <line x1="493" y1="295" x2="787" y2="295" stroke="#3D3020" stroke-width="1"/>
+
+  <!-- Spec: Range - HIGHLIGHTED -->
+  <text x="493" y="332" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#FF6900" font-weight="600">CLTC 续航</text>
+  <g filter="url(#proGlow)">
+    <text x="787" y="332" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="700" fill="#FF6900" text-anchor="end">902<tspan font-size="14"> km</tspan></text>
+  </g>
+  <!-- Range bar background -->
+  <rect x="493" y="344" width="294" height="4" rx="2" fill="#3D3020"/>
+  <!-- Range bar fill (902/902 = 100%) -->
+  <rect x="493" y="344" width="294" height="4" rx="2" fill="url(#accentGrad)"/>
+  <!-- Standout label -->
+  <rect x="685" y="354" width="102" height="20" rx="10" fill="#FF6900" opacity="0.15"/>
+  <text x="736" y="368" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#FF6900" text-anchor="middle" font-weight="600">同级最长续航</text>
+
+  <!-- Spec: Acceleration -->
+  <text x="493" y="404" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#777777" font-weight="500">0-100 km/h</text>
+  <text x="787" y="404" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="700" fill="#FFFFFF" text-anchor="end">5.7<tspan font-size="14" fill="#888888"> s</tspan></text>
+  <!-- Accel bar background -->
+  <rect x="493" y="416" width="294" height="4" rx="2" fill="#3D3020"/>
+  <!-- Accel bar fill (3.08/5.7 = 54%) -->
+  <rect x="493" y="416" width="159" height="4" rx="2" fill="#666666"/>
+
+  <!-- Spec: Platform -->
+  <text x="493" y="456" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#777777" font-weight="500">平台电压</text>
+  <text x="787" y="456" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="700" fill="#FFFFFF" text-anchor="end">752<tspan font-size="14" fill="#888888"> V</tspan></text>
+  <!-- Voltage bar background -->
+  <rect x="493" y="468" width="294" height="4" rx="2" fill="#3D3020"/>
+  <!-- Voltage bar fill (752/897 = ~84%) -->
+  <rect x="493" y="468" width="246" height="4" rx="2" fill="#666666"/>
+
+  <!-- Value badge -->
+  <rect x="554" y="490" width="173" height="30" rx="15" fill="none" stroke="#FF6900" stroke-width="1" opacity="0.5"/>
+  <text x="640" y="510" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#FF6900" text-anchor="middle">续航 + 均衡最优选</text>
+
+  <!-- Highlight tag for Pro -->
+  <rect x="554" y="530" width="173" height="26" rx="13" fill="#3D2A10"/>
+  <text x="640" y="548" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#FF8C33" text-anchor="middle" font-weight="500">空气弹簧 + CDC减振</text>
+
+
+  <!-- ===== CARD 3: MAX ===== -->
+  <g filter="url(#cardShadow)">
+    <rect x="847" y="160" width="373" height="430" rx="12" fill="url(#cardMax)"/>
+    <!-- Top accent bar -->
+    <rect x="847" y="160" width="373" height="4" rx="2" fill="#FF6900" opacity="0.7"/>
+  </g>
+
+  <!-- Performance badge -->
+  <rect x="965" y="148" width="96" height="22" rx="11" fill="#CC5500"/>
+  <text x="1013" y="163" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#FFFFFF" text-anchor="middle" font-weight="700" letter-spacing="1">性能旗舰</text>
+
+  <!-- Trim name -->
+  <text x="1033" y="205" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#FF6900" text-anchor="middle" font-weight="600" letter-spacing="3">MAX</text>
+
+  <!-- Price -->
+  <text x="1033" y="252" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="42" font-weight="700" fill="#FFFFFF" text-anchor="middle">30.39</text>
+  <text x="1033" y="275" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#888888" text-anchor="middle">万元起</text>
+
+  <!-- Divider -->
+  <line x1="887" y1="295" x2="1180" y2="295" stroke="#3D2015" stroke-width="1"/>
+
+  <!-- Spec: Range -->
+  <text x="887" y="332" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#777777" font-weight="500">CLTC 续航</text>
+  <text x="1180" y="332" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="700" fill="#FFFFFF" text-anchor="end">835<tspan font-size="14" fill="#888888"> km</tspan></text>
+  <!-- Range bar background -->
+  <rect x="887" y="344" width="293" height="4" rx="2" fill="#3D2015"/>
+  <!-- Range bar fill (835/902 = ~93%) -->
+  <rect x="887" y="344" width="271" height="4" rx="2" fill="#996644"/>
+
+  <!-- Spec: Acceleration - HIGHLIGHTED -->
+  <text x="887" y="384" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#FF6900" font-weight="600">0-100 km/h</text>
+  <g filter="url(#maxGlow)">
+    <text x="1180" y="384" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="700" fill="#FF6900" text-anchor="end">3.08<tspan font-size="14"> s</tspan></text>
+  </g>
+  <!-- Accel bar background -->
+  <rect x="887" y="396" width="293" height="4" rx="2" fill="#3D2015"/>
+  <!-- Accel bar fill (best = 100%) -->
+  <rect x="887" y="396" width="293" height="4" rx="2" fill="url(#accentGrad)"/>
+  <!-- Standout label -->
+  <rect x="1078" y="406" width="102" height="20" rx="10" fill="#FF6900" opacity="0.15"/>
+  <text x="1129" y="420" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#FF6900" text-anchor="middle" font-weight="600">性能怪兽</text>
+
+  <!-- Spec: Platform - HIGHLIGHTED -->
+  <text x="887" y="456" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#FF6900" font-weight="600">平台电压</text>
+  <text x="1180" y="456" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="700" fill="#FF6900" text-anchor="end">897<tspan font-size="14"> V</tspan></text>
+  <!-- Voltage bar background -->
+  <rect x="887" y="468" width="293" height="4" rx="2" fill="#3D2015"/>
+  <!-- Voltage bar fill (897/897 = 100%) -->
+  <rect x="887" y="468" width="293" height="4" rx="2" fill="url(#accentGrad)"/>
+
+  <!-- Value badge -->
+  <rect x="947" y="490" width="173" height="30" rx="15" fill="none" stroke="#FF6900" stroke-width="1" opacity="0.4"/>
+  <text x="1033" y="510" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#DDAAAA" text-anchor="middle">双电机 508kW / 681hp</text>
+
+  <!-- Highlight tag for Max -->
+  <rect x="947" y="530" width="173" height="26" rx="13" fill="#3D2015"/>
+  <text x="1033" y="548" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#FF8C33" text-anchor="middle" font-weight="500">5.2C 快充 | 897V</text>
+
+
+  <!-- ========== BOTTOM FOOTER BAR ========== -->
+  <rect x="60" y="610" width="1160" height="52" rx="10" fill="#1E1E1E" stroke="#333333" stroke-width="1"/>
+
+  <!-- V6s Plus icon-like element -->
+  <rect x="80" y="622" width="6" height="28" rx="3" fill="#FF6900"/>
+
+  <!-- Footer text -->
+  <text x="100" y="637" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#777777" font-weight="500">全系标配</text>
+
+  <text x="100" y="654" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#CCCCCC" font-weight="600">V6s Plus 电机</text>
+
+  <!-- Separator dot -->
+  <circle cx="230" cy="646" r="2" fill="#555555"/>
+
+  <text x="248" y="637" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#777777" font-weight="500">转速</text>
+  <text x="248" y="654" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#FF6900" font-weight="700">22,000 rpm</text>
+
+  <!-- Separator dot -->
+  <circle cx="368" cy="646" r="2" fill="#555555"/>
+
+  <text x="386" y="637" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#777777" font-weight="500">逆变器</text>
+  <text x="386" y="654" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#CCCCCC" font-weight="600">SiC 碳化硅</text>
+
+  <!-- Separator dot -->
+  <circle cx="516" cy="646" r="2" fill="#555555"/>
+
+  <text x="534" y="637" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#777777" font-weight="500">智驾算力</text>
+  <text x="534" y="654" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#CCCCCC" font-weight="600">700 TOPS NVIDIA Thor</text>
+
+  <!-- ========== PAGE NUMBER ========== -->
+  <text x="1200" y="700" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#555555" text-anchor="end">03 / 12</text>
+
+  <!-- Xiaomi logo placeholder (simple text) -->
+  <text x="60" y="700" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#444444" font-weight="600">xiaomi</text>
+</svg>

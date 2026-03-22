@@ -1,0 +1,261 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <defs>
+    <!-- Card shadow filter -->
+    <filter id="cardShadow" x="-4%" y="-4%" width="108%" height="112%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#1A1A1A" flood-opacity="0.08"/>
+    </filter>
+    <!-- Elevated card shadow -->
+    <filter id="cardShadowLift" x="-4%" y="-4%" width="108%" height="116%">
+      <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#FF6900" flood-opacity="0.12"/>
+    </filter>
+    <!-- Subtle inner glow for hero number -->
+    <filter id="heroGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#FF6900" flood-opacity="0.15"/>
+    </filter>
+    <!-- Gradient for top accent band -->
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF6900"/>
+      <stop offset="100%" stop-color="#FF8C33"/>
+    </linearGradient>
+    <!-- Subtle background pattern -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FAFAFA"/>
+      <stop offset="100%" stop-color="#F0F0F0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ============================================ -->
+  <!-- BACKGROUND                                   -->
+  <!-- ============================================ -->
+  <rect width="1280" height="720" fill="url(#bgGrad)"/>
+
+  <!-- Top accent band -->
+  <rect x="0" y="0" width="1280" height="5" fill="url(#accentGrad)"/>
+
+  <!-- ============================================ -->
+  <!-- HEADER AREA  (y: 28 – 110)                   -->
+  <!-- ============================================ -->
+  <!-- Title -->
+  <text x="60" y="62"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="38" font-weight="800" fill="#1A1A1A"
+        letter-spacing="-0.5">34分钟，15,000台锁单</text>
+
+  <!-- Subtitle -->
+  <text x="60" y="96"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="18" font-weight="400" fill="#888888"
+        letter-spacing="0.3">从89,000到600,000+ — 小米汽车的速度</text>
+
+  <!-- Orange accent line under title -->
+  <rect x="60" y="110" width="80" height="3" rx="1.5" fill="#FF6900"/>
+
+  <!-- ============================================ -->
+  <!-- BENTO GRID: THREE DATA CARDS  (y: 140 – 400) -->
+  <!-- Row of 3 cards with 20px gaps                -->
+  <!-- Total width: 1160px (60px margins each side) -->
+  <!-- Card widths: 353 + 20 + 373 + 20 + 373 = 1139 -->
+  <!-- Adjusted: 360 + 20 + 370 + 20 + 370 = 1140  -->
+  <!-- ============================================ -->
+
+  <!-- Card 1: 34 minutes — Hero card (orange background) -->
+  <g filter="url(#cardShadowLift)">
+    <rect x="60" y="140" width="360" height="250" rx="16" fill="#FF6900"/>
+    <!-- Decorative large faded number in background -->
+    <text x="340" y="340"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="200" font-weight="900" fill="#FFFFFF" fill-opacity="0.08"
+          text-anchor="end">34</text>
+    <!-- Label -->
+    <text x="88" y="184"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.75"
+          letter-spacing="2" text-transform="uppercase">锁单时间</text>
+    <!-- Separator dot -->
+    <circle cx="88" cy="207" r="3" fill="#FFFFFF" fill-opacity="0.4"/>
+    <line x1="98" y1="207" x2="180" y2="207" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="1"/>
+    <!-- Big number -->
+    <text x="88" y="310"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="96" font-weight="900" fill="#FFFFFF"
+          letter-spacing="-3">34</text>
+    <!-- Unit -->
+    <text x="260" y="310"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="28" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">分钟</text>
+    <!-- Sub-detail -->
+    <text x="88" y="358"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="13" font-weight="400" fill="#FFFFFF" fill-opacity="0.6">锁单 15,000 台</text>
+  </g>
+
+  <!-- Card 2: 600,000+ cumulative deliveries -->
+  <g filter="url(#cardShadow)">
+    <rect x="440" y="140" width="380" height="250" rx="16" fill="#FFFFFF"/>
+    <!-- Top border accent -->
+    <rect x="440" y="140" width="380" height="4" rx="2" fill="#FF6900" fill-opacity="0.6"/>
+    <!-- Label -->
+    <text x="472" y="188"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="14" font-weight="500" fill="#AAAAAA"
+          letter-spacing="2">累计交付</text>
+    <!-- Big number -->
+    <text x="472" y="296"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="72" font-weight="900" fill="#1A1A1A"
+          letter-spacing="-2">600,000</text>
+    <!-- Plus sign in orange -->
+    <text x="472" y="296"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="72" font-weight="900" fill="#1A1A1A"
+          letter-spacing="-2" dx="355">+</text>
+    <!-- Unit -->
+    <text x="472" y="330"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="18" font-weight="400" fill="#888888">台</text>
+    <!-- Sub-detail -->
+    <text x="472" y="362"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="13" font-weight="400" fill="#BBBBBB">22个月 · 从零到现象级</text>
+  </g>
+
+  <!-- Card 3: 411,800 annual deliveries -->
+  <g filter="url(#cardShadow)">
+    <rect x="840" y="140" width="380" height="250" rx="16" fill="#FFFFFF"/>
+    <!-- Top border accent -->
+    <rect x="840" y="140" width="380" height="4" rx="2" fill="#FF6900" fill-opacity="0.6"/>
+    <!-- Label -->
+    <text x="872" y="188"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="14" font-weight="500" fill="#AAAAAA"
+          letter-spacing="2">2025全年交付</text>
+    <!-- Big number -->
+    <text x="872" y="296"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="72" font-weight="900" fill="#1A1A1A"
+          letter-spacing="-2">411,800</text>
+    <!-- Unit -->
+    <text x="872" y="330"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="18" font-weight="400" fill="#888888">台</text>
+    <!-- Sub-detail -->
+    <text x="872" y="362"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="13" font-weight="400" fill="#BBBBBB">同比增长 · 年度目标达成</text>
+  </g>
+
+  <!-- ============================================ -->
+  <!-- BENTO GRID: COMPARISON ROW  (y: 410 – 560)  -->
+  <!-- Sales ranking bar chart card                 -->
+  <!-- ============================================ -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="410" width="760" height="215" rx="16" fill="#FFFFFF"/>
+    <!-- Card title -->
+    <text x="92" y="452"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="16" font-weight="700" fill="#1A1A1A">中国20万+轿车销量第一</text>
+    <!-- Orange badge -->
+    <rect x="330" y="436" width="36" height="20" rx="10" fill="#FF6900" fill-opacity="0.1"/>
+    <text x="348" y="450"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="11" font-weight="600" fill="#FF6900" text-anchor="middle">No.1</text>
+
+    <!-- Bar: Xiaomi SU7 -->
+    <text x="92" y="492"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="13" font-weight="600" fill="#1A1A1A">小米 SU7</text>
+    <rect x="200" y="478" width="540" height="22" rx="6" fill="#FF6900"/>
+    <text x="720" y="494"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="11" font-weight="600" fill="#FFFFFF" text-anchor="end">100%</text>
+
+    <!-- Bar: BMW 3 Series -->
+    <text x="92" y="528"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="13" font-weight="500" fill="#888888">宝马 3系</text>
+    <rect x="200" y="514" width="338" height="22" rx="6" fill="#D9D9D9"/>
+    <text x="548" y="530"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="11" font-weight="500" fill="#888888">1/1.6x</text>
+
+    <!-- Bar: Mercedes C-Class -->
+    <text x="92" y="564"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="13" font-weight="500" fill="#888888">奔驰 C级</text>
+    <rect x="200" y="550" width="270" height="22" rx="6" fill="#D9D9D9"/>
+    <text x="480" y="566"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="11" font-weight="500" fill="#888888">1/2x</text>
+
+    <!-- Bar: Audi A4L -->
+    <text x="92" y="600"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="13" font-weight="500" fill="#888888">奥迪 A4L</text>
+    <rect x="200" y="586" width="180" height="22" rx="6" fill="#D9D9D9"/>
+    <text x="390" y="602"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="11" font-weight="500" fill="#888888">1/3x</text>
+  </g>
+
+  <!-- ============================================ -->
+  <!-- BENTO GRID: VIP ATTENDEES CARD (y: 410–560) -->
+  <!-- Right column card                            -->
+  <!-- ============================================ -->
+  <g filter="url(#cardShadow)">
+    <rect x="840" y="410" width="380" height="215" rx="16" fill="#1A1A1A"/>
+    <!-- Card title -->
+    <text x="872" y="452"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="16" font-weight="700" fill="#FFFFFF">行业大佬齐聚发布会</text>
+
+    <!-- VIP 1: Wang Chuanfu -->
+    <circle cx="908" cy="502" r="22" fill="#FF6900" fill-opacity="0.15"/>
+    <text x="908" y="508"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="16" font-weight="700" fill="#FF6900" text-anchor="middle">王</text>
+    <text x="944" y="498"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="14" font-weight="600" fill="#FFFFFF">王传福</text>
+    <text x="944" y="516"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="12" font-weight="400" fill="#888888">BYD 创始人</text>
+
+    <!-- VIP 2: Li Xiang -->
+    <circle cx="908" cy="556" r="22" fill="#FF6900" fill-opacity="0.15"/>
+    <text x="908" y="562"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="16" font-weight="700" fill="#FF6900" text-anchor="middle">李</text>
+    <text x="944" y="552"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="14" font-weight="600" fill="#FFFFFF">李想</text>
+    <text x="944" y="570"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="12" font-weight="400" fill="#888888">理想汽车 创始人</text>
+
+    <!-- VIP 3: He Xiaopeng -->
+    <circle cx="908" cy="610" r="22" fill="#FF6900" fill-opacity="0.15"/>
+    <text x="908" y="616"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="16" font-weight="700" fill="#FF6900" text-anchor="middle">何</text>
+    <text x="944" y="606"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="14" font-weight="600" fill="#FFFFFF">何小鹏</text>
+    <text x="944" y="624"
+          font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+          font-size="12" font-weight="400" fill="#888888">小鹏汽车 创始人</text>
+  </g>
+
+  <!-- ============================================ -->
+  <!-- BOTTOM BAR                                   -->
+  <!-- ============================================ -->
+  <!-- Bottom note strip -->
+  <rect x="60" y="648" width="1160" height="36" rx="8" fill="#FF6900" fill-opacity="0.06"/>
+  <text x="640" y="672"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="14" font-weight="500" fill="#FF6900" text-anchor="middle">20万+轿车第一  ·  王传福 · 李想 · 何小鹏齐聚  ·  22个月交付600,000+台</text>
+
+  <!-- Page number -->
+  <text x="1220" y="708"
+        font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+        font-size="12" font-weight="400" fill="#BBBBBB" text-anchor="end">02 / 12</text>
+</svg>

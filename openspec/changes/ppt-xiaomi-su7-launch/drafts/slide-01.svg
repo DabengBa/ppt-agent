@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6900;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8533;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1280" height="720" fill="url(#bg-grad)"/>
+  
+  <!-- Grid pattern -->
+  <g stroke="rgba(255,255,255,0.1)" stroke-width="1">
+    <line x1="0" y1="0" x2="0" y2="720" />
+    <line x1="128" y1="0" x2="128" y2="720" />
+    <line x1="256" y1="0" x2="256" y2="720" />
+    <line x1="384" y1="0" x2="384" y2="720" />
+    <line x1="512" y1="0" x2="512" y2="720" />
+    <line x1="640" y1="0" x2="640" y2="720" />
+    <line x1="768" y1="0" x2="768" y2="720" />
+    <line x1="896" y1="0" x2="896" y2="720" />
+    <line x1="1024" y1="0" x2="1024" y2="720" />
+    <line x1="1152" y1="0" x2="1152" y2="720" />
+    <line x1="1280" y1="0" x2="1280" y2="720" />
+  </g>
+  
+  <!-- Title -->
+  <text x="640" y="280" text-anchor="middle" font-family="sans-serif" font-size="72" font-weight="bold" fill="white">
+    新一代小米SU7
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="640" y="380" text-anchor="middle" font-family="sans-serif" font-size="28" fill="#FFB366">
+    更好看 · 更好开 · 更智能 · 更安全
+  </text>
+  
+  <!-- Tagline -->
+  <text x="640" y="480" text-anchor="middle" font-family="sans-serif" font-size="20" fill="rgba(255,255,255,0.7)">
+    新一代驾驶者之车
+  </text>
+  
+  <!-- Xiaomi logo placeholder -->
+  <rect x="600" y="520" width="80" height="80" rx="8" fill="white" opacity="0.2"/>
+  <text x="640" y="565" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="bold" fill="white">
+    Mi
+  </text>
+</svg>

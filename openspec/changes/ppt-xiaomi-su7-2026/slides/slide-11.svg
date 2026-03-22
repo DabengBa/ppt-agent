@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <text x="60" y="50" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="36" font-weight="bold" fill="#1a202c">全面超越同级竞品</text>
+  <g transform="translate(60, 100)">
+    <rect width="280" height="320" rx="12" fill="#f0f4f8" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="140" y="40" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="18" font-weight="bold" fill="#1a365d">续航对比</text>
+    <text x="140" y="100" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="48" font-weight="bold" fill="#e67e22">902km</text>
+    <text x="140" y="150" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.7">vs 竞品平均</text>
+    <rect x="40" y="180" width="200" height="16" rx="4" fill="#e2e8f0"/>
+    <rect x="40" y="180" width="180" height="16" rx="4" fill="#e67e22"/>
+    <text x="40" y="230" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c">小米SU7 Pro</text>
+    <text x="40" y="280" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.6">竞品平均</text>
+  </g>
+  <g transform="translate(360, 100)">
+    <rect width="280" height="320" rx="12" fill="#f0f4f8" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="140" y="40" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="18" font-weight="bold" fill="#1a365d">智驾对比</text>
+    <text x="140" y="100" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="32" font-weight="bold" fill="#e67e22">全系标配</text>
+    <text x="140" y="150" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.7">vs 竞品选配</text>
+    <text x="140" y="220" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="24" font-weight="bold" fill="#1a365d">✓ 700TOPS</text>
+    <text x="140" y="260" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.7">Thor-U芯片</text>
+  </g>
+  <g transform="translate(660, 100)">
+    <rect width="280" height="320" rx="12" fill="#f0f4f8" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="140" y="40" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="18" font-weight="bold" fill="#1a365d">安全对比</text>
+    <text x="140" y="100" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="48" font-weight="bold" fill="#e67e22">9</text>
+    <text x="140" y="150" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.7">安全气囊</text>
+    <text x="140" y="220" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.7">行业平均 6-7个</text>
+  </g>
+  <g transform="translate(960, 100)">
+    <rect width="260" height="320" rx="12" fill="#f0f4f8" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="130" y="40" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="18" font-weight="bold" fill="#1a365d">性能对比</text>
+    <text x="130" y="100" text-anchor="middle" font-family="DM Sans, 'PingFang SC', sans-serif" font-size="32" font-weight="bold" fill="#e67e22">2.78秒</text>
+    <text x="130" y="150" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.7">零百加速</text>
+    <text x="130" y="220" text-anchor="middle" font-family="Inter, 'PingFang SC', sans-serif" font-size="14" fill="#1a202c" opacity="0.7">同级领先</text>
+  </g>
+  <text x="1220" y="700" font-family="Inter" font-size="12" fill="#1a202c" opacity="0.3">11</text>
+</svg>

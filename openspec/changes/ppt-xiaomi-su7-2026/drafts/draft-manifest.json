@@ -1,0 +1,107 @@
+{
+  "run_id": "ppt-xiaomi-su7-2026",
+  "phase": "draft",
+  "style": "business",
+  "created": "2026-03-22",
+  "total_slides": 12,
+  "slides": [
+    {
+      "index": 1,
+      "type": "cover",
+      "file": "drafts/slide-01.svg",
+      "title": "新一代小米SU7",
+      "layout": "full-bleed",
+      "status": "generated"
+    },
+    {
+      "index": 2,
+      "type": "content",
+      "file": "drafts/slide-02.svg",
+      "title": "从现象级网红到市场销冠",
+      "layout": "4-column-metrics",
+      "status": "generated"
+    },
+    {
+      "index": 3,
+      "type": "content",
+      "file": "drafts/slide-03.svg",
+      "title": "三版本全面升级",
+      "layout": "3-column-cards",
+      "status": "generated"
+    },
+    {
+      "index": 4,
+      "type": "content",
+      "file": "drafts/slide-04.svg",
+      "title": "902km续航，同价位之王",
+      "layout": "hero-grid",
+      "status": "generated"
+    },
+    {
+      "index": 5,
+      "type": "content",
+      "file": "drafts/slide-05.svg",
+      "title": "全系标配高阶智驾",
+      "layout": "mixed-grid",
+      "status": "generated"
+    },
+    {
+      "index": 6,
+      "type": "content",
+      "file": "drafts/slide-06.svg",
+      "title": "9安全气囊，全方位保护",
+      "layout": "hero-sidebar",
+      "status": "generated"
+    },
+    {
+      "index": 7,
+      "type": "content",
+      "file": "drafts/slide-07.svg",
+      "title": "性能与价格的完美平衡",
+      "layout": "hero-grid",
+      "status": "generated"
+    },
+    {
+      "index": 8,
+      "type": "content",
+      "file": "drafts/slide-08.svg",
+      "title": "外观内饰全面升级",
+      "layout": "mixed-grid",
+      "status": "generated"
+    },
+    {
+      "index": 9,
+      "type": "content",
+      "file": "drafts/slide-09.svg",
+      "title": "小米人车家全生态",
+      "layout": "hero-sidebar",
+      "status": "generated"
+    },
+    {
+      "index": 10,
+      "type": "content",
+      "file": "drafts/slide-10.svg",
+      "title": "全系标配不加价",
+      "layout": "3-column-pricing",
+      "status": "generated"
+    },
+    {
+      "index": 11,
+      "type": "content",
+      "file": "drafts/slide-11.svg",
+      "title": "全面超越同级竞品",
+      "layout": "4-column-comparison",
+      "status": "generated"
+    },
+    {
+      "index": 12,
+      "type": "conclusion",
+      "file": "drafts/slide-12.svg",
+      "title": "新一代小米SU7",
+      "layout": "full-bleed",
+      "status": "generated"
+    }
+  ],
+  "next_phase": "design",
+  "notes": "Draft SVGs generated with business style. Ready for design phase with Bento Grid layout refinement."
+}
