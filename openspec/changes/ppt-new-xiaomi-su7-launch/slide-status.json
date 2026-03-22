@@ -1,0 +1,110 @@
+[
+  {
+    "index": 1,
+    "title": "新一代小米 SU7",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.8,
+    "output_file": "slide-01.svg"
+  },
+  {
+    "index": 2,
+    "title": "为什么说它是“新一代”",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.4,
+    "output_file": "slide-02.svg"
+  },
+  {
+    "index": 3,
+    "title": "价格、版本与首销权益",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.7,
+    "output_file": "slide-03.svg"
+  },
+  {
+    "index": 4,
+    "title": "设计焕新：经典比例继续，细节更有性能感",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.5,
+    "output_file": "slide-04.svg"
+  },
+  {
+    "index": 5,
+    "title": "座舱焕新：豪华感从‘看上去不错’变成‘坐进去就能感到值’",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.4,
+    "output_file": "slide-05.svg"
+  },
+  {
+    "index": 6,
+    "title": "三电与性能：不仅更快，还把长续航做到了第一梯队",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.8,
+    "output_file": "slide-06.svg"
+  },
+  {
+    "index": 7,
+    "title": "补能与底盘：高压平台 + 蛟龙底盘，把技术感变成驾驶质感",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.5,
+    "output_file": "slide-07.svg"
+  },
+  {
+    "index": 8,
+    "title": "智能座舱：从‘能联动’升级到‘更像懂你的出行终端’",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.3,
+    "output_file": "slide-08.svg"
+  },
+  {
+    "index": 9,
+    "title": "智能驾驶：全系标配硬件，把门槛一次性抬高",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.6,
+    "output_file": "slide-09.svg"
+  },
+  {
+    "index": 10,
+    "title": "安全体系：从车身、电池到门把手，把极端场景都考虑进去",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.7,
+    "output_file": "slide-10.svg"
+  },
+  {
+    "index": 11,
+    "title": "和 Model 3、汉 L、小鹏 P7+ 比，它赢在哪",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.4,
+    "output_file": "slide-11.svg"
+  },
+  {
+    "index": 12,
+    "title": "新一代小米 SU7，值得认真看看",
+    "draft_ready": true,
+    "design_ready": true,
+    "reviewed": true,
+    "score": 8.2,
+    "output_file": "slide-12.svg"
+  }
+]

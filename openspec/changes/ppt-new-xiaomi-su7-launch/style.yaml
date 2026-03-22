@@ -1,0 +1,22 @@
+name: Tech Launch Original
+mood: Hot launch energy with disciplined tech polish.
+
+color_scheme:
+  background: "#07111E"
+  background_secondary: "#0B182B"
+  panel: "#132842"
+  text: "#F3F7FB"
+  muted: "#9FB4CF"
+  accent_primary: "#42E8FF"
+  accent_secondary: "#FF7A1A"
+  accent_tertiary: "#6D7BFF"
+
+typography:
+  heading_font: "Geist Sans, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+  body_font: "Geist Sans, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+  mono_font: "JetBrains Mono, SFMono-Regular, Menlo, monospace"
+
+design_notes:
+  - 深色背景 + 霓虹蓝橙双高亮
+  - 大数字与短结论优先
+  - 强调综合价值，不做参数堆叠式排版
