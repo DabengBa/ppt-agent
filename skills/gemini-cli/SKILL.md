@@ -97,7 +97,7 @@ npx tsx scripts/invoke-gemini-ppt.ts \
   --output "${RUN_DIR}/reviews/gemini-raw-${N}.md" \
   --prompt "
 ## Task
-Optimize the SVG presentation slide's layout and visual aesthetics. Identify what works well and propose concrete improvements to make the slide more visually compelling.
+Optimize the SVG presentation slide's layout and visual aesthetics. Your primary output is **typed optimization suggestions** — concrete, actionable design improvements. Scoring is a secondary quality gate.
 
 ## Slide Content
 ${SVG_CONTENT}
@@ -105,7 +105,7 @@ ${SVG_CONTENT}
 ## Style Reference
 ${STYLE_NAME} style with tokens: ${STYLE_TOKENS}
 
-## Review Criteria
+## Optimization Criteria
 1. Layout Balance: card arrangement, visual weight distribution, whitespace usage
 2. Color Harmony: palette consistency, contrast ratios, accent usage
 3. Typography: hierarchy clarity, font size appropriateness, line spacing
@@ -113,26 +113,33 @@ ${STYLE_NAME} style with tokens: ${STYLE_TOKENS}
 5. Information Density: content-to-whitespace ratio, cognitive load
 
 ## Output Format
-Structured review with:
-- overall_score: 1-10
-- pass: true/false (pass if >= 7)
-- per-criterion scores and notes
-- issues: list of specific problems with severity (critical/major/minor)
-- fixes: actionable suggestions for each issue with specific values
+Follow the exact structure from references/roles/reviewer.md:
+1. **Optimization Suggestions** (primary): typed suggestions using the 5-type taxonomy (attribute_change, layout_restructure, full_rethink, content_reduction, deck_coordination). Each with type, priority (1-3), description, and type-specific details.
+2. **Suggestions JSON**: parseable JSON array of all suggestions for downstream automation.
+3. **Quality Gate** (secondary): overall_score (1-10), pass (true/false), per-criterion weighted scores, hard rule violations.
 "
 ```
 
 ---
 
-## Fallback Strategy
+## Fallback Strategy — Technical Validation Only
 
-The dual-model approach (Claude generates, Gemini optimizes) provides value through independent aesthetic perspective. When Gemini is unavailable, the review-core agent should:
+The dual-model approach provides value through independent aesthetic perspective. **Aesthetic optimization requires cross-model review** — Claude cannot meaningfully optimize its own visual design choices (production data: 12 slides all scored 8.2-8.8 with identical notes during self-review).
 
-1. Read `references/roles/reviewer.md` for quality standards and methodology.
-2. Apply the same structured optimization process: 5 criteria, numeric scores, pass/fail gate, issue severity, actionable improvements.
-3. Mark the output as "Claude self-optimization" in the header so downstream consumers know it was not cross-model validated.
+When Gemini is unavailable (exit code 2), review-core performs **technical validation only**:
 
-The quality standards (14px min font, 20px min gap, WCAG AA contrast, 7±2 info units) are the same regardless of which model performs the optimization.
+1. Run hard-rule checks from `references/roles/reviewer.md` Quality Standards table:
+   - XML validity (xmllint)
+   - ViewBox present (1280x720)
+   - Font-size floor (>= 14px body, >= 12px labels)
+   - Safe area margins (>= 60px)
+   - WCAG AA contrast ratios
+   - Style token compliance (colors from declared YAML)
+2. Report violations as pass/fail — **no aesthetic scores, no optimization suggestions**.
+3. Mark output header as: `**Reviewer**: Claude technical validation (Gemini unavailable) — aesthetic optimization not performed`
+4. The fix loop does **not** trigger for technical-only reviews (there are no typed suggestions to apply). Only hard-rule violations that are Critical or Major are reported as blocking issues.
+
+This is an honest tradeoff: without Gemini, slides have technical correctness but no cross-model aesthetic refinement. This is better than rubber-stamp scores that give false confidence.
 
 ## Intermediate Artifact Preservation
 
@@ -148,10 +155,10 @@ Gemini's raw output (`gemini-raw-{nn}.md`) MUST be preserved in `${RUN_DIR}/revi
 | Required                                  | Forbidden                               |
 | ----------------------------------------- | --------------------------------------- |
 | MUST attempt Gemini via script first      | Skip Gemini without trying              |
-| MUST fall back to self-review on exit 2   | Fail the entire review if Gemini is down|
+| MUST fall back to technical validation on exit 2 | Fail the entire review if Gemini is down|
 | MUST use reviewer role quality standards  | Send generic/empty prompts to Gemini    |
 | MUST persist ALL output to run_dir artifacts | Discard Gemini output (gemini-raw-*.md) |
-| Review MUST produce structured scores     | Return vague qualitative-only feedback  |
+| Review MUST produce typed suggestions (Gemini) or hard-rule pass/fail (fallback) | Return vague qualitative-only feedback  |
 | MUST include SVG source in the prompt     | Review based on filename alone          |
 
 ## Collaboration

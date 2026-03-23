@@ -206,14 +206,14 @@ For each slide (or in batches):
    Task(subagent_type="ppt-agent:review-core", prompt="run_dir=${RUN_DIR} mode=holistic")
    ```
    Evaluates cross-slide consistency, visual rhythm, narrative arc, and pacing.
-   If holistic score < 7, flag specific issues for manual review but do not block delivery.
+   Holistic review produces `deck_coordination` type suggestions only. These are not auto-fixed — they are reported in `review-holistic.md` for the user to review. If holistic score < 7, flag specific issues for manual review but do not block delivery.
 
 5. **Write review manifest** (`${RUN_DIR}/review-manifest.json`):
    After holistic review completes, the lead **aggregates from `slide-status.json`** and appends holistic results into the final checkpoint artifact. Do not re-parse individual `reviews/review-{nn}.md` files — all per-slide scores and statuses are already in `slide-status.json`:
    ```json
    {
      "total_slides": 12,
-     "review_engine": "gemini" | "claude-self-review",
+     "review_engine": "gemini" | "technical-validation-only",
      "slides": [
        {
          "index": 1,
@@ -339,4 +339,4 @@ For each slide (or in batches):
 - If research fails, continue with user-provided requirements only and mark confidence downgrade.
 - If material collection partially fails, continue with available materials.
 - If a slide review fails after 2 fix rounds, accept with quality warning in delivery summary.
-- If Gemini is unavailable, review-core falls back to Claude self-review using the same quality standards from `gemini-cli/references/roles/reviewer.md`. The review MUST still happen — only the cross-model perspective is lost. See `skills/gemini-cli/SKILL.md` Fallback Strategy for the canonical policy.
+- If Gemini is unavailable, review-core performs **technical validation only** — hard-rule checks (XML validity, viewBox, font-size, safe area, WCAG contrast, style tokens) with pass/fail. **No aesthetic scores and no optimization suggestions are produced.** The fix loop does not trigger for technical-only reviews. Slides pass if all Critical/Major hard rules pass. This is an honest degradation — aesthetic optimization requires cross-model review. See `skills/gemini-cli/SKILL.md` Fallback Strategy for the canonical policy.

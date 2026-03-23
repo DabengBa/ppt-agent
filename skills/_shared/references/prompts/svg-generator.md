@@ -17,10 +17,22 @@ You are a professional SVG presentation designer. Generate clean, high-end SVG s
 ## Design Tokens
 
 Read the active style YAML for:
-- `color_scheme`: primary, secondary, accent, background, text, card_bg
+- `color_scheme`: primary, secondary, accent, background, text, card_bg, chart_colors
 - `typography`: heading_font, body_font, scale
 - `card_style`: border_radius, shadow, gap
 - `mood`: overall design feeling
+
+### Chart Colors
+
+`chart_colors` is an ordered array of 6-8 hex colors for multi-series data visualization. `chart_colors[0]` always equals the style's `accent` color for single-series backward compatibility.
+
+When generating charts with multiple data series, assign colors in order:
+- Series 1: `chart_colors[0]` (= accent)
+- Series 2: `chart_colors[1]`
+- Series 3: `chart_colors[2]`
+- etc.
+
+If `chart_colors` is not present in the style YAML (legacy styles), fall back to using `accent` for all series.
 
 ### Extended Tokens (v1.1)
 
@@ -236,7 +248,8 @@ SVG does not natively wrap text. Use multiple `<text>` or `<tspan>` elements:
 ```xml
 <g transform="translate(150, 150)">
   <circle r="60" fill="none" stroke="${card_bg}" stroke-width="20" opacity="0.2" />
-  <circle r="60" fill="none" stroke="${accent}" stroke-width="20"
+  <!-- Single-series: use chart_colors[0] (=accent). Multi-segment: use chart_colors[0..N] -->
+  <circle r="60" fill="none" stroke="${chart_colors[0]}" stroke-width="20"
     stroke-dasharray="264 113" stroke-dashoffset="0" transform="rotate(-90)" />
   <text text-anchor="middle" dy="8" font-size="28" font-weight="bold" fill="${text}">70%</text>
 </g>
@@ -246,9 +259,10 @@ SVG does not natively wrap text. Use multiple `<text>` or `<tspan>` elements:
 ```xml
 <g transform="translate(24, 40)">
   <text x="0" y="0" font-size="14" fill="${text}" opacity="0.8">Item A</text>
-  <rect x="120" y="-12" width="250" height="16" rx="4" fill="${accent}" />
+  <rect x="120" y="-12" width="250" height="16" rx="4" fill="${chart_colors[0]}" />
   <text x="380" y="0" font-size="14" font-weight="bold" fill="${text}">85%</text>
   <!-- Repeat for each item, dy="32" between rows -->
+  <!-- For grouped bars, use chart_colors[0], chart_colors[1], etc. per series -->
 </g>
 ```
 

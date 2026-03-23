@@ -8,6 +8,15 @@ color_scheme:
   background: "#fafafa"   # Off-white
   text: "#27272a"         # Dark zinc
   card_bg: "#ffffff"      # Pure white
+  chart_colors:            # Multi-series data viz; [0]=accent
+    - "#3b82f6"            # Blue (accent)
+    - "#71717a"            # Zinc gray
+    - "#f59e0b"            # Amber
+    - "#10b981"            # Emerald
+    - "#ef4444"            # Red
+    - "#8b5cf6"            # Violet
+    - "#06b6d4"            # Cyan
+    - "#d946ef"            # Fuchsia
 
 typography:
   heading_font: "Instrument Serif, Georgia, 'PingFang SC', 'Microsoft YaHei', serif"

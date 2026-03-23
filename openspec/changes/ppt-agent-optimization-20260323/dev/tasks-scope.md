@@ -1,49 +1,35 @@
-# Dev Scope — Wave 1: Unlock Foundation
+# Dev Scope — Wave 2: Rebuild Aesthetic Optimization Layer
 
 > Proposal: ppt-agent-optimization-20260323
-> Scope: T-01 ~ T-06 (6 tasks, all effort S, zero behavioral risk)
+> Scope: T-07 + T-08 + T-09 + T-10 + T-10b (5 tasks, full Wave 2)
+> Status: COMPLETE
 
 ## Selected Tasks
 
-### T-01: Add Bash to review-core tools
-- **File**: `agents/review-core.md`
-- **Change**: Add `Bash` to `tools` list in frontmatter
-- **Why**: Pre-review automated checks (xmllint, grep, etc.) are dead code without Bash
-- **Acceptance**: `tools` array includes `Bash`
+### T-07: Rewrite Gemini optimizer role prompts (P0, L) ✅
+- Restructured reviewer.md output format: suggestions-first, scores secondary
+- Updated SKILL.md prompt template and review-core.md execution steps
 
-### T-02: content-core maxTurns 25→35
-- **File**: `agents/content-core.md`
-- **Change**: `maxTurns: 25` → `maxTurns: 35`
-- **Why**: 12+ slide decks truncate when content-core runs out of turns
-- **Acceptance**: `maxTurns: 35` in frontmatter
+### T-09: Enrich suggestion format with 5-type taxonomy (P0, M) ✅
+- Defined 5 suggestion types with JSON schemas in reviewer.md
+- Documented handling per type in slide-core.md
+- Updated review-core.md signal format
 
-### T-03: Batch draft signals every 3 slides
-- **Files**: `agents/content-core.md`, `commands/ppt.md`
-- **Change**: content-core sends `draft_slide_ready` every 3 slides instead of per-slide; ppt.md updates pipeline description accordingly
-- **Why**: Per-slide signaling consumes turns too fast with the turn budget
-- **Acceptance**: content-core draft mode batches signals; ppt.md Phase 5/6 reflects batching
+### T-08: Redefine self-review fallback as technical validation only (P0, M) ✅
+- Rewrote SKILL.md fallback strategy
+- Split review-core.md quality gates into dual-mode
+- Updated ppt.md fallback rule
 
-### T-04: slide-core maxTurns 30→20
-- **File**: `agents/slide-core.md`
-- **Change**: `maxTurns: 30` → `maxTurns: 20`
-- **Why**: slide-core handles one slide per invocation; 30 turns is excessive
-- **Acceptance**: `maxTurns: 20` in frontmatter
+### T-10: Add chart_colors to style YAMLs + svg-generator (P1, S) ✅
+- Added chart_colors array (8 hex, [0]=accent) to all 17 styles
+- Updated svg-generator.md with chart_colors documentation and pattern examples
 
-### T-05: review-core maxTurns 15→20
-- **File**: `agents/review-core.md`
-- **Change**: `maxTurns: 15` → `maxTurns: 20`
-- **Why**: 15 turns is too tight for pre-review checks + Gemini call + structured output
-- **Acceptance**: `maxTurns: 20` in frontmatter
+### T-10b: Expand style palette from 4 to 17 (P1, M) ✅
+- Created 13 new style YAMLs with full token schema
+- Updated index.json (v1.0.0→v1.1.0, 4→17 styles)
 
-### T-06: outline.json approved field + resume guard
-- **Files**: `commands/ppt.md`, `skills/_shared/references/prompts/outline-architect.md`
-- **Change**: Add `"approved": false` to outline.json schema; ppt.md resume logic checks `approved` field before skipping Phase 4
-- **Why**: `--run-id` resume currently skips Phase 4 Hard Stop if outline.json exists, even if user never approved
-- **Acceptance**: outline.json schema includes `approved` field; resume detection checks it
-
-## Atomic Groups
-- T-02 + T-03 (turn budget optimization is coupled)
-
-## Test Expectations
-- All changes are prompt/config-level — no runtime code to test
-- Verify: frontmatter YAML is valid, JSON schema is consistent, instructions are unambiguous
+## Verification Summary
+- Cross-file consistency verified (5-type taxonomy, fallback strategy, output format)
+- chart_colors[0]==accent verified for all 17 styles
+- 17 YAML files + index.json entries confirmed
+- No stale references to old formats

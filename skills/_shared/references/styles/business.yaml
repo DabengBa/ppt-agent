@@ -8,6 +8,15 @@ color_scheme:
   background: "#ffffff"   # Clean white
   text: "#1a202c"         # Near-black
   card_bg: "#f0f4f8"      # Light gray-blue
+  chart_colors:            # Multi-series data viz; [0]=accent
+    - "#e67e22"            # Warm orange (accent)
+    - "#2d5f8a"            # Medium blue
+    - "#27ae60"            # Green
+    - "#8e44ad"            # Purple
+    - "#c0392b"            # Red
+    - "#16a085"            # Teal
+    - "#f39c12"            # Gold
+    - "#2980b9"            # Bright blue
 
 typography:
   heading_font: "DM Sans, Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif"

@@ -8,6 +8,15 @@ color_scheme:
   background: "#faf5ff"   # Soft lavender
   text: "#1e1b4b"         # Deep indigo
   card_bg: "#ffffff"      # White cards
+  chart_colors:            # Multi-series data viz; [0]=accent
+    - "#d97706"            # Dark amber (accent)
+    - "#7c3aed"            # Violet
+    - "#ec4899"            # Pink
+    - "#14b8a6"            # Teal
+    - "#f43f5e"            # Rose
+    - "#3b82f6"            # Blue
+    - "#84cc16"            # Lime
+    - "#f97316"            # Orange
 
 typography:
   heading_font: "Montserrat, Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif"

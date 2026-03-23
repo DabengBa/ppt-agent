@@ -8,6 +8,15 @@ color_scheme:
   background: "#0f172a"   # Dark slate
   text: "#f1f5f9"         # Light gray
   card_bg: "#1e293b"      # Slate card
+  chart_colors:            # Multi-series data viz; [0]=accent
+    - "#22d3ee"            # Cyan (accent)
+    - "#6366f1"            # Indigo
+    - "#a78bfa"            # Violet
+    - "#f59e0b"            # Amber
+    - "#34d399"            # Emerald
+    - "#f472b6"            # Pink
+    - "#38bdf8"            # Sky blue
+    - "#fb923c"            # Orange
 
 typography:
   heading_font: "Geist Sans, Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif"

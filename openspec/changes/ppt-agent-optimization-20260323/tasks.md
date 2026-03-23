@@ -18,13 +18,13 @@ Atomic groups: T-02 + T-03
 
 ## Wave 2 — Rebuild Aesthetic Optimization Layer
 
-| ID | Title | Priority | Effort | Files |
-|----|-------|----------|--------|-------|
-| T-07 | Rewrite Gemini optimizer role prompts | P0 | L | `skills/gemini-cli/references/roles/reviewer.md`, `skills/gemini-cli/SKILL.md`, `agents/review-core.md` |
-| T-08 | Redefine self-review fallback as technical validation only | P0 | M | `skills/gemini-cli/SKILL.md`, `agents/review-core.md`, `commands/ppt.md` |
-| T-09 | Enrich suggestion format with 5-type taxonomy | P0 | M | `skills/gemini-cli/references/roles/reviewer.md`, `agents/review-core.md`, `agents/slide-core.md` |
-| T-10 | Add chart_colors to style YAMLs + svg-generator | P1 | S | 4→17 style YAMLs, `skills/_shared/references/prompts/svg-generator.md` |
-| T-10b | Expand style palette from 4 to 17 | P1 | M | NEW: 13 style YAMLs, `skills/_shared/index.json` |
+| ID | Title | Priority | Effort | Files | Status |
+|----|-------|----------|--------|-------|--------|
+| T-07 | Rewrite Gemini optimizer role prompts | P0 | L | `skills/gemini-cli/references/roles/reviewer.md`, `skills/gemini-cli/SKILL.md`, `agents/review-core.md` | ✅ Done |
+| T-08 | Redefine self-review fallback as technical validation only | P0 | M | `skills/gemini-cli/SKILL.md`, `agents/review-core.md`, `commands/ppt.md` | ✅ Done |
+| T-09 | Enrich suggestion format with 5-type taxonomy | P0 | M | `skills/gemini-cli/references/roles/reviewer.md`, `agents/review-core.md`, `agents/slide-core.md` | ✅ Done |
+| T-10 | Add chart_colors to style YAMLs + svg-generator | P1 | S | 4→17 style YAMLs, `skills/_shared/references/prompts/svg-generator.md` | ✅ Done |
+| T-10b | Expand style palette from 4 to 17 | P1 | M | NEW: 13 style YAMLs, `skills/_shared/index.json` | ✅ Done |
 
 Atomic groups: T-07 + T-09
 

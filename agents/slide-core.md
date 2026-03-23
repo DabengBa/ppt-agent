@@ -46,7 +46,13 @@ Generate final design-quality SVG slides using Bento Grid layout system and styl
    - Apply style tokens: colors, fonts, border-radius, shadows, gaps.
    - Generate 1280x720 SVG with card-based Bento Grid layout.
    - Ensure: proper visual hierarchy, adequate whitespace (20px min gap), readable typography.
-   - If `fixes_json` is provided, apply the specific fixes from the reviewer. When `fixes_json` is provided, it contains a JSON array of structured fix objects (element, selector_hint, attribute, current, target, severity, reason). Parse each fix and apply the attribute change to the matching element. Fixes are deterministic patches, not generative reinterpretation.
+   - If `fixes_json` is provided, it contains a JSON array of **typed suggestions** from the reviewer (see `gemini-cli/references/roles/reviewer.md` Suggestion Taxonomy). Handle each type as follows:
+     - **`attribute_change`**: Deterministic patch — parse `details.selector_hint` and `details.attribute`, change `details.current` → `details.target` on the matching element. No generative reinterpretation.
+     - **`layout_restructure`**: Regenerate the slide using `details.suggested_layout` as the layout constraint and `details.constraint` as design guidance. Read the draft reference (`drafts/slide-{nn}.svg`) and outline content, then generate a new SVG with the suggested layout.
+     - **`full_rethink`**: Regenerate the slide from scratch. Ignore the current design SVG entirely. Use `details.guidance` as the design direction, reading from the draft reference and outline content.
+     - **`content_reduction`**: Reduce content per `details.what_to_remove`, then regenerate the slide. Target `details.target_info_units` info units.
+     - **`deck_coordination`**: Not handled by slide-core — flagged for holistic review by the lead orchestrator.
+     When multiple suggestion types are present, process in order: `full_rethink` > `layout_restructure` > `content_reduction` > `attribute_change` (higher-impact types supersede lower-impact ones). If a `full_rethink` is present, ignore all other suggestions — the slide will be regenerated from scratch.
 4. Write SVG to `slides/slide-{slide_index}.svg`.
 5. Send `slide_ready` to lead.
 
