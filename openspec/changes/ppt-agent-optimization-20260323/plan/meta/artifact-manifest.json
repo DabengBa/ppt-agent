@@ -1,0 +1,32 @@
+{
+  "proposal_id": "ppt-agent-optimization-20260323",
+  "phase": "plan",
+  "status": "complete",
+  "date": "2026-03-23",
+  "revision": "v2 — added FR-10b style palette expansion (4→17)",
+  "validation": "openspec validate --strict passed",
+  "plan_artifacts": [
+    {"path": "plan/requirements.md", "type": "requirements"},
+    {"path": "plan/context.md", "type": "context"},
+    {"path": "plan/codex-plan.md", "type": "architecture-draft"},
+    {"path": "plan/gemini-plan.md", "type": "architecture-draft"},
+    {"path": "plan/architecture.md", "type": "architecture"},
+    {"path": "plan/constraints.md", "type": "constraints"},
+    {"path": "plan/tasks.md", "type": "tasks"},
+    {"path": "plan/pbt.md", "type": "tests"},
+    {"path": "plan/plan.md", "type": "plan"},
+    {"path": "plan/decision-log.md", "type": "decisions"},
+    {"path": "plan/timeline.md", "type": "timeline"}
+  ],
+  "openspec_artifacts": [
+    {"path": "tasks.md", "type": "root-tasks"},
+    {"path": "specs/review-pipeline/spec.md", "type": "capability-spec"},
+    {"path": "specs/agent-resilience/spec.md", "type": "capability-spec"},
+    {"path": "specs/style-system/spec.md", "type": "capability-spec"}
+  ],
+  "resolved_decisions": [
+    {"id": "UD-1", "resolution": "Two agent variants (slide-core-patch.md with sonnet); prefer Task() model override if supported"},
+    {"id": "UD-2", "resolution": "Inlined in review-core prompt with Bash tool (option b)"},
+    {"id": "UD-3", "resolution": "Ship 5-type taxonomy in Wave 2, validate via calibration gate, adjust before Wave 3"}
+  ]
+}

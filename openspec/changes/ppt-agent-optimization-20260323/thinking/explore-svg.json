@@ -1,0 +1,467 @@
+{
+  "exploration_id": "explore-svg",
+  "timestamp": "2026-03-23",
+  "explorer": "boundary-explorer-svg",
+  "scope": "SVG quality system, style tokens, data visualization, review pipeline",
+
+  "1_layout_coverage_gaps": {
+    "summary": "10 layout combinations defined. The set covers most standard presentation needs but has notable gaps for content-heavy and visual-emphasis slides.",
+    "current_layouts": [
+      "single_focus",
+      "two_column_symmetric",
+      "two_column_asymmetric",
+      "three_column",
+      "hero_grid",
+      "mixed_grid",
+      "timeline_process_flow",
+      "dashboard_mosaic",
+      "horizontal_split",
+      "full_bleed"
+    ],
+    "missing_layouts": [
+      {
+        "name": "centered_feature_spotlight",
+        "description": "Single centered large element (icon, number, or graphic) with supporting text above/below. Different from single_focus because the visual anchor is centered rather than filling the card.",
+        "use_case": "Key stat highlight, product hero, achievement callout",
+        "frequency": "High — very common in keynotes and product launches",
+        "evidence": "The Xiaomi SU7 slide-12 (closing slide) approximates this layout manually but has no formal layout spec to guide it"
+      },
+      {
+        "name": "two_row_stacked",
+        "description": "Two full-width rows, each containing 2-3 cards, creating a 2x2 or 2x3 layout with distinct row content themes.",
+        "use_case": "Before/after comparisons across multiple dimensions, feature matrix",
+        "frequency": "Medium — common when comparing two states or two groups of features",
+        "evidence": "Dashboard/mosaic partially covers this but doesn't distinguish row-level semantic grouping"
+      },
+      {
+        "name": "image_overlay_text",
+        "description": "Full-bleed background visual element with semi-transparent overlay card containing text. Since SVG can't embed external images, this would use decorative SVG shapes/paths as background visual.",
+        "use_case": "Section dividers, emotional slides, brand moments",
+        "frequency": "Medium — the slide-01 cover already uses this pattern (decorative curves + overlaid text) without it being formalized",
+        "evidence": "Slide-01 shows a sophisticated decorative background (gradient + glow circles + curves + car outline) with overlaid content, proving the pattern works but without spec guidance"
+      },
+      {
+        "name": "sidebar_annotation",
+        "description": "Main content area (80% width) with a thin vertical sidebar (20% width) containing metadata, legends, or contextual annotations.",
+        "use_case": "Data slides with legend, content with source annotations",
+        "frequency": "Low-Medium — useful for data-heavy slides needing context",
+        "evidence": "Not observed in production run"
+      }
+    ],
+    "gap_severity": "medium",
+    "recommendation": "Add centered_feature_spotlight and image_overlay_text as formal layout types. The former is extremely common in real presentations; the latter is already being used in practice (cover slides) without formal specification."
+  },
+
+  "2_style_token_completeness": {
+    "summary": "4 styles with extended v1.1 tokens (gradients, elevation, decoration, slide_type_overrides). Token schema is rich but has gaps in data visualization, transition cues, and semantic color roles.",
+    "current_token_categories": [
+      "color_scheme (6 colors: primary, secondary, accent, background, text, card_bg)",
+      "typography (heading_font, body_font, cjk_font, scale; minimal has mono_font)",
+      "card_style (border_radius, shadow, gap; business has border)",
+      "gradients (hero_bg, card_highlight)",
+      "elevation (shadow_sm, shadow_md, shadow_lg)",
+      "decoration (pattern, pattern_opacity, icon_style, icon_weight)",
+      "slide_type_overrides (cover, quote, data, section_divider)"
+    ],
+    "missing_tokens": [
+      {
+        "token": "chart_colors",
+        "description": "Ordered palette of 6-8 colors for data visualization (bars, donut segments, lines). Currently agents must derive chart colors from primary/secondary/accent, which limits multi-series charts.",
+        "severity": "high",
+        "evidence": "svg-generator.md data viz patterns reference ${accent} for all chart elements. Slide-06 (performance data slide) and slide-07 (charging data) in the Xiaomi run would benefit from a multi-color data palette."
+      },
+      {
+        "token": "semantic_colors (success, warning, danger, info)",
+        "description": "Colors for positive/negative deltas, alerts, and informational callouts. Currently hardcoded (e.g., #22c55e for positive delta in svg-generator.md Big Number pattern).",
+        "severity": "medium",
+        "evidence": "The Big Number + Delta pattern in svg-generator.md hardcodes #22c55e for positive deltas — this should be a style token"
+      },
+      {
+        "token": "link_color / interactive_color",
+        "description": "Not needed for static SVG presentation, but could matter if HTML preview evolves to support clickable elements.",
+        "severity": "low",
+        "evidence": "N/A for current use case"
+      },
+      {
+        "token": "slide_type_overrides for additional page types",
+        "description": "Current overrides: cover, quote, data, section_divider. Missing: comparison, process, timeline, image. These page types exist in outline-architect.md but have no style overrides.",
+        "severity": "medium",
+        "evidence": "outline-architect.md defines 7 page types (content, data, comparison, process, quote, image, timeline) but only 4 have style overrides"
+      },
+      {
+        "token": "decorative_accent_color",
+        "description": "A secondary accent for decorative elements (glows, grid lines, subtle curves) distinct from the primary accent used for emphasis. The Xiaomi production run uses 3 accent-like colors (#42E8FF cyan, #FF7A1A orange, #6D7BFF indigo) but the tech.yaml style only defines accent: #22d3ee.",
+        "severity": "medium",
+        "evidence": "Slide-01 through slide-12 all use colors (#42E8FF, #FF7A1A, #6D7BFF) that don't exactly match the tech.yaml accent (#22d3ee). The agent invented a richer palette during generation, which is good design but breaks the 'all colors from style tokens' review rule."
+      }
+    ],
+    "schema_inconsistency": [
+      {
+        "issue": "minimal.yaml has mono_font token but other styles don't",
+        "severity": "low",
+        "impact": "Inconsistent schema across styles; agents referencing mono_font on non-minimal styles would get undefined"
+      },
+      {
+        "issue": "business.yaml has card_style.border but other styles don't",
+        "severity": "low",
+        "impact": "Same inconsistency — some tokens are style-specific without schema enforcement"
+      }
+    ],
+    "gap_severity": "high",
+    "recommendation": "Add chart_colors (ordered data palette) and semantic_colors (success/warning/danger/info) to the token schema. These are the most impactful missing tokens. Also standardize the schema so all styles have the same token keys (even if values differ)."
+  },
+
+  "3_data_visualization_gaps": {
+    "summary": "6 chart types defined (big number, progress bar, sparkline, donut, horizontal bar, timeline). Missing several common chart types and all chart patterns use single-color rendering.",
+    "current_chart_types": [
+      "Big Number + Delta",
+      "Progress Bar",
+      "Sparkline",
+      "Donut Chart",
+      "Horizontal Bar Chart",
+      "Timeline"
+    ],
+    "missing_chart_types": [
+      {
+        "name": "Grouped/Stacked Bar Chart",
+        "description": "Multiple bars per category for multi-dimensional comparisons. Currently only single horizontal bars are supported.",
+        "frequency": "High — extremely common in business presentations",
+        "svg_complexity": "Medium — requires careful positioning and a multi-color palette (needs chart_colors token)",
+        "evidence": "Slide-11 (competitor comparison) could benefit from grouped bars comparing specs across 4 cars"
+      },
+      {
+        "name": "Line Chart (full)",
+        "description": "Multi-point line chart with axis labels and grid. Sparkline exists but is minimal (no axes, no labels).",
+        "frequency": "High — standard for trend data",
+        "svg_complexity": "Medium — axis rendering, label positioning, grid lines",
+        "evidence": "No line chart with axes appears in any specification or production output"
+      },
+      {
+        "name": "Comparison Table",
+        "description": "Structured table with headers, rows, and alternating backgrounds for multi-attribute comparison.",
+        "frequency": "High — explicitly mentioned in svg-generator.md ('If data has >10 entries, prefer a table card') but no SVG pattern provided",
+        "svg_complexity": "Medium — row/column layout with text alignment",
+        "evidence": "svg-generator.md mentions table cards but provides no SVG implementation pattern"
+      },
+      {
+        "name": "Radar/Spider Chart",
+        "description": "Multi-axis comparison showing strengths across dimensions.",
+        "frequency": "Medium — common in competitive analysis",
+        "svg_complexity": "High — requires polygon calculation",
+        "evidence": "Would be ideal for slide-11 competitive comparison"
+      },
+      {
+        "name": "Icon Array / Waffle Chart",
+        "description": "Mentioned in the chart selection table (svg-generator.md line 194) but no SVG implementation pattern provided.",
+        "frequency": "Low-Medium",
+        "svg_complexity": "Low — grid of filled/unfilled icons",
+        "evidence": "Referenced in svg-generator.md chart type selection table but missing SVG pattern"
+      },
+      {
+        "name": "Metric Card Grid",
+        "description": "Also mentioned in chart selection table (svg-generator.md line 196) but no SVG implementation pattern provided.",
+        "frequency": "High — KPI dashboards",
+        "svg_complexity": "Low — repeated card pattern",
+        "evidence": "Referenced in chart type selection table, no SVG template. Production slide-06 uses metric-like cards but pattern is ad-hoc."
+      }
+    ],
+    "single_color_limitation": "All current chart SVG patterns use ${accent} as the single data color. Multi-series data (grouped bars, multi-line charts, multi-segment donuts) needs an ordered color palette. This is blocked by the missing chart_colors token.",
+    "gap_severity": "high",
+    "recommendation": "Priority additions: (1) Comparison Table SVG pattern — referenced but not implemented, (2) Grouped Bar Chart — extremely common, (3) Line Chart with axes — needed for trend data. Also add SVG patterns for Icon Array and Metric Card Grid since they're already referenced in the selection table."
+  },
+
+  "4_quality_gate_calibration": {
+    "summary": "Weighted scoring model (Layout 25%, Readability 25%, Typography 20%, Density 20%, Color 10%) has reasonable design intent but shows problems in practice.",
+    "current_weights": {
+      "layout_balance": { "weight": "25%", "hard_gate": ">=6" },
+      "readability": { "weight": "25%", "hard_gate": ">=6" },
+      "typography": { "weight": "20%", "hard_gate": "none" },
+      "information_density": { "weight": "20%", "hard_gate": "none" },
+      "color_harmony": { "weight": "10%", "hard_gate": "none" }
+    },
+    "issues": [
+      {
+        "issue": "Color weight too low at 10%",
+        "evidence": "The production Xiaomi run uses extended color vocabulary beyond style tokens (#42E8FF, #FF7A1A, #6D7BFF instead of tech.yaml's defined palette). A 10% weight means color issues barely affect the score. Color is foundational to brand perception and consistency.",
+        "recommendation": "Increase color weight to 15%, reduce density to 15%. Color issues compound across slides — one off-palette slide is tolerable, 12 off-palette slides creates inconsistency.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Review format divergence: production reviews don't follow the specified format",
+        "evidence": "reviewer.md specifies a detailed 5-criterion format with structured fix JSON. Production reviews (review-01 through review-12) use a simplified 3-field format (Layout, Typography, Information Density) and omit Readability and Color Harmony entirely. Reviews also have identical Notes text across all 12 slides.",
+        "recommendation": "This is a critical process gap. Either the review spec is too complex for the fallback path and needs simplification, or the self-review agent isn't properly reading the review spec.",
+        "severity": "critical"
+      },
+      {
+        "issue": "Score clustering: all 12 slides score between 8.2-8.8",
+        "evidence": "Score range is 0.6 points across 12 slides with varied complexity (cover, data, comparison, content). This narrow band suggests the review is not discriminating between genuinely different quality levels. A 12-slide deck should show more variance.",
+        "recommendation": "The self-review fallback appears to be applying a template response rather than genuine per-slide evaluation. The identical Notes text ('层级关系清晰，首屏结论明确' repeated on every review) confirms this.",
+        "severity": "critical"
+      },
+      {
+        "issue": "No fix loop evidence in production data",
+        "evidence": "All 12 slides passed on first review (no evidence of fix rounds in slide-status.json). The adaptive fix budget (score 5-6.9: 2 rounds, 3-4.9: 1 round) has never been exercised in this run. Either the initial generation quality is genuinely high, or the review is too lenient.",
+        "recommendation": "Add a metric to track fix_rounds_used per slide in slide-status.json to build evidence over multiple runs.",
+        "severity": "medium"
+      },
+      {
+        "issue": "Holistic review is also templated",
+        "evidence": "review-holistic.md scores 8.4-8.6 across all criteria with brief generic notes. The holistic review spec defines 5 specific evaluation axes (Visual Rhythm, Color Story, Narrative Arc, Style Consistency, Pacing) but the production output doesn't follow this structure.",
+        "recommendation": "Same root cause as individual reviews — the self-review fallback needs stronger prompt enforcement.",
+        "severity": "critical"
+      }
+    ],
+    "gap_severity": "critical",
+    "recommendation": "The scoring model design is reasonable, but the review execution in the Claude self-review fallback is fundamentally broken. All reviews are templated with identical text and non-discriminating scores. This needs urgent fix: (1) enforce the full review format in the self-review prompt, (2) require per-slide unique observations, (3) add a validator that rejects reviews with identical Notes text across slides."
+  },
+
+  "5_cjk_handling": {
+    "summary": "CJK-specific rules in svg-generator.md are thoughtful and well-implemented in production output. Some edge cases remain.",
+    "current_coverage": [
+      "Character width multiplier (1.8x for CJK)",
+      "Line height increase (+20% for CJK)",
+      "CJK font family chain",
+      "Bold-not-italic emphasis",
+      "No positive letter-spacing for CJK body",
+      "Punctuation rules (no opening/closing at wrong line positions)"
+    ],
+    "gaps": [
+      {
+        "issue": "Mixed CJK+Latin text baseline alignment",
+        "description": "When CJK and Latin text appear in the same line (e.g., 'Pro 版 902km'), the baseline alignment can vary across renderers. No guidance provided for dominant-baseline or alignment-baseline attributes.",
+        "evidence": "Slide-06 title has mixed text like 'V6s Plus 电机'. Slide-08 has '双 5G 双卡双通', 'Wi-Fi 7'. These render correctly in most SVG viewers but may shift on some platforms.",
+        "severity": "low"
+      },
+      {
+        "issue": "CJK punctuation width calculation",
+        "description": "CJK punctuation characters (。、「」) are full-width but the 1.8x multiplier applies uniformly to all CJK characters. Punctuation like 。 is full-width but not as visually heavy as ideographic characters.",
+        "evidence": "Minor visual impact; current approach is conservative and acceptable",
+        "severity": "low"
+      },
+      {
+        "issue": "Vertical text not addressed",
+        "description": "SVG supports vertical text via writing-mode='vertical-rl'. Some CJK design contexts use vertical text for emphasis or traditional styling. Not mentioned in any spec.",
+        "evidence": "Not needed for the current use case (horizontal presentations) but could be useful for quote slides or decorative elements in Japanese/traditional Chinese contexts.",
+        "severity": "low"
+      },
+      {
+        "issue": "Text wrapping accuracy for mixed content",
+        "description": "The line capacity formulas (Latin: card_width / (font_size * 0.6), CJK: card_width / (font_size * 1.1)) use a binary approach. Mixed text (common in tech presentations) needs a weighted calculation based on actual CJK ratio per line, not per card.",
+        "evidence": "Slide-08 line '超级小爱支持深度车控、模糊语义导航、连续对话和车外语音控车' is all CJK so formula works. But 'Max 版 0-100km/h 3.08 秒' is mixed and would need per-character-class width estimation.",
+        "severity": "medium"
+      }
+    ],
+    "production_quality": "High — the Xiaomi SU7 production run demonstrates that CJK handling works well in practice. CJK text is readable, properly spaced, and font chains include PingFang SC. The gaps identified are edge cases that rarely cause visible issues.",
+    "gap_severity": "low",
+    "recommendation": "Add a note about dominant-baseline='central' for mixed CJK+Latin inline text. The mixed-text line width calculation could be improved but has low impact in practice."
+  },
+
+  "6_cognitive_design_integration": {
+    "summary": "cognitive-design-principles.md is well-written as a reference document but its integration into actual generation prompts is indirect.",
+    "integration_analysis": [
+      {
+        "principle": "Miller's Law (4+/-1 chunks)",
+        "integration_level": "strong",
+        "evidence": "bento-grid-layout.md Content-Adaptive Sizing table enforces splitting at >5 bullet points. reviewer.md Content Density Targets enforce per-type max info units. outline-architect.md enforces 7+/-2 info units per page.",
+        "gap": "Miller's Law says 4+/-1, outline-architect says 7+/-2 — these are different references (Cowan 2001 vs Miller 1956). cognitive-design-principles.md correctly cites Cowan's 4+/-1 but outline-architect uses the older 7+/-2."
+      },
+      {
+        "principle": "Spatial Contiguity (Mayer)",
+        "integration_level": "medium",
+        "evidence": "bento-grid-layout.md says cards should use internal padding and place related elements together. But no explicit rule like 'labels must be within 20px of their data element'.",
+        "gap": "The principle has the highest effect size (1.10) but isn't explicitly enforced in the review rubric. Layout Balance criterion implicitly captures it but doesn't measure label-to-data proximity."
+      },
+      {
+        "principle": "Coherence (Mayer)",
+        "integration_level": "medium",
+        "evidence": "Information Density scoring captures this. cognitive-design-principles.md says 'remove ALL extraneous material' but the production SVGs include decorative elements (glow circles, grain patterns, grid lines) that could be considered extraneous.",
+        "gap": "Decorative elements serve mood/brand purposes and the principle applies to content, not background texture. But the boundary between 'brand atmosphere' and 'extraneous decoration' is not defined."
+      },
+      {
+        "principle": "Gestalt Proximity",
+        "integration_level": "strong",
+        "evidence": "bento-grid-layout.md minimum 20px gap rule. Card boundaries create Common Region grouping. Production SVGs show clear card-based grouping."
+      },
+      {
+        "principle": "3-Second Test",
+        "integration_level": "weak",
+        "evidence": "cognitive-design-principles.md defines this test but no review criterion operationalizes it. It's inherently subjective and hard to automate, but could be approximated by checking whether the largest text element communicates the slide's key message.",
+        "gap": "The 3-second test is the most practical design principle but isn't referenced in the review rubric."
+      },
+      {
+        "principle": "Three-Tier Hierarchy Model",
+        "integration_level": "medium",
+        "evidence": "svg-generator.md Typography Rules define hierarchy levels (slide title 36-44px, card title 24-32px, body 16-20px, label 12-14px). This maps to the three tiers. But the review doesn't check whether hierarchy is actually implemented correctly.",
+        "gap": "No automated check for 'are there exactly 3 hierarchy levels on this slide'."
+      },
+      {
+        "principle": "Narrative Arc (Setup/Tension/Resolution)",
+        "integration_level": "strong",
+        "evidence": "outline-architect.md explicitly defines the arc (Setup ~15%, Tension ~60%, Resolution ~25%). reviewer.md holistic review checks Narrative Arc. Production outline.json shows clear arc structure.",
+        "gap": "Holistic review criteria names this but production holistic review didn't evaluate it specifically."
+      }
+    ],
+    "gap_severity": "medium",
+    "recommendation": "The cognitive principles document is well-written but acts more as background reading than operational guidance. Key integration improvements: (1) Align Miller's Law reference — use 4+/-1 (Cowan) consistently instead of mixing with 7+/-2 (Miller), (2) Add spatial contiguity check to review rubric ('labels within Npx of data elements'), (3) Operationalize the 3-second test as 'largest text element = slide key message'."
+  },
+
+  "7_style_yaml_schema_validation": {
+    "summary": "No formal schema validation exists. Style YAML is read by agents at generation time with no upfront validation. Malformed YAML could cause silent failures.",
+    "current_state": {
+      "validation": "none",
+      "schema_definition": "implicit — defined by usage in svg-generator.md and reviewer.md",
+      "consistency_check": "none — styles have inconsistent keys (mono_font only in minimal, border only in business)"
+    },
+    "failure_modes": [
+      {
+        "mode": "Missing required color",
+        "impact": "Agent would use undefined token, likely generating default black or no fill. SVG would render with missing colors.",
+        "probability": "low — style files are authored once and reused",
+        "severity": "high if it occurs"
+      },
+      {
+        "mode": "Invalid YAML syntax",
+        "impact": "YAML parse failure. Agent would fail to read tokens entirely.",
+        "probability": "low — YAML is simple format",
+        "severity": "high if it occurs"
+      },
+      {
+        "mode": "Wrong color format (e.g., 'rgb(26,54,93)' instead of '#1a365d')",
+        "impact": "SVG fill attribute expects hex or named color. rgb() format works in some renderers but not all.",
+        "probability": "medium — especially if users create custom brand styles",
+        "severity": "medium"
+      },
+      {
+        "mode": "Missing extended v1.1 tokens (gradients, elevation, decoration)",
+        "impact": "svg-generator.md references these tokens. Agent would use undefined values, likely omitting gradients/shadows.",
+        "probability": "medium — new custom styles might miss v1.1 tokens",
+        "severity": "medium"
+      }
+    ],
+    "brand_color_override": "CLAUDE.md mentions --brand-colors=<path> flag and brand-style.yaml output. This creates a second entry point for user-provided style data with even less validation.",
+    "gap_severity": "medium",
+    "recommendation": "Add a JSON Schema or simple validation checklist for style YAML. At minimum, define required keys at each level and validate color format (#RRGGBB). Could be implemented as a pre-generation check step. For brand-color override, validate that the provided YAML has at minimum: primary, accent, background, text colors."
+  },
+
+  "8_production_quality_analysis": {
+    "summary": "Analysis of the Xiaomi SU7 12-slide production run reveals high visual quality but systematic deviations from specifications.",
+    "observations": [
+      {
+        "finding": "Custom color palette beyond style tokens",
+        "detail": "All 12 slides use a custom dark theme (#07111E background, #132842 panel, #42E8FF cyan, #FF7A1A orange, #6D7BFF indigo, #F3F7FB text, #9FB4CF muted) that doesn't match tech.yaml colors (#0f172a background, #1e293b card, #22d3ee accent, #f1f5f9 text). The agent created a custom design system.",
+        "assessment": "The custom palette is actually better than the tech.yaml defaults — more nuanced, better hierarchy, more colors for differentiation. But this means the style token system was effectively bypassed.",
+        "severity": "high — indicates style tokens are suggestions rather than constraints"
+      },
+      {
+        "finding": "Shared <defs> block across all slides",
+        "detail": "All 12 slides share identical <defs> (same gradients, filters, patterns, glow effects). This creates visual consistency but also means every slide has ~50 lines of redundant SVG.",
+        "assessment": "Good for consistency. The redundancy is acceptable for standalone SVG files. Could be optimized if a shared defs system existed.",
+        "severity": "informational"
+      },
+      {
+        "finding": "Decorative elements add 30-40% to SVG size",
+        "detail": "Background grid lines (11 vertical + 6 horizontal), grain pattern, glow circles, decorative curves appear on every slide. These are purely atmospheric but add significant SVG complexity.",
+        "assessment": "These decorative elements significantly elevate the visual quality — the slides look premium and cohesive. But they're not governed by any spec. The decoration token (pattern: 'grid', pattern_opacity: 0.03) only hints at this; the actual implementation is far richer.",
+        "severity": "medium — good output but ungoverned process"
+      },
+      {
+        "finding": "Car illustrations via SVG paths",
+        "detail": "Slide-01 includes a simplified car illustration using SVG paths and circles. This is impressive but not covered by any generation spec.",
+        "assessment": "Shows the agent's creative capability. However, the illustration is very simplified (curves + circles suggesting a car outline). More complex illustrations would be harder to maintain quality.",
+        "severity": "informational"
+      },
+      {
+        "finding": "Slide-08 uses relationship diagram",
+        "detail": "An interconnected circle diagram showing phone/car/home/tablet ecosystem — a diagram type not defined in the data viz patterns.",
+        "assessment": "This is effectively a network/relationship diagram. Adding this as a formal pattern would be valuable.",
+        "severity": "medium — common diagram type missing from spec"
+      }
+    ]
+  },
+
+  "9_cross_cutting_findings": {
+    "summary": "Several issues span multiple exploration areas and represent systemic patterns.",
+    "findings": [
+      {
+        "id": "spec_vs_practice_gap",
+        "title": "Specifications are elaborate but weakly enforced",
+        "detail": "The spec system (bento-grid-layout.md, svg-generator.md, cognitive-design-principles.md, reviewer.md) is comprehensive and well-designed. But the production run shows the agent freely deviates from specs (custom colors, custom decorative elements, simplified review format) when it produces better results. The specs function as inspirational guidelines rather than hard constraints.",
+        "impact": "This is not necessarily bad — the production quality is high. But it means the quality gate is effectively 'does the agent think it's good' rather than 'does it meet spec'.",
+        "recommendation": "Decide whether specs are hard constraints or soft guidelines. If guidelines, simplify the review process. If constraints, add pre-review validation that checks measurable properties (color hex matches, font-size ranges, gap measurements) before the subjective review."
+      },
+      {
+        "id": "self_review_is_rubber_stamp",
+        "title": "Claude self-review doesn't provide genuine quality feedback",
+        "detail": "All 12 individual reviews have identical Notes text. All scores cluster in 8.2-8.8. The review format spec (5 criteria, structured JSON, specific fixes) is completely ignored in the self-review fallback. The holistic review is also templated.",
+        "impact": "The quality gate provides no signal. Slides that genuinely need improvement would pass just as easily as high-quality slides. The review system gives false confidence.",
+        "recommendation": "This is the single highest-priority fix. Options: (1) Strengthen the self-review prompt to require unique per-slide observations and reject templated responses, (2) Add a programmatic validation layer that checks measurable SVG properties (text size, card gaps, color compliance), (3) Lower expectations for self-review and focus on making Gemini review the primary path."
+      },
+      {
+        "id": "missing_relationship_diagram",
+        "title": "Network/relationship diagrams used in practice but not specified",
+        "detail": "Slide-08's phone-car-home-tablet diagram is a common visualization type (entity-relationship, network graph) that has no SVG pattern template.",
+        "impact": "Agents must improvise these diagrams without guidance, risking inconsistent quality.",
+        "recommendation": "Add a 'Network/Relationship Diagram' SVG pattern showing connected nodes with labels."
+      }
+    ]
+  },
+
+  "priority_ranking": [
+    {
+      "rank": 1,
+      "finding": "Self-review quality gate is non-functional (rubber stamp)",
+      "section": "4_quality_gate_calibration",
+      "effort": "medium",
+      "impact": "critical — undermines the entire review pipeline"
+    },
+    {
+      "rank": 2,
+      "finding": "Missing chart_colors token makes multi-series data viz impossible",
+      "section": "2_style_token_completeness",
+      "effort": "low",
+      "impact": "high — blocks grouped bars, multi-line charts, multi-segment donuts"
+    },
+    {
+      "rank": 3,
+      "finding": "Style tokens bypassed in practice (custom colors used instead)",
+      "section": "8_production_quality_analysis",
+      "effort": "medium",
+      "impact": "high — token system credibility; need to decide: enforce or embrace flexibility"
+    },
+    {
+      "rank": 4,
+      "finding": "Missing SVG patterns for referenced chart types (table, icon array, metric grid)",
+      "section": "3_data_visualization_gaps",
+      "effort": "low",
+      "impact": "medium — referenced in spec but no implementation pattern"
+    },
+    {
+      "rank": 5,
+      "finding": "Cognitive design principles not operationalized in review",
+      "section": "6_cognitive_design_integration",
+      "effort": "medium",
+      "impact": "medium — principles exist but aren't checked"
+    },
+    {
+      "rank": 6,
+      "finding": "Layout spec missing centered_feature_spotlight and image_overlay patterns",
+      "section": "1_layout_coverage_gaps",
+      "effort": "low",
+      "impact": "medium — common patterns already used in practice without spec"
+    },
+    {
+      "rank": 7,
+      "finding": "No YAML schema validation for style files",
+      "section": "7_style_yaml_schema_validation",
+      "effort": "low",
+      "impact": "medium — failure risk increases with custom/brand styles"
+    },
+    {
+      "rank": 8,
+      "finding": "Miller's Law inconsistency (4+/-1 vs 7+/-2 in different specs)",
+      "section": "6_cognitive_design_integration",
+      "effort": "trivial",
+      "impact": "low — cosmetic inconsistency in reference docs"
+    }
+  ]
+}

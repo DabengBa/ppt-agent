@@ -1,0 +1,320 @@
+{
+  "exploration": "agent-architecture-and-communication",
+  "timestamp": "2026-03-23",
+  "findings": [
+    {
+      "id": "model-selection",
+      "category": "model_allocation",
+      "title": "Model selection analysis across 4 agents",
+      "evidence": {
+        "current_config": {
+          "research-core": { "model": "sonnet", "effort": "medium", "rationale": "Web search + synthesis is retrieval-heavy, not reasoning-heavy" },
+          "content-core": { "model": "opus", "effort": "high", "rationale": "Outline architecture requires deep structural reasoning (Pyramid Principle, framework selection, MECE grouping)" },
+          "slide-core": { "model": "opus", "effort": "high", "rationale": "SVG generation requires precise coordinate math, CJK width calculations, and Bento Grid layout composition" },
+          "review-core": { "model": "sonnet", "effort": "medium", "rationale": "Delegates heavy optimization to Gemini; Claude side is structured report writing" }
+        },
+        "analysis": [
+          {
+            "agent": "research-core",
+            "verdict": "APPROPRIATE",
+            "reasoning": "Research tasks are search-retrieve-synthesize loops. Sonnet handles this well. The agent's complexity is in tool orchestration (probe.sh, tiered fallback), not deep reasoning. Opus would increase cost ~5x per research task with marginal quality gain on synthesis.",
+            "risk": "Low — research output is intermediate (feeds into requirements.md via user confirmation), so any quality gap is caught at the Hard Stop."
+          },
+          {
+            "agent": "content-core",
+            "verdict": "APPROPRIATE",
+            "reasoning": "Outline mode requires: (1) framework selection heuristic, (2) Pyramid Principle application with MECE grouping, (3) layout_type selection per page considering style preferences, (4) data_elements typing with chart/metric/table structures, (5) narrative arc planning. This is the highest-reasoning task. Draft mode also generates SVG, which benefits from opus spatial reasoning.",
+            "risk": "None — this is the right choice."
+          },
+          {
+            "agent": "slide-core",
+            "verdict": "APPROPRIATE but OVER-SPECIFIED for fix rounds",
+            "reasoning": "Initial design generation clearly benefits from opus — it must compose Bento Grid layouts, apply style tokens, calculate text overflow, handle CJK width adjustments. However, when processing fixes_json (structured patches from reviewer), the task is largely mechanical: parse fix array, locate element by selector_hint, change attribute from current to target. This could be sonnet-level work.",
+            "optimization_opportunity": "Split slide-core invocation: use opus for initial generation (mode=design without fixes_json), use sonnet for fix application (mode=design with fixes_json). This would save opus cost on fix rounds while preserving quality for initial generation.",
+            "estimated_savings": "Each fix round currently costs 1 opus invocation. With 10-15 slides and avg 0.5 fix rounds per slide, that's 5-8 opus calls that could be sonnet calls. At ~5x cost difference, this saves ~20-32 equivalent sonnet calls per run."
+          },
+          {
+            "agent": "review-core",
+            "verdict": "QUESTIONABLE — depends on Gemini availability",
+            "reasoning": "When Gemini is available (happy path), review-core's job is: (1) run pre-review automated checks, (2) build Gemini prompt, (3) call gemini-cli skill, (4) parse Gemini output into structured report. Sonnet is sufficient for this orchestration. BUT when Gemini is unavailable (fallback path), review-core must perform Claude self-optimization using reviewer.md quality standards. This requires genuine aesthetic judgment: evaluating layout balance, color harmony, visual hierarchy. Sonnet's aesthetic reasoning is measurably weaker than opus.",
+            "optimization_opportunity": "Dynamic model selection: use sonnet when Gemini is available (orchestration only), upgrade to opus when Gemini is unavailable (self-review requires deeper aesthetic reasoning). This requires the orchestrator to probe Gemini availability before spawning review-core, or review-core to signal for re-spawn at higher model tier.",
+            "constraint": "Current agent spawning via Task() does not support dynamic model selection. The model is fixed in the agent definition YAML frontmatter. Implementing this would require either: (a) two review-core variants (review-core-lite, review-core-full), or (b) agent definition supporting model override in Task() prompt args."
+          }
+        ]
+      },
+      "severity": "optimization",
+      "recommendation": "Consider slide-core fix-round downgrade to sonnet. Defer review-core dynamic model until agent infra supports model override."
+    },
+    {
+      "id": "max-turns-allocation",
+      "category": "resource_limits",
+      "title": "MaxTurns allocation analysis",
+      "evidence": {
+        "current_config": {
+          "research-core": { "maxTurns": 20, "typical_workflow": "1 probe + 3-5 search queries + 1-2 URL reads + 1 synthesis write + 2 heartbeats = ~10-12 turns" },
+          "content-core": { "maxTurns": 25, "typical_workflow_outline": "3-4 file reads + 1 outline generation + 1 preview write + 1 heartbeat = ~7-8 turns", "typical_workflow_draft": "2-3 reads + N SVG writes + N signals + 1 manifest write = ~2N+5 turns (for 12 slides = ~29 turns)" },
+          "slide-core": { "maxTurns": 30, "typical_workflow": "5-6 reads (outline, draft, bento-grid, svg-gen, style) + 1 SVG write + 3-4 validation bash commands + 1-2 fix-rewrite cycles + 2 heartbeats = ~14-18 turns" },
+          "review-core": { "maxTurns": 15, "typical_workflow": "3-4 reads (SVG, style, outline) + 3-5 pre-review bash checks + 1 Gemini skill call + 1 report write + 1-2 signals = ~11-14 turns" }
+        },
+        "analysis": [
+          {
+            "agent": "research-core",
+            "verdict": "APPROPRIATE — ~8 turn headroom for complex topics",
+            "detail": "20 turns is generous but justifiable. Complex topics may need 6-8 search queries across multiple platforms. The headroom prevents premature truncation on research-heavy topics."
+          },
+          {
+            "agent": "content-core",
+            "verdict": "POTENTIALLY INSUFFICIENT for draft mode with large decks",
+            "detail": "In draft mode, content-core generates one SVG per slide AND sends a per-slide signal. For a 15-slide deck: 5 reads + 15 writes + 15 signals + 1 manifest = 36 turns, exceeding maxTurns=25. Even with batched writes (2 slides per turn), this is tight at 25 turns for 15 slides.",
+            "risk": "HIGH — content-core may truncate draft generation for decks at the upper end of --pages range (e.g., --pages=12-15).",
+            "optimization_opportunity": "Increase maxTurns to 35, or batch draft_slide_ready signals (e.g., signal every 3 slides instead of per-slide). The per-slide signaling enables pipeline overlap with Phase 6, but the signaling overhead may exceed the pipeline benefit for small decks."
+          },
+          {
+            "agent": "slide-core",
+            "verdict": "OVER-ALLOCATED — designs ONE slide per invocation",
+            "detail": "slide-core is invoked once per slide with a specific slide_index. It designs exactly 1 slide. The workflow is: read context (5-6 turns) + generate SVG (1 turn) + validate (3-4 bash turns) + optional fix cycle (2-3 turns) + signal (1 turn) = 12-15 turns. 30 turns is ~2x the typical need.",
+            "optimization_opportunity": "Reduce to maxTurns=20. This still provides comfortable headroom (5-8 extra turns) for complex slides with validation failures requiring rewrite. The saved turn budget reduces resource waste on the platform.",
+            "risk": "Low — even worst case (2 validation failures + rewrites) needs ~20 turns."
+          },
+          {
+            "agent": "review-core",
+            "verdict": "TIGHT — pre-review checks consume significant turns",
+            "detail": "Pre-review automated checks (5 items, each a bash command or grep) consume 3-5 turns. Add reads (3-4), Gemini call (1), report write (1), signals (1-2) = 13-14 turns. Leaves 1-2 turns headroom. Holistic mode reads ALL slide SVGs (potentially 15 files) which could consume 10+ turns for reads alone.",
+            "risk": "MEDIUM for holistic mode — reading 15 SVG files may exceed 15 turns.",
+            "optimization_opportunity": "Increase to maxTurns=20, or optimize pre-review checks into a single bash script that runs all 5 checks at once (1 turn instead of 5)."
+          }
+        ]
+      },
+      "severity": "bug_risk",
+      "recommendation": "content-core maxTurns should increase to 35 for large deck safety. slide-core can decrease to 20. review-core should increase to 20 for holistic mode safety."
+    },
+    {
+      "id": "tool-availability-gaps",
+      "category": "tool_access",
+      "title": "Tool availability analysis — missing tools and capability gaps",
+      "evidence": {
+        "current_config": {
+          "research-core": { "tools": ["Read", "Write", "SendMessage", "Bash", "WebSearch", "Skill"] },
+          "content-core": { "tools": ["Read", "Write", "Skill", "SendMessage"] },
+          "slide-core": { "tools": ["Read", "Write", "Skill", "SendMessage", "Bash"] },
+          "review-core": { "tools": ["Read", "Write", "Skill", "SendMessage"] }
+        },
+        "analysis": [
+          {
+            "agent": "content-core",
+            "issue": "NO Bash tool — cannot validate generated SVGs",
+            "detail": "content-core in draft mode generates SVG files (drafts/slide-{nn}.svg). Without Bash, it cannot run xmllint to verify XML validity, grep for viewBox, or check font sizes. Draft SVGs are simpler than design SVGs, but malformed XML still wastes downstream turns when slide-core tries to read them.",
+            "severity": "minor",
+            "recommendation": "Add Bash to content-core's tool list. The risk of content-core misusing Bash is low (it has no incentive to run arbitrary commands), and the benefit is early detection of malformed draft SVGs before they reach slide-core.",
+            "counterargument": "Draft SVGs are intentionally simple (placeholder layouts). xmllint validation at this stage may be over-engineering since slide-core regenerates the full design from scratch anyway — it reads the draft as a layout reference, not as a base to patch."
+          },
+          {
+            "agent": "review-core",
+            "issue": "NO Bash tool — pre-review automated checks REQUIRE Bash",
+            "detail": "review-core.md explicitly documents 5 pre-review automated checks: (1) xmllint --noout, (2) ViewBox grep, (3) font-size grep, (4) color token compliance, (5) safe area boundary check. These all require Bash execution. Without Bash in its tool list, review-core CANNOT perform its own documented workflow. This is a BUG.",
+            "severity": "critical",
+            "evidence_lines": "review-core.md lines 34-42 document Bash-dependent checks. review-core.md frontmatter (lines 4-8) does NOT include Bash in tools list.",
+            "recommendation": "Add Bash to review-core's tool list immediately. Without this, the pre-review automated checks are dead code — the agent will skip them and go directly to expensive Gemini/Claude review, wasting API cost on trivially broken SVGs.",
+            "workaround_current": "review-core may attempt pre-review checks via the Skill tool if gemini-cli skill has Bash access, but this is an indirect hack and not the intended behavior."
+          },
+          {
+            "agent": "review-core",
+            "issue": "No Glob/Grep tools — holistic mode must read ALL SVG files",
+            "detail": "In holistic mode, review-core reads ALL slides/slide-*.svg files. Without Glob, it cannot discover which SVG files exist. It must rely on reading outline.json to infer slide count, then construct filenames. This works but is fragile if slides are missing or numbered differently.",
+            "severity": "minor",
+            "recommendation": "Consider adding Glob to review-core for holistic mode file discovery. Low priority since outline.json is authoritative."
+          },
+          {
+            "agent": "content-core",
+            "issue": "No Glob tool — revise mode reads existing outline.json but cannot discover other artifacts",
+            "detail": "In revise mode, content-core reads the existing outline.json as baseline. This works since the path is deterministic. No Glob needed.",
+            "severity": "non-issue"
+          }
+        ]
+      },
+      "severity": "critical",
+      "recommendation": "review-core MUST have Bash added to its tools list — this is a blocking bug. content-core Bash addition is nice-to-have."
+    },
+    {
+      "id": "communication-overhead",
+      "category": "signaling_protocol",
+      "title": "Agent communication protocol efficiency analysis",
+      "evidence": {
+        "signal_types": {
+          "heartbeat": "Sent when starting and before writing final output — 2 per agent invocation minimum",
+          "research_ready": "research-core → lead (mode=research complete)",
+          "collection_ready": "research-core → lead (mode=collect complete)",
+          "outline_ready": "content-core → lead (outline/revise complete)",
+          "draft_slide_ready": "content-core → lead (per-slide signal enabling Phase 6 pipeline)",
+          "draft_complete": "content-core → lead (all drafts done)",
+          "slide_ready": "slide-core → lead (design complete)",
+          "slide_fixed": "slide-core → lead (fix applied)",
+          "review_passed": "review-core → lead (score >= 7)",
+          "review_failed": "review-core → lead (score < 7, includes fixes JSON)",
+          "error": "any agent → lead (with step_id and stderr)"
+        },
+        "analysis": [
+          {
+            "issue": "Heartbeat overhead",
+            "detail": "Each agent sends 2 heartbeats (start + before final write). With 4 agent types and multiple invocations, heartbeats accumulate. For a 12-slide deck: research(1) + collect(3-5) + outline(1) + draft(1) + design(12) + review(12) + holistic(1) = ~31-33 invocations × 2 heartbeats = 62-66 heartbeat signals. Each heartbeat consumes 1 SendMessage turn.",
+            "cost": "62-66 turns total across all agents, consuming ~2 turns per agent invocation that could be used for actual work.",
+            "recommendation": "Heartbeat is useful for long-running agents (research-core, content-core in draft mode) but wasteful for fast agents (review-core checking a single slide). Consider: (1) heartbeat only if expected execution exceeds 5 turns, or (2) combine heartbeat with first substantive action, or (3) remove the 'before final write' heartbeat entirely since the ready/complete signal serves the same purpose.",
+            "severity": "minor"
+          },
+          {
+            "issue": "Per-slide draft signaling vs pipeline benefit",
+            "detail": "content-core sends draft_slide_ready(index=N) after EACH draft SVG. This enables Phase 6 pipeline: slide-core can start designing slide 1 while draft 2-15 are still being generated. However, each signal costs 1 turn, and for a 12-slide deck that's 12 extra turns (from content-core's 25-turn budget — see maxTurns finding). The pipeline benefit depends on whether Phase 6 agents are actually spawned incrementally or in batches.",
+            "pipeline_analysis": "The orchestrator (ppt.md line 156) specifies 'sliding window of min(3, remaining_slides) parallel slide-core agents'. This means the orchestrator can launch up to 3 design agents per batch. For pipeline overlap to work, the orchestrator must receive draft_slide_ready signals and act on them immediately. But the orchestrator is processing multiple concurrent Task() results — it may not react to individual signals fast enough to fully exploit per-slide pipelining.",
+            "recommendation": "Consider batched signaling: signal every 3 slides (matching the sliding window size) instead of per-slide. This reduces content-core's signal overhead from N to N/3 turns while preserving meaningful pipeline overlap. Trade: slightly delayed pipeline start for first 2 slides of each batch.",
+            "severity": "optimization"
+          },
+          {
+            "issue": "requires_ack protocol unused complexity",
+            "detail": "Both research-core.md and review-core.md mention 'Directed messages with requires_ack=true must be acknowledged.' However, there's no documented case where the orchestrator sends requires_ack messages to these agents. This is defensive specification but adds conceptual overhead.",
+            "recommendation": "Document which specific messages use requires_ack, or remove the clause if no messages currently require it. Dead protocol code increases confusion for maintainers.",
+            "severity": "non-issue"
+          },
+          {
+            "issue": "No agent-to-agent communication",
+            "detail": "CLAUDE.md explicitly states 'agents communicate only with the lead orchestrator via SendMessage, not with each other directly.' This is a deliberate design choice (star topology). The benefit is simplicity and centralized control. The cost is that slide-core cannot directly ask review-core for clarification on a fix suggestion — all communication must route through the orchestrator.",
+            "trade_off": "Star topology is correct for this workflow. Agent-to-agent communication would add complexity without clear benefit since the workflow is sequential per-slide (design → review → optional fix → review). The orchestrator already has full context.",
+            "recommendation": "Keep current star topology. No change needed."
+          }
+        ]
+      },
+      "severity": "optimization",
+      "recommendation": "Reduce heartbeat to start-only (remove pre-write heartbeat). Batch draft signals every 3 slides."
+    },
+    {
+      "id": "agent-scope-boundaries",
+      "category": "architecture",
+      "title": "Agent scope and potential decomposition analysis",
+      "evidence": {
+        "current_boundaries": {
+          "research-core": {
+            "modes": ["research", "collect"],
+            "scope": "All web search and material gathering",
+            "coupling": "Low — stateless between invocations, outputs are standalone files"
+          },
+          "content-core": {
+            "modes": ["outline", "revise", "draft"],
+            "scope": "Structural planning (outline) + simple SVG generation (draft)",
+            "coupling": "Medium — outline and revise share state (outline.json). Draft reads outline.json."
+          },
+          "slide-core": {
+            "modes": ["design"],
+            "scope": "Final design SVG generation with style tokens",
+            "coupling": "Low per invocation — reads draft + outline, writes independent slide file"
+          },
+          "review-core": {
+            "modes": ["review", "holistic"],
+            "scope": "Quality assessment via Gemini or self-review",
+            "coupling": "Low — reads slide SVG, writes independent review file"
+          }
+        },
+        "decomposition_analysis": [
+          {
+            "candidate": "Split content-core into outline-core + draft-core",
+            "benefit": "Outline and draft are conceptually different tasks with different skill requirements. Outline requires structural reasoning; draft requires SVG generation. Splitting would allow outline-core to use opus and draft-core to potentially use sonnet (draft SVGs are simpler).",
+            "cost": "Additional agent definition. Draft-core would need to read outline.json (same as current content-core in draft mode). No new coupling introduced.",
+            "pipeline_impact": "No improvement — outline must complete before draft can start (sequential dependency). Splitting agents doesn't enable new parallelism.",
+            "verdict": "NOT RECOMMENDED — overhead outweighs benefit. The sequential dependency means splitting adds an agent spawn overhead (~2-3 turns for setup/heartbeat) without enabling parallelism. The model-tier argument is weak since draft SVGs still benefit from opus spatial reasoning for layout placement.",
+            "confidence": "high"
+          },
+          {
+            "candidate": "Merge review-core into slide-core",
+            "benefit": "Eliminates the orchestrator's design→review→fix loop management. slide-core would self-review after generation.",
+            "cost": "Violates the dual-model review principle. The whole point of Gemini review is cross-model perspective — having Claude review its own SVG output loses the independent verification benefit. Also makes slide-core's scope too broad (design + validate + call external model + parse review + apply fixes).",
+            "verdict": "NOT RECOMMENDED — fundamentally undermines the quality architecture.",
+            "confidence": "high"
+          },
+          {
+            "candidate": "Specialize research-core into search-core + synthesis-core",
+            "benefit": "Could parallelize search across platforms while a separate agent synthesizes results.",
+            "cost": "Significant coordination overhead. Search results need to be written to intermediate files, synthesis-core needs to wait for all searchers. The current research-core already handles this within its 20-turn budget.",
+            "verdict": "NOT RECOMMENDED — over-decomposition for the task complexity.",
+            "confidence": "high"
+          },
+          {
+            "candidate": "Add a new validation-core agent for pre-review automated checks",
+            "benefit": "Could run XML validation, viewBox checks, font-size checks, safe area checks as a lightweight agent (sonnet, maxTurns=5) between slide-core and review-core. This would prevent expensive Gemini calls on trivially broken SVGs.",
+            "cost": "Additional agent spawn overhead. But the checks are already documented in both slide-core (post-generation) and review-core (pre-review). Having them in a separate agent adds a third copy.",
+            "verdict": "NOT RECOMMENDED — the checks should stay in slide-core (post-generation, which already has Bash) and review-core (pre-review, which NEEDS Bash added). A dedicated validation agent is over-engineering for 5 bash commands.",
+            "confidence": "high"
+          }
+        ]
+      },
+      "severity": "architecture",
+      "recommendation": "Keep current 4-agent architecture. No decomposition provides net positive value. Fix tool access bugs instead."
+    },
+    {
+      "id": "memory-setting",
+      "category": "agent_config",
+      "title": "Memory scope analysis",
+      "evidence": {
+        "current_config": "All 4 agents have memory: project",
+        "analysis": [
+          {
+            "observation": "memory: project means each agent can read project-level CLAUDE.md and project memories. This is appropriate for agents that need to understand the PPT workflow context.",
+            "issue": "Agents are spawned per-task (not persistent). They exist for 15-30 turns, then terminate. Project memory is loaded on spawn, which adds context tokens but provides useful workflow understanding (quality gates, output paths, etc.).",
+            "consideration": "For short-lived agents like slide-core (designs 1 slide), loading full project memory may be wasteful. The agent receives all necessary context via its prompt args and reference file reads. Project memory adds tokens without clear benefit since the agent doesn't need workflow-level context — it just needs to design one SVG.",
+            "recommendation": "Consider memory: none for slide-core and review-core to reduce context overhead. These agents are highly focused per-invocation and receive all needed context through explicit file reads and prompt args. research-core and content-core benefit more from project memory since they need to understand overall workflow context (e.g., brand-colors, style selection, page range)."
+          }
+        ]
+      },
+      "severity": "optimization",
+      "recommendation": "Set slide-core and review-core to memory: none. Keep research-core and content-core at memory: project."
+    },
+    {
+      "id": "disallowed-tools",
+      "category": "agent_config",
+      "title": "disallowedTools consistency check",
+      "evidence": {
+        "current_config": "All 4 agents have disallowedTools: [Agent]",
+        "analysis": "This is correct — sub-agents should not spawn further sub-agents (no recursive agent spawning). The Agent tool is properly blocked. No issues found."
+      },
+      "severity": "non-issue",
+      "recommendation": "No change needed."
+    },
+    {
+      "id": "orchestrator-bottleneck",
+      "category": "architecture",
+      "title": "Orchestrator as bottleneck in Phase 6 pipeline",
+      "evidence": {
+        "workflow": "In Phase 6, the orchestrator must: (1) receive draft_slide_ready signals from content-core, (2) spawn slide-core for design, (3) receive slide_ready, (4) spawn review-core, (5) receive review result, (6) if failed: re-spawn slide-core with fixes, (7) repeat review. This is a per-slide state machine managed by the lead orchestrator.",
+        "analysis": [
+          {
+            "issue": "Orchestrator manages N concurrent design-review loops",
+            "detail": "With sliding window of 3, the orchestrator tracks 3 concurrent slide pipelines, each at different stages (design, review, fix). This requires sophisticated state management in the orchestrator's context window.",
+            "risk": "The orchestrator (ppt.md) uses allowed-tools: [Task, AskUserQuestion, Read, Write, Bash]. It manages slide-status.json as the state store. This is workable but fragile — if the orchestrator loses track of which slide is in which state, it may duplicate work or miss slides.",
+            "mitigation": "slide-status.json provides durable state that survives orchestrator context compression. The design is sound for the current scale (10-15 slides)."
+          },
+          {
+            "issue": "Phase 5→6 pipeline has diminishing returns",
+            "detail": "The pipeline overlap between Phase 5 (draft) and Phase 6 (design) is valuable only if draft generation is the bottleneck. In practice, content-core generates simple draft SVGs quickly (1-2 turns per slide), while slide-core takes 12-15 turns per design. The pipeline saves the time of drafting the LAST few slides while the FIRST few are being designed. For a 12-slide deck with 3 parallel design agents, the pipeline saves at most 3-4 draft turns of latency — marginal compared to the total design time of ~150+ turns across all slides.",
+            "recommendation": "The pipeline is nice-to-have but not critical. If content-core's maxTurns budget is tight, consider dropping per-slide signaling in favor of completing all drafts first, then launching Phase 6 in a clean batch. This simplifies both content-core and the orchestrator."
+          }
+        ]
+      },
+      "severity": "architecture",
+      "recommendation": "Pipeline is architecturally sound but provides marginal real-world benefit. Consider simplifying to batch mode if content-core's turn budget is constrained."
+    }
+  ],
+  "summary": {
+    "critical_findings": [
+      "review-core is missing Bash tool — its documented pre-review automated checks (xmllint, viewBox grep, font-size grep) are impossible to execute. This is a bug that wastes Gemini API cost on trivially broken SVGs."
+    ],
+    "high_risk_findings": [
+      "content-core maxTurns=25 is insufficient for draft mode with 15-slide decks. Per-slide SVG write + per-slide signal = 30+ turns needed. Risk of truncated output."
+    ],
+    "optimization_opportunities": [
+      "slide-core maxTurns can be reduced from 30 to 20 (designs ONE slide per invocation, typical workflow needs 12-15 turns)",
+      "review-core maxTurns should increase from 15 to 20 (holistic mode reads all SVGs, pre-review checks consume 3-5 turns)",
+      "slide-core fix rounds could use sonnet instead of opus (structured patch application is mechanical, not creative)",
+      "Heartbeat signals can be reduced to start-only (remove pre-write heartbeat; the ready signal serves the same purpose)",
+      "Draft signaling could batch every 3 slides instead of per-slide to reduce content-core turn consumption",
+      "slide-core and review-core could use memory: none to reduce context token overhead"
+    ],
+    "architecture_verdict": "The 4-agent architecture is well-designed. No decomposition or merger provides net positive value. The star topology (agents communicate only through orchestrator) is correct for this workflow. Focus fixes on tool access bugs and turn budget calibration, not structural changes."
+  }
+}
