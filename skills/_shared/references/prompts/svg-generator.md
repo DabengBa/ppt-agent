@@ -279,6 +279,147 @@ SVG does not natively wrap text. Use multiple `<text>` or `<tspan>` elements:
 </g>
 ```
 
+#### Table
+```xml
+<g transform="translate(24, 40)">
+  <!-- Header row -->
+  <rect x="0" y="0" width="500" height="36" rx="4" fill="${primary}" />
+  <text x="12" y="24" font-size="14" font-weight="bold" fill="#ffffff">Column A</text>
+  <text x="180" y="24" font-size="14" font-weight="bold" fill="#ffffff">Column B</text>
+  <text x="380" y="24" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end">Value</text>
+  <!-- Data rows (alternate card_bg / transparent) -->
+  <rect x="0" y="36" width="500" height="32" fill="${card_bg}" opacity="0.5" />
+  <text x="12" y="58" font-size="14" fill="${text}">Row 1 Label</text>
+  <text x="180" y="58" font-size="14" fill="${text}">Description</text>
+  <text x="380" y="58" font-size="14" fill="${text}" text-anchor="end" font-weight="bold">42</text>
+  <!-- Repeat rows, dy=32 per row. Max 6 data rows for readability. -->
+</g>
+```
+- Max 5 columns × 6 data rows for presentation readability
+- Right-align numeric columns, left-align text columns
+- Header uses `primary` background with white text; data rows alternate `card_bg` / transparent
+
+#### Metric Card Grid
+```xml
+<g transform="translate(24, 40)">
+  <!-- 2x2 grid of metric cards, each 240x140 with 20px gap -->
+  <!-- Card 1 -->
+  <g transform="translate(0, 0)">
+    <rect width="240" height="140" rx="${border_radius}" fill="${card_bg}" filter="url(#card-shadow)" />
+    <text x="24" y="50" font-size="14" fill="${text}" opacity="0.6">Revenue</text>
+    <text x="24" y="95" font-size="40" font-weight="bold" fill="${chart_colors[0]}">$2.4M</text>
+    <text x="24" y="120" font-size="14" fill="#22c55e">▲ +18%</text>
+  </g>
+  <!-- Card 2 at translate(260, 0), Card 3 at translate(0, 160), Card 4 at translate(260, 160) -->
+</g>
+```
+- 2×2 (4 metrics) or 3×2 (6 metrics) grid layout
+- Each card: big number + label + optional delta indicator
+- Use `chart_colors[0..N]` for visual variety across card accent numbers
+- Keep each card under 3 info units (number, label, delta)
+
+#### Grouped Bar Chart
+```xml
+<g transform="translate(80, 40)">
+  <!-- Y-axis -->
+  <line x1="0" y1="0" x2="0" y2="300" stroke="${text}" stroke-width="1" opacity="0.3" />
+  <!-- X-axis -->
+  <line x1="0" y1="300" x2="500" y2="300" stroke="${text}" stroke-width="1" opacity="0.3" />
+  <!-- Category 1: two bars side by side -->
+  <rect x="20" y="100" width="30" height="200" rx="2" fill="${chart_colors[0]}" />
+  <rect x="55" y="150" width="30" height="150" rx="2" fill="${chart_colors[1]}" />
+  <text x="52" y="320" text-anchor="middle" font-size="12" fill="${text}" opacity="0.6">Cat A</text>
+  <!-- Repeat categories at x+100 intervals. Max 5 categories × 3 series. -->
+  <!-- Legend -->
+  <g transform="translate(350, -10)">
+    <rect x="0" y="0" width="12" height="12" rx="2" fill="${chart_colors[0]}" />
+    <text x="18" y="10" font-size="12" fill="${text}">Series 1</text>
+    <rect x="90" y="0" width="12" height="12" rx="2" fill="${chart_colors[1]}" />
+    <text x="108" y="10" font-size="12" fill="${text}">Series 2</text>
+  </g>
+</g>
+```
+- Vertical bars grouped by category, series differentiated by `chart_colors`
+- Max 5 categories × 3 series (15 bars total)
+- Direct value labels above bars when space permits; legend for series identification
+- Y-axis with 3-4 gridlines for scale reference
+
+#### Line Chart with Axes
+```xml
+<g transform="translate(80, 40)">
+  <!-- Grid lines (subtle) -->
+  <line x1="0" y1="75" x2="400" y2="75" stroke="${text}" stroke-width="0.5" opacity="0.1" />
+  <line x1="0" y1="150" x2="400" y2="150" stroke="${text}" stroke-width="0.5" opacity="0.1" />
+  <line x1="0" y1="225" x2="400" y2="225" stroke="${text}" stroke-width="0.5" opacity="0.1" />
+  <!-- Y-axis -->
+  <line x1="0" y1="0" x2="0" y2="300" stroke="${text}" stroke-width="1" opacity="0.3" />
+  <text x="-10" y="5" text-anchor="end" font-size="11" fill="${text}" opacity="0.5">100</text>
+  <text x="-10" y="155" text-anchor="end" font-size="11" fill="${text}" opacity="0.5">50</text>
+  <text x="-10" y="305" text-anchor="end" font-size="11" fill="${text}" opacity="0.5">0</text>
+  <!-- X-axis -->
+  <line x1="0" y1="300" x2="400" y2="300" stroke="${text}" stroke-width="1" opacity="0.3" />
+  <text x="0" y="320" font-size="11" fill="${text}" opacity="0.5">Jan</text>
+  <text x="100" y="320" font-size="11" fill="${text}" opacity="0.5">Apr</text>
+  <text x="200" y="320" font-size="11" fill="${text}" opacity="0.5">Jul</text>
+  <text x="300" y="320" font-size="11" fill="${text}" opacity="0.5">Oct</text>
+  <text x="400" y="320" font-size="11" fill="${text}" opacity="0.5">Dec</text>
+  <!-- Series 1 -->
+  <polyline points="0,250 100,200 200,120 300,150 400,80"
+    fill="none" stroke="${chart_colors[0]}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="400" cy="80" r="4" fill="${chart_colors[0]}" />
+  <!-- Series 2 -->
+  <polyline points="0,280 100,260 200,200 300,180 400,160"
+    fill="none" stroke="${chart_colors[1]}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="400" cy="160" r="4" fill="${chart_colors[1]}" />
+</g>
+```
+- Full chart with X and Y axes, tick labels, and optional gridlines
+- Multiple series using `chart_colors[0..N]` with distinct line strokes
+- Data point markers (circles) on last point or all points
+- Differs from Sparkline: has axes, labels, grid — suitable for data slides requiring precise reading
+
+#### Network / Relationship Diagram
+```xml
+<g transform="translate(300, 200)">
+  <!-- Edges (draw before nodes so nodes layer on top) -->
+  <line x1="0" y1="0" x2="-150" y2="-100" stroke="${text}" stroke-width="1.5" opacity="0.2" />
+  <line x1="0" y1="0" x2="150" y2="-80" stroke="${text}" stroke-width="1.5" opacity="0.2" />
+  <line x1="0" y1="0" x2="-120" y2="120" stroke="${text}" stroke-width="1.5" opacity="0.2" />
+  <line x1="0" y1="0" x2="140" y2="100" stroke="${text}" stroke-width="1.5" opacity="0.2" />
+  <!-- Central node (accent emphasis) -->
+  <circle cx="0" cy="0" r="40" fill="${accent}" />
+  <text x="0" y="5" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">Core</text>
+  <!-- Peripheral nodes -->
+  <circle cx="-150" cy="-100" r="30" fill="${card_bg}" stroke="${primary}" stroke-width="2" />
+  <text x="-150" y="-95" text-anchor="middle" font-size="12" fill="${text}">Node A</text>
+  <circle cx="150" cy="-80" r="30" fill="${card_bg}" stroke="${primary}" stroke-width="2" />
+  <text x="150" y="-75" text-anchor="middle" font-size="12" fill="${text}">Node B</text>
+  <!-- Repeat for additional nodes. Max 7 nodes for readability. -->
+</g>
+```
+- Central/hub node emphasized with `accent` fill
+- Peripheral nodes with `card_bg` fill and `primary` border
+- Edges drawn first (lower z-index), nodes on top
+- Max 7 nodes for presentation readability — more than 7 becomes unreadable at 1280×720
+- Use for architecture diagrams, ecosystem maps, org structures
+
+### Pattern Selection by Content
+
+| Content Type | Primary Pattern | Alternative |
+|-------------|----------------|-------------|
+| Single KPI with trend | Big Number + Delta | Sparkline |
+| Multiple KPIs (3-6) | Metric Card Grid | Progress Bar set |
+| Time series data | Line Chart with Axes | Sparkline (minimal) |
+| Ranking / comparison | Horizontal Bar Chart | Table |
+| Multi-series comparison | Grouped Bar Chart | Table |
+| Part-to-whole | Donut Chart | Horizontal Bar |
+| Process / milestones | Timeline | Network Diagram |
+| Tabular data (>10 items) | Table | — |
+| Relationships / ecosystem | Network Diagram | — |
+| Goal progress | Progress Bar | Donut Chart |
+
+Choose based on: (1) data complexity — simpler data = simpler pattern, (2) audience reading time — presentations give ~3 seconds per slide element, (3) content density targets from the page type.
+
 ## Text Overflow Strategy
 
 SVG does not auto-wrap or auto-shrink text. Prevent overflow with these rules:

@@ -1,0 +1,252 @@
+# Prototype Diff: Wave 1 (T-11, T-12, T-14)
+
+> Source: Codex-core (gpt-5.4 via codex exec, read-only sandbox)
+> Date: 2026-03-23
+> Files modified: commands/ppt.md, agents/slide-core.md, skills/gemini-cli/references/roles/reviewer.md, skills/_shared/references/prompts/outline-architect.md
+
+---
+
+## T-11: Atomic Write for `slide-status.json`
+
+### Change 1: Tighten `--run-id` resume detection with `.tmp.json` cleanup
+**File**: commands/ppt.md
+**After line containing**: "**Resume detection** (when `--run-id` is provided): Check existing artifacts to determine the resume point:"
+**Insert/Replace**:
+```markdown
+- Before checking resume artifacts, delete any orphaned `${RUN_DIR}/slide-status.tmp.json`. This temp file is never authoritative and may be left behind by an interrupted atomic write.
+- If `${RUN_DIR}/slide-status.json` exists, validate it with `python3` before trusting it. If validation fails, stop and surface the error instead of guessing resume state.
+- Valid `slide-status.json` exists → read it, skip slides already marked `passed` or `accepted_with_warning`, and resume Phase 6 from the first incomplete slide
+- `draft-manifest.json` exists but no valid `slide-status.json` → resume at Phase 6 start
+- `outline.json` exists with `"approved": true` but no `draft-manifest.json` → resume at Phase 5
+- `outline.json` exists with `"approved": false` or missing → resume at Phase 4 (re-enter Hard Stop for user approval)
+- `materials.md` exists but no `outline.json` → resume at Phase 4
+- `requirements.md` exists but no `materials.md` → resume at Phase 3
+- `research-context.md` exists but no `requirements.md` → resume at Phase 2 (user confirmation)
+- Nothing exists → start from Phase 1
+```
+
+### Change 2: Upgrade incremental status write to atomic write protocol
+**File**: commands/ppt.md
+**After line containing**: "**Pipeline optimization**: Do not wait for all drafts to complete. As soon as `draft_slides_ready(indices=[...])` is received, launch slide-core for each slide in the batch. Use a sliding window of `min(3, remaining_slides)` parallel slide-core agents to balance throughput and resource usage."
+**Insert/Replace**:
+````markdown
+**Incremental progress tracking**: Maintain `${RUN_DIR}/slide-status.json` throughout Phase 6 using an atomic write protocol. After each slide completes its design→review cycle (`passed` or `accepted_with_warning`), update the full JSON object and rewrite the checkpoint atomically. Do not append raw text directly to `slide-status.json`.
+
+**LLM executor protocol**:
+1. Read `${RUN_DIR}/slide-status.json` if it exists; otherwise start from:
+   ```json
+   {
+     "slides": {}
+   }
+   ```
+2. Merge/update the current slide entry in memory.
+3. Write the full JSON document to `${RUN_DIR}/slide-status.tmp.json`.
+4. Validate the temp file with `python3` (do not use `jq`; availability is not guaranteed):
+   ```bash
+   python3 - "${RUN_DIR}/slide-status.tmp.json" <<'PY'
+   import json
+   import sys
+
+   with open(sys.argv[1], "r", encoding="utf-8") as f:
+       json.load(f)
+   PY
+   ```
+5. If validation passes, atomically promote it with:
+   ```bash
+   mv "${RUN_DIR}/slide-status.tmp.json" "${RUN_DIR}/slide-status.json"
+   ```
+6. If validation fails, delete the temp file, keep the last good `slide-status.json`, and surface an error.
+
+Format after each successful update:
+```json
+{
+  "slides": {
+    "01": { "status": "passed", "score": 8.2, "fix_rounds": 0, "timestamp": "2026-03-21T10:30:00Z" },
+    "05": { "status": "accepted_with_warning", "score": 6.8, "fix_rounds": 2, "timestamp": "2026-03-21T10:35:00Z" }
+  }
+}
+```
+On `--run-id` resume: delete any leftover `${RUN_DIR}/slide-status.tmp.json`, then read only the validated `${RUN_DIR}/slide-status.json`. Skip slides already marked `passed` or `accepted_with_warning`, and continue from the first incomplete slide.
+````
+
+## T-12: 3-Zone Color Enforcement
+
+### Change 3: Expand SVG Requirements to 3-zone color model
+**File**: agents/slide-core.md
+**After line containing**: "## SVG Requirements"
+**Insert/Replace**:
+```markdown
+- `viewBox="0 0 1280 720"` — fixed 16:9 aspect ratio.
+- No external image references — all graphics must be inline SVG.
+- Use `<text>` with proper font-family from style tokens.
+- Card backgrounds use `<rect>` with rounded corners from style tokens.
+- Shadows via SVG `<filter>` elements.
+- Apply the 3-zone color model:
+  - **Zone 1 — Mandatory Core**: slide background, cards, text, dividers, UI icons, and semantic emphasis fills/strokes MUST come from declared semantic color tokens in style YAML. No arbitrary hex/RGB values in this zone.
+  - **Zone 2 — Chart/Data**: data marks may use only the `chart_colors` array from style YAML plus semantic neutrals needed for axes, labels, and baselines.
+  - **Zone 3 — Decorative Free**: arbitrary colors are allowed only for non-informational decoration and MUST be isolated inside `<g data-decorative="true">...</g>` or inside `<defs>`. Colors defined in `<defs>` are implicitly decorative unless reused by core UI or data marks.
+- For heavy-decoration styles (glows, blobs, mesh backgrounds, confetti, abstract shapes), wrap the entire decorative cluster in a parent `<g data-decorative="true">` rather than tagging each child individually.
+- When generating slides with CJK (Chinese/Japanese/Korean) text, apply CJK-specific rules from `svg-generator.md` CJK Text Handling section. Use `cjk_font` from style tokens in the font-family chain.
+```
+
+### Change 4: Add Color Zone Compliance as validation check #5
+**File**: agents/slide-core.md
+**After line containing**: "## Post-Generation Validation"
+**Insert/Replace**:
+````markdown
+After writing each SVG file, run these automated checks using the Bash tool before reporting completion:
+
+### 1. XML Validity
+```bash
+xmllint --noout "${run_dir}/slides/slide-${slide_index}.svg" 2>&1
+```
+If xmllint fails, fix the XML error and re-write the SVG. Do NOT send `slide_ready` until XML is valid.
+
+### 2. ViewBox Check
+Verify the SVG contains `viewBox="0 0 1280 720"`. If missing or incorrect, fix immediately.
+
+### 3. Font Size Minimum
+```bash
+grep -oP 'font-size="?\K[0-9]+' "${run_dir}/slides/slide-${slide_index}.svg" | awk '$1 < 14 { found=1 } END { if (found) print "WARN: font-size below 14px detected" }'
+```
+Body text below 14px must be fixed. Page numbers, labels, or footnotes below 14px are allowed only when they remain readable and non-essential.
+
+### 4. Safe Area Boundary
+Verify no content elements are placed at x < 60, x > 1220, y < 40, or y > 680.
+
+### 5. Color Zone Compliance
+Check all `fill`, `stroke`, and `stop-color` usage against the 3-zone model:
+- Zone 1 core UI colors must resolve to semantic style tokens only.
+- Zone 2 chart/data colors may use only `chart_colors` plus semantic neutrals from style YAML.
+- Zone 3 arbitrary colors are allowed only inside `<g data-decorative="true">...</g>` or inside `<defs>`.
+If any non-token color appears outside these allowances, fix the SVG before proceeding.
+
+If any check fails, fix the SVG and re-validate before proceeding. These checks are cheaper than a full Gemini review and catch the most common AI SVG generation errors, including broken color scoping.
+````
+
+### Change 5: Replace Style tokens row with 3-zone color rules in reviewer hard rules table
+**File**: skills/gemini-cli/references/roles/reviewer.md
+**After line containing**: "These are hard rules — violations are reported in the Hard Rule Violations section:"
+**Insert/Replace**:
+```markdown
+| Standard | Threshold | Severity if violated |
+|----------|-----------|---------------------|
+| Card gap | >= 20px between any two cards | Critical |
+| Safe area | >= 60px padding from viewport edges | Critical |
+| Font size | >= 14px for all text at 1280x720 | Critical for body text, Minor for page numbers |
+| Contrast | >= 4.5:1 ratio (WCAG AA) for body text | Major |
+| Contrast | >= 3:1 ratio for large text (>= 24px bold) | Major |
+| Info units | Per-type target (see Content Density Targets) | Major if exceeds type max by >2, Critical if cover/quote > 3 |
+| Color zone 1 (Mandatory Core) | Backgrounds, cards, text, dividers, UI icons, and emphasis fills/strokes must resolve to declared semantic color tokens only | Major |
+| Color zone 2 (Chart/Data) | Data marks may use only `chart_colors` plus semantic neutrals from style YAML | Major |
+| Color zone 3 (Decorative Free) | Arbitrary colors are allowed only on elements marked `data-decorative="true"` or inside `<defs>` | Minor if isolated, Major if decorative color is untagged |
+| Untagged arbitrary color | Any non-token color outside Zone 2 / Zone 3 is forbidden | Critical |
+| Text overflow | Text elements MUST NOT extend beyond their parent card boundaries | Critical |
+| Body text size | No body text below 14px font-size | Major |
+```
+
+## T-14: Visual Weight + Expanded Holistic Review
+
+### Change 6: Add `visual_weight` field to outline.json page schema
+**File**: skills/_shared/references/prompts/outline-architect.md
+**After line containing**: `"title": "Page Title",`
+**Insert/Replace**:
+```json
+          "type": "content|data|comparison|process|quote|image|timeline",
+          "key_points": ["Point 1", "Point 2", "Point 3"],
+          "layout_hint": "single_focus|two_column|three_column|hero_grid|mixed_grid",
+          "visual_weight": "low|medium|high",
+          "transition_cue": "How this slide connects to the next",
+```
+
+### Change 7: Add Visual Weight Assignment rules and expand Page Type Definitions table
+**File**: skills/_shared/references/prompts/outline-architect.md
+**After line containing**: "### Speaker Notes Schema"
+**Insert/Replace**:
+```markdown
+The `notes` field should contain structured speaker guidance, not just "additional context". Include 2-3 talking points (what the presenter should say aloud), a verbal bridge to the next slide (`transition_line`), and estimated speaking time in seconds (`timing_seconds`). This enables automatic generation of a speaker notes document and presentation timing estimates.
+
+### Visual Weight Assignment
+
+The `visual_weight` field captures the intended perceptual emphasis of a slide so downstream generators and holistic review can manage deck rhythm intentionally.
+
+- New outlines MUST emit `visual_weight` for every page.
+- Legacy `outline.json` files that omit `visual_weight` should be treated as `medium` by downstream consumers instead of failing resume or review.
+- `visual_weight` describes visual emphasis, not business priority.
+
+| Visual Weight | Use When | Typical Signals |
+| ------------- | -------- | --------------- |
+| low | Breathing/reset slide | 1 dominant message, generous whitespace, <= 2 info units |
+| medium | Default explanatory slide | 2-4 balanced blocks, moderate density |
+| high | Emphasis/climax slide | Hero chart, strong comparison, or dense evidence requiring focal attention |
+
+## Page Type Definitions
+
+| Type        | Purpose                                   | Typical Layout           | Default Weight |
+| ----------- | ----------------------------------------- | ------------------------ | -------------- |
+| content     | Text-focused information delivery         | two_column, mixed_grid   | medium         |
+| data        | Charts, statistics, metrics               | hero_grid, mixed_grid    | high           |
+| comparison  | Side-by-side analysis                     | two_column, three_column | high           |
+| process     | Step-by-step flow or timeline             | hero_grid, mixed_grid    | medium         |
+| quote       | Key quote or testimonial                  | single_focus             | low            |
+| image       | Visual-dominant with minimal text         | single_focus, hero_grid  | low            |
+| timeline    | Sequential process or chronological flow  | hero_grid, mixed_grid    | medium         |
+
+These defaults are guidance, not a hard lock. Override them when the narrative needs an intentional exception, but keep the deck-level rhythm explicit.
+```
+
+### Change 8: Upgrade Holistic Deck Review to weighted 5-dimension protocol with quantitative triggers
+**File**: skills/gemini-cli/references/roles/reviewer.md
+**After line containing**: "## Holistic Deck Review (mode=holistic)"
+**Insert/Replace**:
+```markdown
+Run once after all individual slides pass review. Evaluate across the full set of `slides/slide-*.svg` and consult `outline.json` when available.
+
+Use this weighted 5-dimension protocol:
+
+1. **Visual Rhythm (25%)**
+   - Compare layout families and `visual_weight` across adjacent slides.
+   - Flag a `deck_coordination` issue if 4+ consecutive slides share the same `visual_weight`, or if 3+ consecutive slides reuse the same primary layout family (`two_column`, `hero_grid`, `single_focus`, etc.).
+   - If `outline.json` is legacy and omits `visual_weight`, infer `medium` by default and continue.
+
+2. **Narrative Arc (25%)**
+   - Check whether the deck follows the expected progression: Setup → Tension → Resolution.
+   - Flag if the strongest evidence or CTA appears before context is established, or if the final 25% of slides still introduces new problem framing instead of resolution.
+   - For decks with `<= 6` slides, allow a compressed arc: Setup → Evidence → Resolution.
+
+3. **Color Story (20%)**
+   - Track accent color intensity and frequency across the deck.
+   - Flag if strong accent treatment appears on more than 60% of slides, or if climax slides are not visually differentiated from their neighbors.
+   - Decorative-only colors inside `<g data-decorative="true">` or `<defs>` do not count as narrative accent escalation.
+
+4. **Style Consistency (20%)**
+   - Verify that shadow style, border-radius family, font scale, stroke treatment, and card chrome remain consistent unless a section break intentionally changes them.
+   - Flag if 2+ slides diverge from the deck's dominant token family without a clear narrative reason.
+
+5. **Pacing (10%)**
+   - Check for breathing space between dense or high-emphasis slides.
+   - Flag if 3+ `high`-weight slides appear consecutively without a `low` or `medium` reset, or if a deck with more than 8 slides has no breathing slide (`quote`, `image`, or sparse `single_focus`) at all.
+   - For decks with `<= 5` slides, relax this rule: prefer at least 1 lighter slide instead of requiring a dedicated breathing slide.
+
+Scoring:
+- `overall_coherence = 0.25*visual_rhythm + 0.25*narrative_arc + 0.20*color_story + 0.20*style_consistency + 0.10*pacing`
+- Score gate: `>= 7/10` overall coherence score, or flag for lead orchestrator.
+
+Output uses the same structure but with `deck_coordination` type suggestions only.
+Each suggestion must identify affected slides, violated dimension, quantitative trigger, and a concrete rebalance recommendation.
+
+Output: `${run_dir}/reviews/review-holistic.md`
+```
+
+---
+
+## Cross-File Consistency Checklist
+
+| Attribute / Token | slide-core.md | reviewer.md | outline-architect.md |
+|-------------------|---------------|-------------|----------------------|
+| `data-decorative="true"` | Zone 3 definition + validation #5 | Zone 3 row + Color Story dim. 3 | N/A |
+| `chart_colors` | Zone 2 definition | Zone 2 row | N/A |
+| `visual_weight` enum (`low\|medium\|high`) | N/A | Holistic dims 1, 5 | Schema + assignment rules |
+| Legacy `visual_weight` fallback (`medium`) | N/A | Dim 1 fallback instruction | Assignment section |
+| `<defs>` implicit decorative | Zone 3 definition | Zone 3 row | N/A |
+| Short deck relaxation | N/A | Dims 2 (<=6), 5 (<=5) | N/A |

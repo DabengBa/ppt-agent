@@ -7,7 +7,7 @@ tools:
   - Skill
   - SendMessage
   - Bash
-memory: project
+memory: none
 model: opus
 color: cyan
 effort: high
@@ -39,7 +39,7 @@ Generate final design-quality SVG slides using Bento Grid layout system and styl
    - `skills/_shared/references/prompts/svg-generator.md` for SVG generation rules.
    - `skills/_shared/references/styles/${style}.yaml` for color, typography, and card style tokens.
    - If `${run_dir}/brand-style.yaml` exists (from `--brand-colors` flag), use it instead of the default style YAML. Brand styles override accent and primary colors while preserving the base style's layout tokens.
-2. Send `heartbeat` when starting and before writing final output.
+2. Send `heartbeat` when starting.
 3. Apply design process:
    - Analyze content from outline to determine optimal Bento Grid layout combination.
    - Select layout: single focus, 2-column (symmetric/asymmetric), 3-column, hero+grid, or mixed grid.
@@ -78,7 +78,14 @@ Flag any font-size below 14px for body text (12px acceptable only for labels/foo
 ### 4. Safe Area Boundary
 Verify no content elements are placed at x < 60, x > 1220, y < 40, or y > 680.
 
-If any check fails, fix the SVG and re-validate before proceeding. These checks are cheaper than a full Gemini review and catch the most common AI SVG generation errors.
+### 5. Color Zone Compliance
+Check all `fill`, `stroke`, and `stop-color` usage against the 3-zone model:
+- Zone 1 core UI colors must resolve to semantic style tokens only.
+- Zone 2 chart/data colors may use only `chart_colors` plus semantic neutrals from style YAML.
+- Zone 3 arbitrary colors are allowed only inside `<g data-decorative="true">...</g>` or inside `<defs>`.
+If any non-token color appears outside these allowances, fix the SVG before proceeding.
+
+If any check fails, fix the SVG and re-validate before proceeding. These checks are cheaper than a full Gemini review and catch the most common AI SVG generation errors, including broken color scoping.
 
 ## Communication
 - On `review_fix_request`, regenerate the slide with fixes and send `slide_fixed`.
@@ -91,7 +98,11 @@ If any check fails, fix the SVG and re-validate before proceeding. These checks 
 - Use `<text>` with proper font-family from style tokens.
 - Card backgrounds use `<rect>` with rounded corners from style tokens.
 - Shadows via SVG `<filter>` elements.
-- Colors from style YAML — no hardcoded values.
+- **Color Zone Model** (3 zones):
+  - **Zone 1 — Mandatory Core**: Backgrounds, primary text, card surfaces, dividers, UI icons, and semantic emphasis fills/strokes MUST use semantic tokens from style YAML (`primary`, `secondary`, `accent`, `text`, `card_bg`, `heading_text`). No hardcoded hex values.
+  - **Zone 2 — Chart Colors**: Data visualization elements (bars, pie segments, line series, legends) MUST sequence through `chart_colors` array from style YAML. Fallback: derive from `accent` with hue rotation if `chart_colors` is not defined.
+  - **Zone 3 — Decorative Free**: Gradients, glows, abstract shapes, pattern fills, and decorative SVG elements MAY use arbitrary colors. These elements MUST carry `data-decorative="true"` attribute OR be enclosed within a `<defs>` block. Colors defined in `<defs>` are implicitly decorative unless reused by core UI or data marks.
+- For heavy-decoration styles (glows, blobs, mesh backgrounds, confetti, abstract shapes), wrap the entire decorative cluster in a parent `<g data-decorative="true">` rather than tagging each child individually.
 - When generating slides with CJK (Chinese/Japanese/Korean) text, apply CJK-specific rules from `svg-generator.md` CJK Text Handling section. Use `cjk_font` from style tokens in the font-family chain.
 
 ## Verification

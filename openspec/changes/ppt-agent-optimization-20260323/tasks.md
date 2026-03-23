@@ -32,22 +32,22 @@ Atomic groups: T-07 + T-09
 
 ## Wave 3 — Fix Strategy + State Hardening
 
-| ID | Title | Priority | Effort | Files |
-|----|-------|----------|--------|-------|
-| T-11 | slide-status.json atomic write | P1 | S | `commands/ppt.md` |
-| T-12 | Guided-freedom color enforcement | P1 | M | `agents/slide-core.md`, `skills/gemini-cli/references/roles/reviewer.md` |
-| T-13 | Suggestion-driven fix strategy | P1 | M | `commands/ppt.md`, `agents/slide-core.md` |
-| T-14 | Holistic deck review design | P1 | M | `skills/_shared/references/prompts/outline-architect.md`, `skills/gemini-cli/references/roles/reviewer.md` |
+| ID | Title | Priority | Effort | Files | Status |
+|----|-------|----------|--------|-------|--------|
+| T-11 | slide-status.json atomic write | P1 | S | `commands/ppt.md` | ✅ Done |
+| T-12 | Guided-freedom color enforcement | P1 | M | `agents/slide-core.md`, `skills/gemini-cli/references/roles/reviewer.md` | ✅ Done |
+| T-13 | Suggestion-driven fix strategy | P1 | M | `commands/ppt.md`, `skills/gemini-cli/references/roles/reviewer.md` | ✅ Done |
+| T-14 | Holistic deck review design | P1 | M | `skills/_shared/references/prompts/outline-architect.md`, `skills/gemini-cli/references/roles/reviewer.md` | ✅ Done |
 
 ## Wave 4 — Visual Richness + Pipeline Optimization
 
-| ID | Title | Priority | Effort | Files |
-|----|-------|----------|--------|-------|
-| T-15 | Add 5 missing SVG patterns | P1 | M | `skills/_shared/references/prompts/svg-generator.md` |
-| T-16 | Holistic review implementation | P1 | M | `commands/ppt.md`, `agents/review-core.md` |
-| T-17 | Sonnet for attribute-level fix patches | P2 | M | `agents/slide-core.md`, `commands/ppt.md` |
-| T-18 | Heartbeat reduction to start-only | P2 | S | All 4 agent .md files |
-| T-19 | Memory scope none for slide-core/review-core | P2 | S | `agents/slide-core.md`, `agents/review-core.md` |
+| ID | Title | Priority | Effort | Files | Status |
+|----|-------|----------|--------|-------|--------|
+| T-15 | Add 5 missing SVG patterns | P1 | M | `skills/_shared/references/prompts/svg-generator.md` | ✅ Done |
+| T-16 | Holistic review implementation | P1 | M | `commands/ppt.md`, `agents/review-core.md` | ✅ Done |
+| T-17 | Sonnet for attribute-level fix patches | P2 | M | `agents/slide-core.md`, `commands/ppt.md` | |
+| T-18 | Heartbeat reduction to start-only | P2 | S | All 4 agent .md files | ✅ Done |
+| T-19 | Memory scope none for slide-core/review-core | P2 | S | `agents/slide-core.md`, `agents/review-core.md` | ✅ Done |
 | T-20 | Adaptive sliding window | P2 | M | `commands/ppt.md` |
 | T-21 | Requirements section extraction schema | P2 | S | `commands/ppt.md` |
 | T-22 | Material merge deduplication | P2 | S | `commands/ppt.md` |

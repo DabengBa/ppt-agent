@@ -7,7 +7,7 @@ tools:
   - Skill
   - SendMessage
   - Bash
-memory: project
+memory: none
 model: sonnet
 color: yellow
 effort: medium
@@ -46,7 +46,7 @@ Only proceed to LLM review if no Critical automated checks fail.
 1. Read the full SVG source from `${run_dir}/slides/slide-{slide_index}.svg`.
 2. Read the active style YAML (e.g. `skills/_shared/references/styles/${style}.yaml`) to extract style tokens (colors, fonts, border-radius, gap).
 3. Read `${run_dir}/outline.json` to get the slide's title and context.
-4. Send `heartbeat` when starting and before writing final output.
+4. Send `heartbeat` when starting.
 5. Build a review prompt that includes:
    - The **full SVG source code** (MUST be included — reviewing by filename alone is forbidden per `gemini-cli/SKILL.md` constraints)
    - The **style token values** (color scheme, typography, card style)
@@ -77,7 +77,20 @@ Only proceed to LLM review if no Critical automated checks fail.
 
 ### Holistic Mode Execution
 
-For `mode=holistic`: read ALL `${run_dir}/slides/slide-*.svg` files and evaluate cross-slide consistency, visual rhythm, color story, narrative arc, and pacing. Output `${run_dir}/reviews/review-holistic.md`.
+For `mode=holistic`:
+1. Read ALL `${run_dir}/slides/slide-*.svg` files.
+2. Read `${run_dir}/outline.json` to extract `visual_weight`, `type`, and narrative structure per slide. If `visual_weight` is absent (legacy outlines), infer from page type: `quote`/`image` = low, `content`/`process` = medium, `data`/`comparison` = high.
+3. Read the active style YAML for token reference (color, font, border-radius values).
+4. Evaluate using the **5-Dimension Evaluation Framework** from `reviewer.md` Holistic Deck Review section:
+   - Visual Rhythm (25%) — layout variety and weight alternation
+   - Color Story (20%) — accent escalation and token consistency
+   - Narrative Arc (20%) — visual weight progression, setup→tension→resolution
+   - Style Consistency (20%) — attribute uniformity across slides
+   - Pacing (15%) — breathing slides between dense content
+5. For each dimension, assign a 0-10 score based on quantitative triggers and qualitative assessment.
+6. Compute weighted `overall_coherence` score.
+7. Output `deck_coordination` suggestions only, each with `slides_affected`, violated dimension, and concrete rebalance recommendation.
+8. Write `${run_dir}/reviews/review-holistic.md` following the Holistic Scoring Output format from `reviewer.md`.
 
 ## Communication
 - Directed messages with `requires_ack=true` must be acknowledged.

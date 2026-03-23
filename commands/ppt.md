@@ -96,8 +96,10 @@ Generate professional PPT slides as SVG files (1280x720) through a structured mu
    ```
 
    **Resume detection** (when `--run-id` is provided): Check existing artifacts to determine the resume point:
-   - `slide-status.json` exists → resume Phase 6 from first incomplete slide
-   - `draft-manifest.json` exists but no `slide-status.json` → resume at Phase 6 start
+   - Before checking resume artifacts, delete any orphaned `${RUN_DIR}/slide-status.tmp.json`. This temp file is never authoritative and may be left behind by an interrupted atomic write.
+   - If `${RUN_DIR}/slide-status.json` exists, validate it with `python3` before trusting it. If validation fails, stop and surface the error instead of guessing resume state.
+   - Valid `slide-status.json` exists → read it, skip slides already marked `passed` or `accepted_with_warning`, and resume Phase 6 from the first incomplete slide
+   - `draft-manifest.json` exists but no valid `slide-status.json` → resume at Phase 6 start
    - `outline.json` exists with `"approved": true` but no `draft-manifest.json` → resume at Phase 5
    - `outline.json` exists with `"approved": false` or missing → resume at Phase 4 (re-enter Hard Stop for user approval)
    - `materials.md` exists but no `outline.json` → resume at Phase 4
@@ -180,7 +182,21 @@ Generate professional PPT slides as SVG files (1280x720) through a structured mu
 
 **Pipeline optimization**: Do not wait for all drafts to complete. As soon as `draft_slides_ready(indices=[...])` is received, launch slide-core for each slide in the batch. Use a sliding window of `min(3, remaining_slides)` parallel slide-core agents to balance throughput and resource usage.
 
-**Incremental progress tracking**: Maintain `${RUN_DIR}/slide-status.json` throughout Phase 6. After each slide completes its design→review cycle (pass or accepted_with_warning), append its entry immediately. This enables `--run-id` resume to skip already-completed slides. Format:
+**Incremental progress tracking**: Maintain `${RUN_DIR}/slide-status.json` throughout Phase 6 using an atomic write protocol. After each slide completes its design→review cycle (`passed` or `accepted_with_warning`), update the full JSON object and rewrite the checkpoint atomically. Do not append raw text directly to `slide-status.json`.
+
+**Atomic write protocol**:
+1. Read `${RUN_DIR}/slide-status.json` if it exists; otherwise start from `{ "slides": {} }`.
+2. Merge/update the current slide entry in memory.
+3. Write the full JSON document to `${RUN_DIR}/slide-status.tmp.json`.
+4. Validate the temp file with `python3` (do not use `jq`; availability is not guaranteed):
+   ```bash
+   python3 -c "import json, sys; json.load(open(sys.argv[1]))" "${RUN_DIR}/slide-status.tmp.json"
+   ```
+5. If validation passes, atomically promote with: `mv "${RUN_DIR}/slide-status.tmp.json" "${RUN_DIR}/slide-status.json"` (POSIX guarantees atomicity for same-filesystem `mv`).
+6. If validation fails, delete the temp file, keep the last good `slide-status.json`, and surface an error.
+7. Resume logic (`--run-id`) MUST only read `slide-status.json`, never `.tmp.json`.
+
+Format after each successful update:
 ```json
 {
   "slides": {
@@ -189,7 +205,7 @@ Generate professional PPT slides as SVG files (1280x720) through a structured mu
   }
 }
 ```
-On `--run-id` resume: read `slide-status.json`, skip slides already marked `passed` or `accepted_with_warning`, and continue from the first incomplete slide.
+On `--run-id` resume: delete any leftover `${RUN_DIR}/slide-status.tmp.json`, then read only the validated `${RUN_DIR}/slide-status.json`. Skip slides already marked `passed` or `accepted_with_warning`, and continue from the first incomplete slide.
 
 **MANDATORY**: For EVERY slide, the lead MUST run BOTH slide-core (design) AND review-core (review) before proceeding. Do NOT skip per-slide review. Do NOT jump to holistic review or Phase 7 until every slide has a `reviews/review-{nn}.md` file. Per-slide review is the core value of Phase 6 — without it, the entire dual-model architecture is wasted.
 
@@ -210,17 +226,22 @@ For each slide (or in batches):
    Outputs `${RUN_DIR}/reviews/review-{nn}.md` with typed optimization suggestions + pass/fail.
    **This step MUST produce a review file for EVERY slide.** If review-core is not dispatched, Phase 6 is incomplete.
 
-3. **Fix loop** (adaptive budget per Weighted Scoring Model): if review fails, action depends on initial weighted score:
-   - Score >= 7.0 + gates pass: no fixes needed.
-   - Score 5.0–6.9: fix loop, max 2 rounds.
-   - Score 3.0–4.9: fix loop, max 1 round (unlikely to reach 7 in 2).
-   - Score < 3.0: regenerate from scratch — re-run `mode=design` **without** `fixes_json` so slide-core produces a fresh layout from the draft reference instead of patching a broken SVG.
+3. **Fix loop** (suggestion-type-driven routing): parse the review output and route fixes by suggestion type, not score bands:
+   1. Extract the `Suggestions JSON` array and `overall_score` from the review output.
+   2. If score >= 7.0 AND all hard gates pass AND no priority-1 suggestions → **PASS**.
+   3. If score < 7.0 OR hard gates fail OR priority-1 suggestions exist → enter fix loop.
+   4. Fix loop routes by the **highest-impact suggestion type** present (priority cascade: `full_rethink` > `layout_restructure` > `content_reduction` > `attribute_change`):
+      - `full_rethink` present → regenerate from scratch, **max 1 round**. Re-run `mode=design` **without** `fixes_json` so slide-core produces a fresh layout from the draft reference instead of patching a broken SVG.
+      - `layout_restructure` or `content_reduction` present → constrained regeneration with `fixes_json`, **max 2 rounds**.
+      - `attribute_change` only → deterministic patch with `fixes_json`, **max 1 round**.
+   5. If no suggestions but score < 7.0 → accept with warning (edge case: score fails but reviewer produced no actionable typed suggestions).
+   6. **Fallback** (no Gemini / technical-only mode) → only technical fixes (XML, viewBox, safe area, font-size), no suggestion routing. Pass/fail on hard rules only.
 
-   For fix rounds, re-run slide-core with fixes:
+   For fix rounds (`layout_restructure`, `content_reduction`, or `attribute_change`), re-run slide-core with fixes:
    ```text
    Task(subagent_type="ppt-agent:slide-core", prompt="run_dir=${RUN_DIR} mode=design slide_index=${N} style=${STYLE} fixes_json=${FIXES}")
    ```
-   For regeneration (score < 3.0), re-run without fixes:
+   For regeneration (`full_rethink`), re-run without fixes:
    ```text
    Task(subagent_type="ppt-agent:slide-core", prompt="run_dir=${RUN_DIR} mode=design slide_index=${N} style=${STYLE}")
    ```
@@ -232,8 +253,22 @@ For each slide (or in batches):
    ```text
    Task(subagent_type="ppt-agent:review-core", prompt="run_dir=${RUN_DIR} mode=holistic")
    ```
-   Evaluates cross-slide consistency, visual rhythm, narrative arc, and pacing.
-   Holistic review produces `deck_coordination` type suggestions only. These are not auto-fixed — they are reported in `review-holistic.md` for the user to review. If holistic score < 7, flag specific issues for manual review but do not block delivery.
+   Evaluates cross-slide consistency using the 5-Dimension Evaluation Framework (Visual Rhythm, Color Story, Narrative Arc, Style Consistency, Pacing) from `reviewer.md`.
+   Outputs `${RUN_DIR}/reviews/review-holistic.md` with `deck_coordination` type suggestions only.
+
+   **Holistic fix flow** (advisory — does not block delivery):
+   1. Parse `deck_coordination` suggestions from `review-holistic.md`.
+   2. Filter to **priority-1** suggestions only (must-fix for coherence).
+   3. Group priority-1 suggestions by `slides_affected`.
+   4. For each affected slide with priority-1 suggestions:
+      - Extract the relevant `deck_coordination` details (e.g., "normalize title to 34px", "replace non-token color").
+      - Re-dispatch `slide-core` with `fixes_json` containing only the `attribute_change` or `layout_restructure` equivalents derived from the `deck_coordination` suggestion.
+   5. After all affected slides are re-generated, **re-run holistic review once** (max 1 holistic re-run):
+      ```text
+      Task(subagent_type="ppt-agent:review-core", prompt="run_dir=${RUN_DIR} mode=holistic")
+      ```
+   6. If holistic score >= 7 after re-run → record as passed. If still < 7 → accept with advisory note. Do NOT re-run again.
+   7. Priority-2 and priority-3 suggestions are reported in `review-holistic.md` for the user to review but are NOT auto-fixed.
 
 5. **Write review manifest** (`${RUN_DIR}/review-manifest.json`):
    After holistic review completes, the lead **aggregates from `slide-status.json`** and appends holistic results into the final checkpoint artifact. Do not re-parse individual `reviews/review-{nn}.md` files — all per-slide scores and statuses are already in `slide-status.json`:
@@ -357,7 +392,7 @@ For each slide (or in batches):
 
 - Weighted score >= 7.0 per slide with hard gates: Layout >= 6, Readability >= 6
 - No Critical issues (text overflow, broken layout)
-- Adaptive fix budget: score >= 7 pass, 5-6.9 fix (2 rounds max), 3-4.9 fix (1 round), <3 regenerate
+- Suggestion-type-driven fix routing: full_rethink (1 round regenerate), layout_restructure/content_reduction (2 rounds), attribute_change (1 round patch)
 - All SVGs must be valid 1280x720
 - Holistic deck coherence score >= 7 (advisory, does not block delivery)
 

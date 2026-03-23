@@ -28,7 +28,9 @@ These are hard rules — violations are reported in the Hard Rule Violations sec
 | Contrast | >= 4.5:1 ratio (WCAG AA) for body text | Major |
 | Contrast | >= 3:1 ratio for large text (>= 24px bold) | Major |
 | Info units | Per-type target (see Content Density Targets) | Major if exceeds type max by >2, Critical if cover/quote > 3 |
-| Style tokens | All colors from declared style YAML | Minor for semantic extensions, Major for random colors |
+| Color zone 1 (Mandatory Core) | Backgrounds, cards, text, dividers, UI icons use semantic YAML tokens only | Major — semantic element with non-token color |
+| Color zone 2 (Chart/Data) | Data viz elements use `chart_colors` array plus semantic neutrals | Minor — chart color not from array but harmonious |
+| Color zone 3 (Decorative Free) | Decorative elements with `data-decorative="true"` or in `<defs>` may use arbitrary colors | Pass — properly marked decorative elements are exempt |
 | Text overflow | Text elements MUST NOT extend beyond their parent card boundaries | Critical |
 | Body text size | No body text below 14px font-size | Major |
 
@@ -256,13 +258,16 @@ Overall score uses weighted criteria (not equal-weight average):
 - Readability >= 6
 - No Critical issues
 
-**Adaptive fix budget based on initial score**:
-| Initial Score | Action |
-|--------------|--------|
-| >= 7.0 + gates pass | Pass — no fixes needed |
-| 5.0 - 6.9 | Fix loop: max 2 rounds |
-| 3.0 - 4.9 | Fix loop: max 1 round (unlikely to reach 7 in 2) |
-| < 3.0 | Regenerate from scratch (full_rethink) — do not patch |
+**Adaptive fix budget based on highest-priority suggestion type**:
+| Primary Suggestion Type | Action | Budget |
+|-------------------------|--------|--------|
+| None (score >= 7.0 + gates pass + no P1 suggestions) | Pass — no fixes needed | 0 rounds |
+| `attribute_change` only | Deterministic patch with `fixes_json` | Max 1 round |
+| `layout_restructure` or `content_reduction` | Constrained regeneration with `fixes_json` | Max 2 rounds |
+| `full_rethink` | Regenerate from scratch (do not patch) | Max 1 round |
+| No suggestions + score < 7.0 | Accept with warning | 0 rounds |
+
+Technical-only fallback (no Gemini): only hard-rule fixes, no suggestion routing. See `skills/gemini-cli/SKILL.md` Fallback Strategy.
 
 ## Scoring Guidelines
 
@@ -280,15 +285,47 @@ Beyond measurable quality standards, actively suggest aesthetic improvements —
 
 ## Holistic Deck Review (mode=holistic)
 
-Run once after all individual slides pass review. Evaluate across the full set of `slides/slide-*.svg`:
+Run once after all individual slides pass review. Evaluate across the full set of `slides/slide-*.svg` and consult `outline.json` when available.
 
-1. **Visual Rhythm**: Do layouts alternate between dense and sparse? Monotonous layouts fatigue audiences.
-2. **Color Story**: Does accent color usage escalate toward key slides? Accent on every slide = no emphasis.
-3. **Narrative Arc**: Do slides follow the framework's expected progression? (Setup → Tension → Resolution)
-4. **Style Consistency**: Are shadows, border-radius, font sizes consistent across all slides?
-5. **Pacing**: Are there "breathing" slides (quote, image, single_focus) between dense content slides?
+### 5-Dimension Evaluation Framework
+
+| # | Dimension | Weight | Quantitative Trigger |
+|---|-----------|--------|---------------------|
+| 1 | **Visual Rhythm** | 25% | 3+ consecutive slides with same layout type OR fewer than 3 distinct layouts in a 10+ slide deck |
+| 2 | **Color Story** | 20% | Accent color used on >60% of slides (diluted emphasis) OR accent absent from the climax slide |
+| 3 | **Narrative Arc** | 20% | 3+ consecutive high-weight slides without a low-weight breathing slide. Use `visual_weight` from `outline.json`; if absent (legacy outlines), infer from page type |
+| 4 | **Style Consistency** | 20% | Any measured attribute (shadow, border-radius, font-size, card gap) varies by >30% across slides |
+| 5 | **Pacing** | 15% | 4+ consecutive content/data/comparison slides with no breathing slide (quote, image, single_focus) |
+
+**Dimension details**:
+
+1. **Visual Rhythm** (25%): Do layouts alternate between dense and sparse? Monotonous layouts fatigue audiences. Flag if 3+ consecutive slides share the same layout type, or if the entire deck uses fewer than 3 distinct layout types (for 10+ slide decks). For decks under 5 slides, skip this check entirely.
+
+2. **Color Story** (20%): Does accent color usage escalate toward key slides? Accent on every slide dilutes emphasis. Flag if accent appears on >60% of slides, or if the climax slide (highest `visual_weight`) lacks accent color. Decorative-only colors inside `<g data-decorative="true">` or `<defs>` do not count as narrative accent escalation.
+
+3. **Narrative Arc** (20%): Do slides follow the visual weight progression from `outline.json`? The deck should build tension through weight escalation. Flag if 3+ consecutive high-weight slides appear without a low-weight breathing slide. Use `visual_weight` field from `outline.json`; if absent (legacy outlines), infer: `quote`/`image` = low, `content`/`process` = medium, `data`/`comparison` = high.
+
+4. **Style Consistency** (20%): Are shadows, border-radius, font sizes, and card gaps uniform across all slides? Flag if any measured attribute varies by >30% across slides (excluding intentional single_focus variations).
+
+5. **Pacing** (15%): Are there breathing slides between dense or high-emphasis slides? Flag if 4+ consecutive content/data/comparison slides appear with no breathing slide (quote, image, or sparse single_focus). For decks with <= 5 slides, relax this rule: prefer at least 1 lighter slide instead of requiring a dedicated breathing slide.
+
+**Deck size adaptation**: For decks under 10 slides, relax quantitative thresholds proportionally (e.g., "3+ consecutive" becomes "all slides" for a 3-slide deck). For decks under 5 slides, skip layout variety warnings entirely.
+
+### Holistic Scoring Output
+
+For each dimension, assign a score from 0-10 based on the quantitative triggers and qualitative assessment, then compute the weighted overall score.
+
+| Dimension | Score (/10) | Weight | Weighted | Trigger Fired? | Notes |
+|-----------|-------------|--------|----------|----------------|-------|
+| Visual Rhythm | {n} | 25% | {w} | {yes/no} | {observation} |
+| Color Story | {n} | 20% | {w} | {yes/no} | {observation} |
+| Narrative Arc | {n} | 20% | {w} | {yes/no} | {observation} |
+| Style Consistency | {n} | 20% | {w} | {yes/no} | {observation} |
+| Pacing | {n} | 15% | {w} | {yes/no} | {observation} |
+| **Overall Coherence** | **{N}** | 100% | **{W}** | — | — |
 
 Output uses the same structure but with `deck_coordination` type suggestions only.
+Each suggestion must identify affected slides, violated dimension, quantitative trigger, and a concrete rebalance recommendation.
 
 Output: `${run_dir}/reviews/review-holistic.md`
 Score gate: >= 7/10 overall coherence score, or flag for lead orchestrator.

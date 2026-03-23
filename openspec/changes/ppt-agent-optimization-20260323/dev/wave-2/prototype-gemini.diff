@@ -1,0 +1,89 @@
+# Prototype Diff: Suggestion-Type-Driven Fix Routing (Wave 2)
+
+> Source: Gemini analysis from `analysis-gemini.md` (Gemini CLI role=implementer mode=analyze).
+> Gemini CLI prototype call returned 429 MODEL_CAPACITY_EXHAUSTED; diff constructed from prior Gemini analysis artifacts.
+
+---
+
+### Change 1: Replace score-band fix routing with suggestion-type-driven routing in Phase 6 orchestrator
+
+**File**: `commands/ppt.md` (lines 229-243)
+
+**Rationale**: The current routing uses numeric score bands (>=7, 5-6.9, 3-4.9, <3) to decide fix strategy. This is fragile because a score of 4.5 with only `attribute_change` suggestions gets the same treatment as 4.5 with `full_rethink` suggestions. Routing on the highest-priority suggestion type aligns the orchestrator with the already type-aware `slide-core.md` fix executor and makes budget allocation semantically meaningful.
+
+**Old text**:
+```
+3. **Fix loop** (adaptive budget per Weighted Scoring Model): if review fails, action depends on initial weighted score:
+   - Score >= 7.0 + gates pass: no fixes needed.
+   - Score 5.0–6.9: fix loop, max 2 rounds.
+   - Score 3.0–4.9: fix loop, max 1 round (unlikely to reach 7 in 2).
+   - Score < 3.0: regenerate from scratch — re-run `mode=design` **without** `fixes_json` so slide-core produces a fresh layout from the draft reference instead of patching a broken SVG.
+
+   For fix rounds, re-run slide-core with fixes:
+   ```text
+   Task(subagent_type="ppt-agent:slide-core", prompt="run_dir=${RUN_DIR} mode=design slide_index=${N} style=${STYLE} fixes_json=${FIXES}")
+   ```
+   For regeneration (score < 3.0), re-run without fixes:
+   ```text
+   Task(subagent_type="ppt-agent:slide-core", prompt="run_dir=${RUN_DIR} mode=design slide_index=${N} style=${STYLE}")
+   ```
+   Then re-run review-core. If still failing after max rounds, accept current version with quality note.
+```
+
+**New text**:
+```
+3. **Fix loop** (adaptive budget per Suggestion Type): if review fails (Score < 7.0 or hard gates fail), routing depends on the highest priority suggestion type returned by the review:
+   - `full_rethink`: Regenerate from scratch, max 1 round. Re-run `mode=design` **without** `fixes_json` so slide-core produces a fresh layout.
+   - `layout_restructure` or `content_reduction`: Constrained regeneration, max 2 rounds. Re-run with `fixes_json`.
+   - `attribute_change` only: Deterministic patch, max 1 round. Re-run with `fixes_json`.
+   - **Fallback mode (no Gemini)**: Technical XML fixes only, no suggestion routing.
+
+   For fix rounds (`layout_restructure`, `content_reduction`, or `attribute_change`), re-run slide-core with fixes:
+   ```text
+   Task(subagent_type="ppt-agent:slide-core", prompt="run_dir=${RUN_DIR} mode=design slide_index=${N} style=${STYLE} fixes_json=${FIXES}")
+   ```
+   For regeneration (`full_rethink`), re-run without fixes:
+   ```text
+   Task(subagent_type="ppt-agent:slide-core", prompt="run_dir=${RUN_DIR} mode=design slide_index=${N} style=${STYLE}")
+   ```
+   Then re-run review-core. If still failing after max rounds, accept current version with quality note.
+```
+
+---
+
+### Change 2: Replace score-based Adaptive Fix Budget table with suggestion-type-based table in reviewer prompt
+
+**File**: `skills/gemini-cli/references/roles/reviewer.md` (lines 261-267)
+
+**Rationale**: The reviewer's budget table must match the orchestrator's routing logic. When the reviewer emits suggestions, the orchestrator now routes on suggestion type, not score. Aligning the table ensures the reviewer understands that its suggestion type classification directly controls the fix budget and strategy downstream.
+
+**Old text**:
+```
+**Adaptive fix budget based on initial score**:
+| Initial Score | Action |
+|--------------|--------|
+| >= 7.0 + gates pass | Pass — no fixes needed |
+| 5.0 - 6.9 | Fix loop: max 2 rounds |
+| 3.0 - 4.9 | Fix loop: max 1 round (unlikely to reach 7 in 2) |
+| < 3.0 | Regenerate from scratch (full_rethink) — do not patch |
+```
+
+**New text**:
+```
+**Adaptive fix budget based on highest-priority suggestion**:
+| Primary Suggestion Type | Action | Budget |
+|-------------------------|--------|--------|
+| None (Score >= 7.0 + gates pass) | Pass — no fixes needed | 0 rounds |
+| `attribute_change` only | Deterministic patch | Max 1 round |
+| `layout_restructure` or `content_reduction` | Constrained regeneration | Max 2 rounds |
+| `full_rethink` | Regenerate from scratch (do not patch) | Max 1 round |
+```
+
+---
+
+## Cross-cutting Notes (from Gemini analysis)
+
+- **`agents/slide-core.md`**: No changes needed. Already handles suggestion types with correct priority cascade (`full_rethink` > `layout_restructure` > `content_reduction` > `attribute_change`).
+- **`agents/review-core.md`**: Line 69 delegates to the reviewer.md table. Language is compatible as-is.
+- **Review output format**: The reviewer must emit `suggestion_type` explicitly in the top-level review payload so the orchestrator can route without parsing prose. This is already implied by the existing suggestion format but should be verified during implementation.
+- **`slide-status.json`**: The orchestrator must read `highest_priority_suggestion` from the review output when populating slide status. Verify the review parser aggregates suggestion types correctly.

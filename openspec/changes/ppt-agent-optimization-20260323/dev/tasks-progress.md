@@ -44,6 +44,91 @@ Wave 2 total: 20 files modified/created.
 - 1 svg-generator.md updated (chart_colors documentation + chart pattern updates)
 
 ## Next: Calibration Gate
-- Production run (8-10 slides) required before Wave 3
+- Production run (8-10 slides) required before Wave 3 T-13
 - Validates: Does Gemini produce typed suggestions? Does the taxonomy cover actual output? Are technical thresholds reasonable?
-- Results inform Wave 3 adjustments (T-11~T-14)
+- Results inform T-13 (suggestion-driven fix strategy)
+
+## Wave 3 (Part 1): Fix Strategy + State Hardening — COMPLETE
+
+> Dev wave-1, 2026-03-23
+> T-13 deferred pending calibration gate
+
+### Scope
+T-11 + T-12 + T-14 (3 tasks, calibration-independent subset of Wave 3)
+
+### Changes
+
+| Task | Change | File(s) | Verified |
+|------|--------|---------|----------|
+| T-11 | Atomic write protocol: tmp+python3 validate+mv rename | `commands/ppt.md` | atomic write in Phase 6; orphaned tmp cleanup in resume |
+| T-12 | 3-zone guided-freedom color enforcement (core/chart/decorative) | `agents/slide-core.md`, `reviewer.md` | Zones consistent cross-file; Check #5 added; old single-row rule removed |
+| T-14 | visual_weight field + 5-dimension holistic review framework | `outline-architect.md`, `reviewer.md` | Schema, assignment rules, scoring table, legacy fallback all present |
+
+### Files touched
+- `commands/ppt.md` (+24/-3)
+- `agents/slide-core.md` (+15/-6)
+- `skills/gemini-cli/references/roles/reviewer.md` (+48/-4)
+- `skills/_shared/references/prompts/outline-architect.md` (+36/-8)
+
+Total: 4 files, +123/-21 LOC
+
+### Status
+Completed. All 12 verification checks passed.
+
+## Wave 3 (Part 2): Suggestion-Driven Fix Strategy — COMPLETE
+
+> Dev wave-2, 2026-03-23
+> Calibration gate passed (ppt-xiaomi-su7-launch, 14 slides)
+
+### Scope
+T-13 (suggestion-driven fix strategy, calibration-dependent)
+
+### Calibration Evidence
+- Gemini produces typed suggestions: 100% coverage
+- 5-type taxonomy: all types observed
+- Key finding: Slide-05 (3.65) needed full_rethink but old score-band routing gave only 1 round
+
+### Changes
+
+| Task | Change | File(s) | Verified |
+|------|--------|---------|----------|
+| T-13 | Score-band routing → suggestion-type routing | `commands/ppt.md`, `reviewer.md` | Routing logic consistent; old score-band text removed |
+
+### Files touched
+- `commands/ppt.md` (+18/-7)
+- `skills/gemini-cli/references/roles/reviewer.md` (+10/-6)
+
+Total: 2 files, +28/-13 LOC
+
+### Status
+Completed. All 8 verification checks passed.
+
+## Wave 4 (Part 1): Visual Richness + Pipeline Quick Wins — COMPLETE
+
+> Dev wave-3, 2026-03-23
+> External models unavailable (Codex 502, Gemini 429) — lead executed directly
+
+### Scope
+T-15 + T-16 + T-18 + T-19 (2 P1 + 2 P2 quick wins)
+
+### Changes
+
+| Task | Change | File(s) | Verified |
+|------|--------|---------|----------|
+| T-15 | 5 SVG patterns (table, metric grid, grouped bar, line chart, network) + selection table | `svg-generator.md` | All 5 patterns + table present |
+| T-16 | Holistic fix flow (P1 suggestions → re-dispatch → max 1 re-run) | `ppt.md`, `review-core.md` | 7-step flow + 5-dim framework ref |
+| T-18 | Heartbeat → start-only | 4 agent .md files | "before writing" removed |
+| T-19 | memory: project → none | `slide-core.md`, `review-core.md` | frontmatter updated |
+
+### Files touched
+- `commands/ppt.md` (+22/-1)
+- `agents/slide-core.md` (+3/-3)
+- `agents/review-core.md` (+14/-3)
+- `agents/content-core.md` (+1/-1)
+- `agents/research-core.md` (+1/-1)
+- `skills/_shared/references/prompts/svg-generator.md` (+141)
+
+Total: 6 files, +224/-24 LOC
+
+### Status
+Completed. All 12 verification checks passed.

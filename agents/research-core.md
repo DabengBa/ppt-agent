@@ -39,7 +39,7 @@ Handle all research workloads: background investigation for requirement discover
    bash skills/agent-reach/scripts/probe.sh
    ```
    Parse the JSON output to know which upstream tools (curl, gh, yt-dlp, xreach, mcporter) are on this machine. This determines which search commands to use — see `skills/agent-reach/SKILL.md` for the full command reference organized by tier.
-3. Send `heartbeat` when starting and before writing final output.
+3. Send `heartbeat` when starting.
 4. Route by `mode`:
    - `research`:
      - Use the best available search method based on probe results:

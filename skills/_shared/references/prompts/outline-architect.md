@@ -54,6 +54,7 @@ Generate a JSON structure wrapped in `[PPT_OUTLINE]` markers:
           "type": "content|data|comparison|process|quote|image",
           "key_points": ["Point 1", "Point 2", "Point 3"],
           "layout_hint": "single_focus|two_column|three_column|hero_grid|mixed_grid",
+          "visual_weight": "low|medium|high",
           "transition_cue": "How this slide connects to the next",
           "notes": {
             "talking_points": ["Key point to say aloud", "Another key point"],
@@ -81,17 +82,33 @@ The `approved` field tracks whether the user has explicitly approved the outline
 
 The `notes` field should contain structured speaker guidance, not just "additional context". Include 2-3 talking points (what the presenter should say aloud), a verbal bridge to the next slide (`transition_line`), and estimated speaking time in seconds (`timing_seconds`). This enables automatic generation of a speaker notes document and presentation timing estimates.
 
+### Visual Weight Assignment
+
+The `visual_weight` field captures the intended perceptual emphasis of a slide so downstream generators and holistic review can manage deck rhythm intentionally.
+
+- New outlines MUST emit `visual_weight` for every page.
+- Legacy `outline.json` files that omit `visual_weight` should be treated as `medium` by downstream consumers instead of failing resume or review.
+- `visual_weight` describes visual emphasis, not business priority.
+
+| Visual Weight | Use When | Typical Signals |
+| ------------- | -------- | --------------- |
+| low | Breathing/reset slide | 1 dominant message, generous whitespace, <= 2 info units |
+| medium | Default explanatory slide | 2-4 balanced blocks, moderate density |
+| high | Emphasis/climax slide | Hero chart, strong comparison, or dense evidence requiring focal attention |
+
 ## Page Type Definitions
 
-| Type        | Purpose                              | Typical Layout      |
-| ----------- | ------------------------------------ | ------------------- |
-| content     | Text-focused information delivery    | two_column, mixed   |
-| data        | Charts, statistics, metrics          | hero_grid, mixed    |
-| comparison  | Side-by-side analysis                | two_column, three   |
-| process     | Step-by-step flow or timeline        | hero_grid, mixed    |
-| quote       | Key quote or testimonial             | single_focus        |
-| image       | Visual-dominant with minimal text    | single_focus, hero  |
-| timeline    | Sequential process or chronological flow | hero_grid, mixed |
+| Type        | Purpose                                   | Typical Layout           | Default Weight |
+| ----------- | ----------------------------------------- | ------------------------ | -------------- |
+| content     | Text-focused information delivery         | two_column, mixed_grid   | medium         |
+| data        | Charts, statistics, metrics               | hero_grid, mixed_grid    | high           |
+| comparison  | Side-by-side analysis                     | two_column, three_column | high           |
+| process     | Step-by-step flow or timeline             | hero_grid, mixed_grid    | medium         |
+| quote       | Key quote or testimonial                  | single_focus             | low            |
+| image       | Visual-dominant with minimal text         | single_focus, hero_grid  | low            |
+| timeline    | Sequential process or chronological flow  | hero_grid, mixed_grid    | medium         |
+
+These defaults are guidance, not a hard lock. Override them when the narrative needs an intentional exception, but keep the deck-level rhythm explicit.
 
 ## Structure Guidelines
 
@@ -103,6 +120,7 @@ The `notes` field should contain structured speaker guidance, not just "addition
 - Each page should convey ONE key message (7±2 information units max).
 - Vary page types to maintain audience engagement.
 - Ensure logical flow between pages within each part.
+- **Visual weight distribution**: Avoid 3+ consecutive high-weight slides without a breathing slide (low weight). Aim for rhythm: high-medium-low-medium-high pattern across the deck. Cover and end pages are inherently low weight.
 
 ## Narrative Arc
 

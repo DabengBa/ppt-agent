@@ -33,7 +33,7 @@ Handle content authoring: structured outline creation using Pyramid Principle an
 ## Execution
 1. Read `${run_dir}/input.md` for page range (`--pages`), style (`--style`), and other flags.
    Read `${run_dir}/requirements.md` and `${run_dir}/materials.md`.
-2. Send `heartbeat` when starting and before writing final output.
+2. Send `heartbeat` when starting.
 3. Route by `mode`:
    - `outline`:
      - Read the Pyramid Principle prompt from `skills/_shared/references/prompts/outline-architect.md` (relative to plugin root).
