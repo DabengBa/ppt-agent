@@ -42,7 +42,7 @@ All agents are spawned via `Task()` calls. No Agent Team required — agents com
 - Style tokens are in `skills/_shared/references/styles/`. Available styles are discovered from `skills/_shared/index.json` (domain=style).
 - HTML preview template is in `skills/_shared/assets/preview-template.html`.
 - `outline.json` schema is defined in `skills/_shared/references/prompts/outline-architect.md` (single source of truth).
-- Optimization fallback policy is defined in `skills/gemini-cli/SKILL.md` (single source of truth). When Gemini is unavailable, Claude self-optimization is used — optimization is never skipped.
+- Optimization fallback policy is defined in `skills/gemini-cli/SKILL.md` (single source of truth). When Gemini is unavailable, the workflow degrades to technical validation only — hard-rule checks continue, but aesthetic optimization is not faked.
 - Brand color override is supported via `--brand-colors=<path>` flag. Brand styles are written to `${RUN_DIR}/brand-style.yaml`.
 
 ## HTML Preview Template
@@ -62,10 +62,18 @@ Keyboard: `P` present / `G` gallery / `S` scroll / `F` fullscreen / `N` notes / 
 
 ## Quality Gates
 
+When Gemini review is available:
+
 - Layout score >= 7/10
 - No critical review issues
 - Maximum 2 fix rounds per slide
 - All slides must be valid SVG 1280x720
+
+When Gemini is unavailable:
+
+- Fall back to technical validation only
+- Enforce XML validity, `viewBox`, font-size floor, safe area, contrast, and style-token compliance
+- Skip aesthetic scoring and fix suggestions
 
 ## Output Directory
 
@@ -78,7 +86,9 @@ Keyboard: `P` present / `G` gallery / `S` scroll / `F` fullscreen / `N` notes / 
 - `slides/slide-{nn}.svg`
 - `slide-status.json` — per-slide incremental progress (enables `--run-id` resume)
 - `reviews/review-{nn}.md`
+- `reviews/review-holistic.md`
 - `review-manifest.json` — Phase 6→7 quality gate checkpoint
 - `output/` — final deliverables:
   - `slide-{nn}.svg` — final design SVGs
   - `index.html` — interactive HTML preview page
+  - `speaker-notes.md` — extracted presenter notes and timing guide
