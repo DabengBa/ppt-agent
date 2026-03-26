@@ -1,7 +1,6 @@
 .DS_Store
-openspec/changes/gpt54-showcase-cleanup/
-openspec/changes/ppt-new-xiaomi-su7-launch/gallery*.png
-openspec/changes/ppt-new-xiaomi-su7-launch/slide04*.png
-openspec/changes/ppt-new-xiaomi-su7-launch/slide05*.png
-openspec/changes/ppt-new-xiaomi-su7-launch/slide08*.png
-openspec/changes/ppt-new-xiaomi-su7-launch/slide11*.png
+.content-skills/
+.serena/
+.claude/
+llmdoc/
+openspec/
